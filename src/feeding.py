@@ -15,7 +15,7 @@ firstplayer = "2QYUPPUG8"
 
 
 
-if(True): # collecting mode
+if(False): # collecting mode
     if db.get_players_count() == 0:
         playerapi = api.getPlayerStats(firstplayer)
         player = (
