@@ -70,3 +70,13 @@ class Database:
         # remove duplicates
         brawlers = list(dict.fromkeys(brawlers))
         return brawlers
+
+
+    def getUniqueMatchCombos(self):# select battles where a1, a2, a3, b1, b2, b3 are unique, then count
+        self.cur.execute("SELECT COUNT(*) FROM (SELECT DISTINCT a1, a2, a3, b1, b2, b3 FROM battles)")
+        return self.cur.fetchall()
+
+    def getUniqueBattlesWithMoreThanXMatches(self, x):
+        self.cur.execute("SELECT * FROM (SELECT a1, a2, a3, b1, b2, b3 FROM battles GROUP BY a1, a2, a3, b1, b2, b3 HAVING COUNT(*) > ?)", (x,))
+        return self.cur.fetchall()
+    
