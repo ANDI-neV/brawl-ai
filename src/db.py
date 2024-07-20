@@ -80,3 +80,7 @@ class Database:
         self.cur.execute("SELECT * FROM (SELECT a1, a2, a3, b1, b2, b3 FROM battles GROUP BY a1, a2, a3, b1, b2, b3 HAVING COUNT(*) > ?)", (x,))
         return self.cur.fetchall()
     
+    def reset(self):
+        self.cur.execute("DELETE FROM battles")
+        self.cur.execute("UPDATE players SET checked=0")
+        self.conn.commit()

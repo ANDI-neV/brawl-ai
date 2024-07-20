@@ -15,7 +15,7 @@ firstplayer = "2QYUPPUG8"
 
 
 
-if(False): # collecting mode
+if(True): 
     if db.get_players_count() == 0:
         playerapi = api.getPlayerStats(firstplayer)
         player = (
@@ -24,7 +24,7 @@ if(False): # collecting mode
         )
         db.insert_player(player)
 
-    while db.get_battles_count() < 20000:
+    while db.get_battles_count() < 5000:
         player = db.get_unchecked_player()
         playerTag = player[0]
         db.set_player_checked(playerTag)
@@ -36,7 +36,9 @@ if(False): # collecting mode
                     map = battle["event"]["map"]
                     mode = battle["battle"]["mode"]
                     allowedModes = ["gemGrab", "brawlBall", "heist", "bounty", "hotZone", "knockout"]
-                    if mode in allowedModes:
+                    modesGood = mode in allowedModes
+                    isRanked = battle["battle"]["type"] == "soloRanked" or False
+                    if modesGood and isRanked:
                         a1 = battle["battle"]["teams"][0][0]["brawler"]["name"]
                         a2 = battle["battle"]["teams"][0][1]["brawler"]["name"]
                         a3 = battle["battle"]["teams"][0][2]["brawler"]["name"]
@@ -87,5 +89,5 @@ if(False): # collecting mode
 
                 
 
-        time.sleep(0.3)
+        time.sleep(0)
         
