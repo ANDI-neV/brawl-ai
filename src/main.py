@@ -13,17 +13,6 @@ if __name__ == "__main__":
     random.seed(datetime.now().timestamp())
     firstplayer = "2QYUPPUG8"
     
-    if(True): # get winrates
-        max = 0
-        best = ""
-        for brawler in db.getAllBrawlers():
-            wr = db.getWinrate(brawler)
-            if wr > max:
-                max = wr
-            if wr <= 0.46:
-                print(brawler)
-                print(db.getWinrate(brawler))
-        print("Best winrate: " + best + " " + str(max))
 
 
     if(True): # collecting mode
