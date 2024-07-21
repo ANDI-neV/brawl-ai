@@ -9,6 +9,9 @@ class Database:
         self.cur.execute("CREATE TABLE IF NOT EXISTS players (tag TEXT PRIMARY KEY, name TEXT, checked INTEGER)")
         self.conn.commit()
 
+    def commit(self):
+        self.conn.commit()
+
     def get_unchecked_player(self):
         self.cur.execute("SELECT * FROM players WHERE checked=0 LIMIT 1")
         return self.cur.fetchone()
@@ -26,7 +29,6 @@ class Database:
         if self.cur.execute("SELECT * FROM battles WHERE battleTime=?", (battle[1],)).fetchone():
             return
         self.cur.execute("INSERT INTO battles (id, battleTime, map, mode, a1, a2, a3, b1, b2, b3, result) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", battle)
-        self.conn.commit()
 
     def insert_player(self, player):
         tag = player[0]
@@ -34,7 +36,6 @@ class Database:
         if self.cur.execute("SELECT * FROM players WHERE tag=?", (tag,)).fetchone():
             return
         self.cur.execute("INSERT INTO players (tag, name, checked) VALUES (?, ?, ?)", (tag, name, 0))
-        self.conn.commit()
 
     def set_player_checked(self, tag):
         self.cur.execute("UPDATE players SET checked=1 WHERE tag=?", (tag,))

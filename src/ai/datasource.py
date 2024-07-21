@@ -10,7 +10,7 @@ class DevBrawlAPI:
         headers = {
             "Authorization": f"Bearer {self.token}"
         }
-        print("Requesting from " + f"{self.url}/v1/players/%23{playerTag}/battlelog")
+        #print("Requesting from " + f"{self.url}/v1/players/%23{playerTag}/battlelog")
         response = requests.get(f"{self.url}/v1/players/%23{playerTag}/battlelog", headers=headers)
         if response.status_code == 200:
             data = response.json()

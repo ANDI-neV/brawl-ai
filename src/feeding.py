@@ -16,6 +16,8 @@ firstplayer = "2QYUPPUG8"
 
 
 if(True): 
+    starttime = time.time()
+
     if db.get_players_count() == 0:
         playerapi = api.getPlayerStats(firstplayer)
         player = (
@@ -23,9 +25,11 @@ if(True):
             playerapi["name"]
         )
         db.insert_player(player)
-
-    while db.get_battles_count() < 5000:
+    runtime = 30
+    while (time.time() - starttime) < 60 * runtime:
+        print("Time left: " + str((60 * runtime - (time.time() - starttime))/ 60) + " min")
         player = db.get_unchecked_player()
+        restTime = time.time()
         playerTag = player[0]
         db.set_player_checked(playerTag)
         battlelog = api.getPlayerBattlelog(playerTag)
@@ -48,17 +52,11 @@ if(True):
                         result = battle["battle"]["result"]
                         unixtime = time.mktime(time.strptime(battleTime, "%Y%m%dT%H%M%S.000Z"))
                         unixtime = int(unixtime)
-                        #print(unixtime)
-                        #print(map)
-                        #print(result)
                         if result == "victory":
                             result = 1
                         else:
                             result = 0
-                        #print(a1, a2, a3)
-                        #print(b1, b2, b3)
                         id = random.randint(0, 10000000000000)
-                        #print("----")
                         db.insert_battle((id, unixtime, map, mode, a1, a2, a3, b1, b2, b3, result))
 
                         playerstags = [
@@ -83,11 +81,8 @@ if(True):
                                 playersnames[i]
                             )
                             db.insert_player(enemyplayer)
+                        
                 except Exception as e:
                     print(e)
                     print(battle)
-
-                
-
-        time.sleep(0)
-        
+            db.commit()
