@@ -1,0 +1,2805 @@
+[
+  {
+    "name": "8-Bit",
+    "url": "https://brawlstars.fandom.com/wiki/8-Bit",
+    "rarity": "Super Rare",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 580.0,
+      "plugged in": 720.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.5,
+      "reload gear": 1.275
+    },
+    "projectiles per attack": {
+      "normal": 618.0
+    },
+    "super charge per hit": {
+      "normal": 8.48
+    },
+    "attack spread": {
+      "normal": 9.0
+    },
+    "projectile speed": {
+      "normal": 1196.0
+    },
+    "attack width": {
+      "normal": 0.33
+    },
+    "damage booster range": {
+      "normal": 3.335
+    }
+  },
+  {
+    "name": "Amber",
+    "url": "https://brawlstars.fandom.com/wiki/Amber",
+    "rarity": "Legendary",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0,
+      "fire starters": 820.0
+    },
+    "range": {
+      "normal": 7.33
+    },
+    "reload": {
+      "normal": 0.22,
+      "7.48 seconds max;  reload gear": 8.8,
+      "5.86 seconds max;  scorchin' siphon": 0.187,
+      "4.96 seconds max;  scorchin' siphon and reload gear": 7.48
+    },
+    "projectiles per attack": {
+      "normal": 40.0
+    },
+    "super charge per hit": {
+      "normal": 6.36
+    },
+    "attack spread": {
+      "normal": 15.0
+    },
+    "projectile speed": {
+      "normal": 1750.0
+    }
+  },
+  {
+    "name": "Angelo",
+    "url": "https://brawlstars.fandom.com/wiki/Angelo",
+    "rarity": "Epic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 820.0,
+      "hypercharge": 1017.0,
+      "flow": 1025.0,
+      "flow and hypercharge": 1222.0
+    },
+    "range": {
+      "normal": 2.0
+    },
+    "reload": {
+      "normal": 0.1
+    },
+    "super charge per hit": {
+      "normal": 12.5
+    },
+    "projectile speed": {
+      "normal": 4000.0
+    },
+    "attack width": {
+      "normal": 0.67
+    },
+    "duration": {
+      "normal": 8.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "35%",
+      "speed": "+24%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Ash",
+    "url": "https://brawlstars.fandom.com/wiki/Ash",
+    "rarity": "Epic",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 720.0,
+      "fast; half rage": 770.0,
+      "very fast, full rage": 820.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.4,
+      "full rage and mad as heck": 1.0
+    },
+    "super charge per hit": {
+      "normal": 3.75
+    },
+    "projectile speed": {
+      "normal": 1196.0
+    },
+    "attack width": {
+      "normal": 1.67
+    },
+    "rat movement speed": {
+      "normal": 1200.0
+    }
+  },
+  {
+    "name": "Barley",
+    "url": "https://brawlstars.fandom.com/wiki/Barley",
+    "rarity": "Rare",
+    "class": "Artillery",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 9.33
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 14.8
+    },
+    "projectile speed": {
+      "normal": 1504.0
+    },
+    "projectiles per super": {
+      "normal": 53.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "30%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Bea",
+    "url": "https://brawlstars.fandom.com/wiki/Bea",
+    "rarity": "Epic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 9.0
+    },
+    "reload": {
+      "normal": 0.9
+    },
+    "super charge per hit": {
+      "normal": 2.5
+    },
+    "projectile speed": {
+      "normal": 2500.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "projectiles per super": {
+      "normal": 7.0
+    },
+    "super spread": {
+      "normal": 15.0
+    }
+  },
+  {
+    "name": "Belle",
+    "url": "https://brawlstars.fandom.com/wiki/Belle",
+    "rarity": "Epic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 906.0
+    },
+    "range": {
+      "normal": 10.67
+    },
+    "reload": {
+      "normal": 1.4,
+      "reload gear": 1.19
+    },
+    "super charge per hit": {
+      "normal": 25.0
+    },
+    "projectile speed": {
+      "normal": 4000.0
+    },
+    "attack width": {
+      "normal": 0.67
+    },
+    "super width": {
+      "normal": 1.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Berry",
+    "url": "https://brawlstars.fandom.com/wiki/Berry",
+    "rarity": "Epic",
+    "class": "Support",
+    "movement speed": {
+      "normal": 720.0,
+      "super": 3000.0
+    },
+    "range": {
+      "normal": 8.33
+    },
+    "reload": {
+      "normal": 2.4,
+      "floor is fine; normal": 1.6
+    },
+    "super charge per hit": {
+      "normal": 22.8,
+      "ice cream": 19.8,
+      "heal": 7.425
+    },
+    "projectile speed": {
+      "normal": 2400.0
+    },
+    "duration": {
+      "normal": 6.0
+    }
+  },
+  {
+    "name": "Bibi",
+    "url": "https://brawlstars.fandom.com/wiki/Bibi",
+    "rarity": "Epic",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 820.0,
+      "hypercharge": 1017.0,
+      "home run": 920.0,
+      "home run and hypercharge": 1117.0
+    },
+    "range": {
+      "normal": 40.0
+    },
+    "reload": {
+      "normal": 0.8
+    },
+    "super charge per hit": {
+      "normal": 25.2
+    },
+    "attack spread": {
+      "normal": 150.0
+    },
+    "duration": {
+      "normal": 4.0
+    },
+    "projectile speed": {
+      "normal": 3000.0
+    },
+    "super width": {
+      "normal": 1.67
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "50%",
+      "speed": "+24%",
+      "damage": "+5%",
+      "shield": "+25%"
+    }
+  },
+  {
+    "name": "Bo",
+    "url": "https://brawlstars.fandom.com/wiki/Bo",
+    "rarity": "Epic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 8.67
+    },
+    "reload": {
+      "normal": 1.7,
+      "reload gear": 1.445
+    },
+    "projectiles per attack": {
+      "normal": 3.0
+    },
+    "super charge per hit": {
+      "normal": 33.48
+    },
+    "attack spread": {
+      "normal": 15.0
+    },
+    "projectile speed": {
+      "normal": 2391.0
+    },
+    "projectiles per super": {
+      "normal": 3.0
+    }
+  },
+  {
+    "name": "Bonnie",
+    "url": "https://brawlstars.fandom.com/wiki/Bonnie",
+    "rarity": "Epic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 620.0,
+      "sugar rush": 806.0,
+      "bonnie; very fast": 820.0
+    },
+    "range": {
+      "normal": 7.331
+    },
+    "reload": {
+      "normal": 1.0,
+      "sugar rush": 0.7,
+      "bonnie; slow": 2.0
+    },
+    "projectiles per attack": {
+      "normal": 1.0,
+      "bonnie": 3.0
+    },
+    "super charge per hit": {
+      "normal": 30.8,
+      "super charge gear": 33.88,
+      "wisdom tooth": 7.7,
+      "wisdom tooth and super charge gear": 8.47
+    },
+    "attack spread": {
+      "normal": 20.0
+    },
+    "projectile speed": {
+      "normal": 2500.0
+    },
+    "attack width": {
+      "normal": 1.0
+    }
+  },
+  {
+    "name": "Brock",
+    "url": "https://brawlstars.fandom.com/wiki/Brock",
+    "rarity": "Rare",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 8.33
+    },
+    "reload": {
+      "normal": 2.1,
+      "reload gear": 1.785
+    },
+    "super charge per hit": {
+      "normal": 20.8
+    },
+    "projectile speed": {
+      "normal": 870.0
+    },
+    "attack width": {
+      "normal": 0.671
+    },
+    "projectiles per super": {
+      "normal": 9.0,
+      "hypercharge": 13.0,
+      "more rockets and hypercharge": 28.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "45%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Bull",
+    "url": "https://brawlstars.fandom.com/wiki/Bull",
+    "rarity": "Rare",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 770.0,
+      "hypercharge": 962.0,
+      "super": 1800.0
+    },
+    "range": {
+      "normal": 11.0
+    },
+    "reload": {
+      "normal": 1.6,
+      "berserker": 0.8
+    },
+    "projectiles per attack": {
+      "normal": 5.0
+    },
+    "super charge per hit": {
+      "normal": 36.0
+    },
+    "attack spread": {
+      "normal": 45.0
+    },
+    "projectile speed": {
+      "normal": 2853.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "35%",
+      "speed": "+25%",
+      "damage": "+5%",
+      "shield": "+25%"
+    }
+  },
+  {
+    "name": "Buster",
+    "url": "https://brawlstars.fandom.com/wiki/Buster",
+    "rarity": "Mythic",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 770.0,
+      "while super is active": 620.0
+    },
+    "range": {
+      "normal": 3.0
+    },
+    "reload": {
+      "normal": 1.8
+    },
+    "super charge per hit": {
+      "normal": 34.5
+    },
+    "attack spread": {
+      "normal": 45.0
+    },
+    "projectile speed": {
+      "normal": 4200.0
+    },
+    "duration": {
+      "normal": 3.0
+    },
+    "super spread": {
+      "normal": 60.0
+    }
+  },
+  {
+    "name": "Buzz",
+    "url": "https://brawlstars.fandom.com/wiki/Buzz",
+    "rarity": "Mythic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 770.0,
+      "hypercharge": 963.0,
+      "super": 4500.0
+    },
+    "range": {
+      "normal": 10.0
+    },
+    "reload": {
+      "normal": 1.0
+    },
+    "projectiles per attack": {
+      "normal": 5.0
+    },
+    "super charge per hit": {
+      "normal": 10.08
+    },
+    "attack spread": {
+      "normal": 100.0
+    },
+    "projectile speed": {
+      "normal": 3500.0
+    },
+    "super width": {
+      "normal": 1.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "25%",
+      "speed": "+25%",
+      "damage": "+15%",
+      "shield": "+15%"
+    }
+  },
+  {
+    "name": "Byron",
+    "url": "https://brawlstars.fandom.com/wiki/Byron",
+    "rarity": "Mythic",
+    "class": "Support",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 7.33
+    },
+    "reload": {
+      "normal": 1.45
+    },
+    "projectiles per attack": {
+      "normal": 13.0
+    },
+    "super charge per hit": {
+      "normal": 24.0
+    },
+    "projectile speed": {
+      "normal": 2000.0
+    },
+    "attack width": {
+      "normal": 1.0
+    }
+  },
+  {
+    "name": "Carl",
+    "url": "https://brawlstars.fandom.com/wiki/Carl",
+    "rarity": "Super Rare",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0,
+      "super": 1440.0
+    },
+    "range": {
+      "normal": 2.33
+    },
+    "super charge per hit": {
+      "normal": 7.5
+    },
+    "projectile speed": {
+      "normal": 30003312.0
+    },
+    "attack width": {
+      "normal": 1.67
+    },
+    "projectiles per super": {
+      "normal": 12.0
+    },
+    "duration": {
+      "normal": 3.0
+    }
+  },
+  {
+    "name": "Charlie",
+    "url": "https://brawlstars.fandom.com/wiki/Charlie",
+    "rarity": "Mythic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 9.0
+    },
+    "super charge per hit": {
+      "normal": 15.01
+    },
+    "projectile speed": {
+      "normal": 3300.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "duration": {
+      "normal": 5.0
+    },
+    "super width": {
+      "normal": 1.33
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "60%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Chester",
+    "url": "https://brawlstars.fandom.com/wiki/Chester",
+    "rarity": "Legendary",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 770.0,
+      "candy beans": 1020.0
+    },
+    "range": {
+      "normal": 3.0
+    },
+    "reload": {
+      "normal": 1.9,
+      "candy beans": 0.475
+    },
+    "projectiles per attack": {
+      "normal": 1.0,
+      "second sequence": 2.0,
+      "third sequence": 3.0,
+      "fourth sequence": 4.0
+    },
+    "super charge per hit": {
+      "normal": 4.0
+    },
+    "attack spread": {
+      "normal": 15.0,
+      "third sequence": 30.0,
+      "fourth sequence": 45.0
+    },
+    "projectile speed": {
+      "normal": 2000.0
+    },
+    "attack width": {
+      "normal": 0.67
+    },
+    "duration": {
+      "normal": 5.0
+    },
+    "super spread": {
+      "normal": 50.0
+    }
+  },
+  {
+    "name": "Chuck",
+    "url": "https://brawlstars.fandom.com/wiki/Chuck",
+    "rarity": "Mythic",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 770.0,
+      "dash": 3700.0
+    },
+    "range": {
+      "normal": 10.0,
+      "dash": 6.67
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "projectiles per attack": {
+      "normal": 3.0
+    },
+    "super charge per hit": {
+      "normal": 10.0,
+      "dash": 43.75
+    },
+    "projectile speed": {
+      "normal": 1500.0
+    },
+    "attack width": {
+      "normal": 1.33
+    }
+  },
+  {
+    "name": "Clancy",
+    "url": "https://brawlstars.fandom.com/wiki/Clancy",
+    "rarity": "Mythic",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 5.67,
+      "stage 2+; long": 8.33
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "projectiles per attack": {
+      "normal": 1.0,
+      "stage 2": 1.0,
+      "stage 3": 2.0
+    },
+    "super charge per hit": {
+      "normal": 10.0
+    },
+    "attack spread": {
+      "normal": 125.0
+    },
+    "projectile speed": {
+      "normal": 3500.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "projectiles per super": {
+      "normal": 16.0
+    }
+  },
+  {
+    "name": "Colette",
+    "url": "https://brawlstars.fandom.com/wiki/Colette",
+    "rarity": "Epic",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0,
+      "super": 4000.0
+    },
+    "range": {
+      "normal": 11.0
+    },
+    "reload": {
+      "normal": 1.6
+    },
+    "super charge per hit": {
+      "normal": 25.0
+    },
+    "projectile speed": {
+      "normal": 4000.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "30%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Colt",
+    "url": "https://brawlstars.fandom.com/wiki/Colt",
+    "rarity": "Rare",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0,
+      "slick boots": 820.0,
+      "hypercharge": 936.0,
+      "slick boots and hypercharge": 1036.0
+    },
+    "range": {
+      "normal": 11.0
+    },
+    "reload": {
+      "normal": 1.4,
+      "reload gear": 1.19
+    },
+    "projectiles per attack": {
+      "normal": 61.0
+    },
+    "super charge per hit": {
+      "normal": 6.96
+    },
+    "projectile speed": {
+      "normal": 4891.0
+    },
+    "attack width": {
+      "normal": 0.33
+    },
+    "projectiles per super": {
+      "normal": 12.0
+    },
+    "super width": {
+      "normal": 0.671
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "35%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Cordelius",
+    "url": "https://brawlstars.fandom.com/wiki/Cordelius",
+    "rarity": "Legendary",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 820.0,
+      "super": 980.0,
+      "hypercharge": 1017.0,
+      "super and hypercharge": 1177.0
+    },
+    "range": {
+      "normal": 9.0
+    },
+    "reload": {
+      "normal": 1.2,
+      "super": 0.84
+    },
+    "projectiles per attack": {
+      "normal": 21.0
+    },
+    "super charge per hit": {
+      "normal": 15.75
+    },
+    "projectile speed": {
+      "normal": 3800.0
+    },
+    "attack width": {
+      "normal": 0.671
+    },
+    "duration": {
+      "normal": 8.0
+    },
+    "super width": {
+      "normal": 1.33
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "25%",
+      "speed": "+24%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Crow",
+    "url": "https://brawlstars.fandom.com/wiki/Crow",
+    "rarity": "Legendary",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 820.0,
+      "hypercharge": 1017.0,
+      "super": 3000.0
+    },
+    "range": {
+      "normal": 8.67
+    },
+    "reload": {
+      "normal": 1.4
+    },
+    "projectiles per attack": {
+      "normal": 3.0
+    },
+    "super charge per hit": {
+      "normal": 6.0
+    },
+    "attack spread": {
+      "normal": 22.5
+    },
+    "projectile speed": {
+      "normal": 3261.0
+    },
+    "projectiles per super": {
+      "normal": 28.0
+    },
+    "super width": {
+      "normal": 0.33
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "60%",
+      "speed": "+24%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Darryl",
+    "url": "https://brawlstars.fandom.com/wiki/Darryl",
+    "rarity": "Super Rare",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 770.0,
+      "super": 2400.0
+    },
+    "range": {
+      "normal": 7.0
+    },
+    "reload": {
+      "normal": 1.8,
+      "rolling reload": 0.9
+    },
+    "projectiles per attack": {
+      "normal": 10.0
+    },
+    "super charge per hit": {
+      "normal": 12.0
+    },
+    "attack spread": {
+      "normal": 40.0
+    },
+    "projectile speed": {
+      "normal": 4000.0
+    }
+  },
+  {
+    "name": "Doug",
+    "url": "https://brawlstars.fandom.com/wiki/Doug",
+    "rarity": "Mythic",
+    "class": "Support",
+    "movement speed": {
+      "normal": 770.0,
+      "fast food": 870.0
+    },
+    "range": {
+      "normal": 9.33
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "super charge per hit": {
+      "normal": 21.0
+    },
+    "duration": {
+      "normal": 5.0
+    },
+    "projectile speed": {
+      "normal": 4500.0
+    },
+    "super width": {
+      "normal": 1.33
+    }
+  },
+  {
+    "name": "Draco",
+    "url": "https://brawlstars.fandom.com/wiki/Draco",
+    "rarity": "Legendary",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 720.0,
+      "alternate": 864.0
+    },
+    "range": {
+      "normal": 5.67
+    },
+    "reload": {
+      "normal": 0.22
+    },
+    "super charge per hit": {
+      "normal": 1.6
+    },
+    "projectile speed": {
+      "normal": 3500.0
+    },
+    "attack width": {
+      "normal": 1.33
+    },
+    "projectiles per super": {
+      "normal": 4.0
+    },
+    "duration": {
+      "normal": 10.0
+    },
+    "super spread": {
+      "normal": 45.0
+    }
+  },
+  {
+    "name": "Dynamike",
+    "url": "https://brawlstars.fandom.com/wiki/Dynamike",
+    "rarity": "Super Rare",
+    "class": "Artillery",
+    "movement speed": {
+      "normal": 770.0,
+      "fidget spinner": 920.0,
+      "hypercharge": 963.0,
+      "fidget spinner and hypercharge": 1113.0
+    },
+    "range": {
+      "normal": 7.33
+    },
+    "reload": {
+      "normal": 1.6
+    },
+    "projectiles per attack": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 50.05
+    },
+    "projectile speed": {
+      "normal": 1600.0
+    },
+    "explosion range": {
+      "normal": 2.67
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "30%",
+      "speed": "+25%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Edgar",
+    "url": "https://brawlstars.fandom.com/wiki/Edgar",
+    "rarity": "Epic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 820.0,
+      "hypercharge": 1017.0,
+      "super": 3500.0,
+      "after super": 1020.0,
+      "after super  hypercharge": 1217.0
+    },
+    "range": {
+      "normal": 6.67
+    },
+    "reload": {
+      "normal": 0.7,
+      "hypercharge": 0.35
+    },
+    "projectiles per attack": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 8.37,
+      "hypercharge": 9.207,
+      "super charge gear and hypercharge": 16.74
+    },
+    "projectile speed": {
+      "normal": 3500.0
+    },
+    "attack width": {
+      "normal": 2.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+24%",
+      "damage": "+15%",
+      "shield": "+15%"
+    }
+  },
+  {
+    "name": "El Primo",
+    "url": "https://brawlstars.fandom.com/wiki/El_Primo",
+    "rarity": "Rare",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 770.0,
+      "hypercharge": 963.0,
+      "meteor rush": 970.0,
+      "meteor rush and hypercharge": 1163.0,
+      "super": 1600.0
+    },
+    "range": {
+      "normal": 9.0
+    },
+    "reload": {
+      "normal": 0.8
+    },
+    "projectiles per attack": {
+      "normal": 4.0
+    },
+    "super charge per hit": {
+      "normal": 30.0
+    },
+    "projectile speed": {
+      "normal": 3261.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "30%",
+      "speed": "+25%",
+      "damage": "+5%",
+      "shield": "+25%"
+    }
+  },
+  {
+    "name": "Emz",
+    "url": "https://brawlstars.fandom.com/wiki/Emz",
+    "rarity": "Epic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 5.67
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 4.56
+    },
+    "attack spread": {
+      "normal": 40.0
+    },
+    "projectile speed": {
+      "normal": 1500.0
+    },
+    "duration": {
+      "normal": 5.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "30%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Eve",
+    "url": "https://brawlstars.fandom.com/wiki/Eve",
+    "rarity": "Mythic",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.6,
+      "reload gear": 1.36
+    },
+    "projectiles per attack": {
+      "normal": 3.0
+    },
+    "super charge per hit": {
+      "normal": 2.5
+    },
+    "projectile speed": {
+      "normal": 3500.0
+    },
+    "attack width": {
+      "normal": 0.67,
+      "medium egg": 1.0,
+      "large egg": 1.33
+    },
+    "hatchling movement speed": {
+      "normal": 1000.0
+    },
+    "hatchling range": {
+      "normal": 2.67
+    }
+  },
+  {
+    "name": "Fang",
+    "url": "https://brawlstars.fandom.com/wiki/Fang",
+    "rarity": "Mythic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 770.0,
+      "hypercharge": 963.0,
+      "super": 4000.0
+    },
+    "range": {
+      "normal": 10.0
+    },
+    "reload": {
+      "normal": 1.0
+    },
+    "super charge per hit": {
+      "normal": 25.2
+    },
+    "projectile speed": {
+      "normal": 32004500.0
+    },
+    "attack width": {
+      "normal": 20.67
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "20%",
+      "speed": "+25%",
+      "damage": "+15%",
+      "shield": "+15%"
+    }
+  },
+  {
+    "name": "Frank",
+    "url": "https://brawlstars.fandom.com/wiki/Frank",
+    "rarity": "Epic",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 770.0,
+      "hypercharge": 970.0
+    },
+    "range": {
+      "normal": 7.0,
+      "hypercharge; normal": 6.33
+    },
+    "reload": {
+      "normal": 0.8
+    },
+    "super charge per hit": {
+      "normal": 37.2
+    },
+    "attack spread": {
+      "normal": 65.0
+    },
+    "projectile speed": {
+      "normal": 6000.0
+    },
+    "super spread": {
+      "normal": 65.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+26%",
+      "damage": "+5%",
+      "shield": "+25%"
+    }
+  },
+  {
+    "name": "Gale",
+    "url": "https://brawlstars.fandom.com/wiki/Gale",
+    "rarity": "Epic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 10.0
+    },
+    "reload": {
+      "normal": 1.2
+    },
+    "projectiles per attack": {
+      "normal": 6.0
+    },
+    "super charge per hit": {
+      "normal": 15.25
+    },
+    "projectile speed": {
+      "normal": 5000.0
+    },
+    "attack width": {
+      "normal": 2.0
+    },
+    "projectiles per super": {
+      "normal": 4.0
+    },
+    "super width": {
+      "normal": 46.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "30%",
+      "speed": "+26%",
+      "damage": "+15%",
+      "shield": "+15%"
+    }
+  },
+  {
+    "name": "Gene",
+    "url": "https://brawlstars.fandom.com/wiki/Gene",
+    "rarity": "Mythic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 7.67,
+      "talk to the hand gear": 8.67
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "projectiles per attack": {
+      "normal": 1.0,
+      "max range": 6.0
+    },
+    "super charge per hit": {
+      "normal": 25.0,
+      "max range": 4.17
+    },
+    "attack spread": {
+      "normal": 100.0
+    },
+    "projectile speed": {
+      "normal": 3200.0,
+      "grabbed": 2000.0,
+      "grabbed;  hypercharge": 3200.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "projectiles per super": {
+      "normal": 13.0
+    },
+    "super width": {
+      "normal": 1.33
+    },
+    "hypercharge": {
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Gray",
+    "url": "https://brawlstars.fandom.com/wiki/Gray",
+    "rarity": "Mythic",
+    "class": "Support",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 6.67
+    },
+    "reload": {
+      "normal": 1.4
+    },
+    "super charge per hit": {
+      "normal": 29.0
+    },
+    "projectile speed": {
+      "normal": 38043200.0,
+      "walking cane; hooked": 2000.0
+    },
+    "attack width": {
+      "normal": 0.331
+    }
+  },
+  {
+    "name": "Griff",
+    "url": "https://brawlstars.fandom.com/wiki/Griff",
+    "rarity": "Epic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 9.0
+    },
+    "reload": {
+      "normal": 1.7,
+      "reload gear": 1.445
+    },
+    "projectiles per attack": {
+      "normal": 9.0
+    },
+    "super charge per hit": {
+      "normal": 7.59
+    },
+    "attack spread": {
+      "normal": 15.0
+    },
+    "projectile speed": {
+      "normal": 32003000.0
+    },
+    "projectiles per super": {
+      "normal": 5.0
+    },
+    "super spread": {
+      "normal": 75.0
+    }
+  },
+  {
+    "name": "Grom",
+    "url": "https://brawlstars.fandom.com/wiki/Grom",
+    "rarity": "Epic",
+    "class": "Artillery",
+    "movement speed": {
+      "normal": 720.0,
+      "foot patrol; very fast": 830.0
+    },
+    "range": {
+      "normal": 8.33
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "projectiles per attack": {
+      "normal": 412.0
+    },
+    "super charge per hit": {
+      "normal": 22.0
+    },
+    "projectile speed": {
+      "normal": 8003000.0
+    },
+    "attack width": {
+      "normal": 0.83
+    },
+    "projectiles per super": {
+      "normal": 4.0
+    },
+    "super width": {
+      "normal": 2.5
+    }
+  },
+  {
+    "name": "Gus",
+    "url": "https://brawlstars.fandom.com/wiki/Gus",
+    "rarity": "Super Rare",
+    "class": "Support",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 9.33
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "super charge per hit": {
+      "normal": 25.0
+    },
+    "projectile speed": {
+      "normal": 3600.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "super width": {
+      "normal": 1.33
+    }
+  },
+  {
+    "name": "Hank",
+    "url": "https://brawlstars.fandom.com/wiki/Hank",
+    "rarity": "Epic",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 720.0,
+      "it's gonna blow": 792.0
+    },
+    "range": {
+      "normal": 20.0
+    },
+    "reload": {
+      "normal": 0.25
+    },
+    "super charge per hit": {
+      "normal": 28.71
+    },
+    "projectiles per super": {
+      "normal": 6.0
+    },
+    "super spread": {
+      "normal": 360.0
+    },
+    "projectile speed": {
+      "normal": 4000.0
+    },
+    "super width": {
+      "normal": 0.67
+    }
+  },
+  {
+    "name": "Jacky",
+    "url": "https://brawlstars.fandom.com/wiki/Jacky",
+    "rarity": "Super Rare",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 770.0,
+      "pneumatic booster or hypercharge": 963.0,
+      "pneumatic booster and hypercharge": 1156.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.8
+    },
+    "super charge per hit": {
+      "normal": 25.42
+    },
+    "attack spread": {
+      "normal": 360.0
+    },
+    "duration": {
+      "normal": 1.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+25%",
+      "damage": "+5%",
+      "shield": "+25%"
+    }
+  },
+  {
+    "name": "Janet",
+    "url": "https://brawlstars.fandom.com/wiki/Janet",
+    "rarity": "Mythic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 720.0,
+      "super": 1400.0
+    },
+    "range": {
+      "normal": 2.67
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "super charge per hit": {
+      "normal": 16.8
+    },
+    "attack spread": {
+      "normal": 80.0,
+      "max range": 15.0
+    },
+    "projectile speed": {
+      "normal": 1500.0
+    },
+    "projectiles per super": {
+      "normal": 7.0
+    },
+    "duration": {
+      "normal": 6.0
+    }
+  },
+  {
+    "name": "Jessie",
+    "url": "https://brawlstars.fandom.com/wiki/Jessie",
+    "rarity": "Super Rare",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.8
+    },
+    "super charge per hit": {
+      "normal": 6.305
+    },
+    "projectile speed": {
+      "normal": 11963478.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "super spread": {
+      "normal": 30.0
+    },
+    "scrappy range": {
+      "normal": 9.0
+    },
+    "scrappy reload": {
+      "normal": 0.3
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "60%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Kit",
+    "url": "https://brawlstars.fandom.com/wiki/Kit",
+    "rarity": "Legendary",
+    "class": "Support",
+    "movement speed": {
+      "normal": 820.0,
+      "super; jumping": 6000.0,
+      "super; detaching": 2000.0
+    },
+    "range": {
+      "normal": 6.67
+    },
+    "reload": {
+      "normal": 0.8,
+      "attached": 2.0
+    },
+    "super charge per hit": {
+      "normal": 25.0
+    },
+    "attack spread": {
+      "normal": 75.0
+    },
+    "projectile speed": {
+      "normal": 1900.0
+    },
+    "duration": {
+      "normal": 2.0,
+      "overly attached": 10.0
+    }
+  },
+  {
+    "name": "Larry & Lawrie",
+    "url": "https://brawlstars.fandom.com/wiki/Larry_%26_Lawrie",
+    "rarity": "Epic",
+    "class": "Artillery",
+    "movement speed": {
+      "normal": 770.0
+    },
+    "range": {
+      "normal": 6.67,
+      "order: swap": 7.33
+    },
+    "reload": {
+      "normal": 2.2
+    },
+    "super charge per hit": {
+      "normal": 2.7
+    },
+    "attack spread": {
+      "normal": 12.5
+    },
+    "projectile speed": {
+      "normal": 34002000.0
+    },
+    "projectiles per super": {
+      "normal": 8.0
+    },
+    "super spread": {
+      "normal": 12.5
+    },
+    "lawrie movement speed": {
+      "normal": 770.0
+    },
+    "lawrie range": {
+      "normal": 5.0
+    }
+  },
+  {
+    "name": "Leon",
+    "url": "https://brawlstars.fandom.com/wiki/Leon",
+    "rarity": "Legendary",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 820.0,
+      "hypercharge": 1017.0,
+      "smoke trails": 1066.0,
+      "smoke trails and hypercharge": 1263.0
+    },
+    "range": {
+      "normal": 9.67
+    },
+    "reload": {
+      "normal": 1.9
+    },
+    "projectiles per attack": {
+      "normal": 4.0
+    },
+    "super charge per hit": {
+      "normal": 12.6
+    },
+    "attack spread": {
+      "normal": 17.5
+    },
+    "projectile speed": {
+      "normal": 3500.0
+    },
+    "duration": {
+      "normal": 6.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "30%",
+      "speed": "+24%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Lily",
+    "url": "https://brawlstars.fandom.com/wiki/Lily",
+    "rarity": "Mythic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 820.0,
+      "vigilance": 943.0
+    },
+    "range": {
+      "normal": 9.0
+    },
+    "reload": {
+      "normal": 0.8
+    },
+    "super charge per hit": {
+      "normal": 12.5
+    },
+    "projectile speed": {
+      "normal": 38002000.0
+    },
+    "attack width": {
+      "normal": 2.0
+    },
+    "super width": {
+      "normal": 1.33
+    }
+  },
+  {
+    "name": "Lola",
+    "url": "https://brawlstars.fandom.com/wiki/Lola",
+    "rarity": "Epic",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.7,
+      "reload gear": 1.445
+    },
+    "projectiles per attack": {
+      "normal": 6.0
+    },
+    "super charge per hit": {
+      "normal": 3.38
+    },
+    "projectile speed": {
+      "normal": 4500.0
+    },
+    "clone range": {
+      "normal": 9.0
+    }
+  },
+  {
+    "name": "Lou",
+    "url": "https://brawlstars.fandom.com/wiki/Lou",
+    "rarity": "Mythic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 7.67
+    },
+    "reload": {
+      "normal": 1.3
+    },
+    "projectiles per attack": {
+      "normal": 3.0
+    },
+    "super charge per hit": {
+      "normal": 1.0
+    },
+    "projectile speed": {
+      "normal": 1739.0
+    },
+    "attack width": {
+      "normal": 0.33
+    },
+    "duration": {
+      "normal": 10.0
+    },
+    "syrup range": {
+      "normal": 3.67
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Maisie",
+    "url": "https://brawlstars.fandom.com/wiki/Maisie",
+    "rarity": "Epic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 3.33
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "super charge per hit": {
+      "normal": 38.75
+    },
+    "projectile speed": {
+      "normal": 3000.0
+    },
+    "attack width": {
+      "normal": 0.67
+    },
+    "super spread": {
+      "normal": 360.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Mandy",
+    "url": "https://brawlstars.fandom.com/wiki/Mandy",
+    "rarity": "Epic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 40.0
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "super charge per hit": {
+      "normal": 50.0
+    },
+    "projectile speed": {
+      "normal": 4200.0
+    },
+    "attack width": {
+      "normal": 0.67
+    },
+    "duration": {
+      "normal": 3.0
+    },
+    "super width": {
+      "normal": 1.67
+    }
+  },
+  {
+    "name": "Max",
+    "url": "https://brawlstars.fandom.com/wiki/Max",
+    "rarity": "Mythic",
+    "class": "Support",
+    "movement speed": {
+      "normal": 820.0,
+      "hypercharge": 1017.0,
+      "super": 1120.0,
+      "super and hypercharge": 1317.0
+    },
+    "range": {
+      "normal": 4.0
+    },
+    "reload": {
+      "normal": 1.3,
+      "run n' gun": 1.1
+    },
+    "projectiles per attack": {
+      "normal": 4.0
+    },
+    "super charge per hit": {
+      "normal": 7.36
+    },
+    "attack spread": {
+      "normal": 15.0
+    },
+    "projectile speed": {
+      "normal": 4000.0
+    },
+    "duration": {
+      "normal": 4.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+24%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Meg",
+    "url": "https://brawlstars.fandom.com/wiki/Meg",
+    "rarity": "Legendary",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 770.0,
+      "mecha; normal": 720.0
+    },
+    "range": {
+      "normal": 4.33
+    },
+    "reload": {
+      "normal": 1.3,
+      "toolbox": 0.845,
+      "mecha; very fast": 1.1,
+      "mecha;  toolbox": 0.715
+    },
+    "projectiles per attack": {
+      "normal": 216.0
+    },
+    "super charge per hit": {
+      "normal": 21.25
+    },
+    "attack spread": {
+      "normal": 10.0
+    },
+    "projectile speed": {
+      "normal": 40004500.0
+    },
+    "attack width": {
+      "normal": 12.0
+    },
+    "super spread": {
+      "normal": 150.0
+    }
+  },
+  {
+    "name": "Melodie",
+    "url": "https://brawlstars.fandom.com/wiki/Melodie",
+    "rarity": "Mythic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 720.0,
+      "fast beats and one monster note": 763.0,
+      "fast beats and two monster notes": 806.0,
+      "fast beats and three monster notes": 850.0,
+      "super": 3700.0
+    },
+    "range": {
+      "normal": 5.33
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "super charge per hit": {
+      "normal": 25.3
+    },
+    "attack spread": {
+      "normal": 360.0
+    },
+    "projectile speed": {
+      "normal": 4500860.0,
+      "monster notes;  perfect pitch": 1076.0
+    },
+    "attack width": {
+      "normal": 0.83
+    },
+    "number of supers": {
+      "normal": 3.0
+    },
+    "super width": {
+      "normal": 2.0
+    }
+  },
+  {
+    "name": "Mico",
+    "url": "https://brawlstars.fandom.com/wiki/Mico",
+    "rarity": "Mythic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 820.0,
+      "hypercharge": 1017.0,
+      "super": 1025.0
+    },
+    "range": {
+      "normal": 4.0,
+      "presto": 5.33
+    },
+    "reload": {
+      "normal": 2.6
+    },
+    "super charge per hit": {
+      "normal": 14.875
+    },
+    "projectile speed": {
+      "normal": 5200.0
+    },
+    "duration": {
+      "normal": 6.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "50%",
+      "speed": "+24%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Mortis",
+    "url": "https://brawlstars.fandom.com/wiki/Mortis",
+    "rarity": "Mythic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 820.0
+    },
+    "range": {
+      "normal": 10.0
+    },
+    "reload": {
+      "normal": 2.4,
+      "survival shovel": 1.2
+    },
+    "super charge per hit": {
+      "normal": 30.15
+    },
+    "projectile speed": {
+      "normal": 27184077.0
+    },
+    "super width": {
+      "normal": 2.67
+    }
+  },
+  {
+    "name": "Mr. P",
+    "url": "https://brawlstars.fandom.com/wiki/Mr._P",
+    "rarity": "Mythic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.6
+    },
+    "super charge per hit": {
+      "normal": 5.59
+    },
+    "projectile speed": {
+      "normal": 1196.0,
+      "porter": 3125.0
+    },
+    "attack width": {
+      "normal": 1.33
+    },
+    "super width": {
+      "normal": 0.67
+    },
+    "porter movement speed": {
+      "normal": 1000.0
+    },
+    "porter range": {
+      "normal": 4.67
+    },
+    "porter reload": {
+      "normal": 0.7
+    }
+  },
+  {
+    "name": "Nani",
+    "url": "https://brawlstars.fandom.com/wiki/Nani",
+    "rarity": "Epic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 3.33
+    },
+    "reload": {
+      "normal": 1.8
+    },
+    "projectiles per attack": {
+      "normal": 3.0
+    },
+    "super charge per hit": {
+      "normal": 22.5
+    },
+    "attack spread": {
+      "normal": 50.0
+    },
+    "projectile speed": {
+      "normal": 2500.0
+    },
+    "duration": {
+      "normal": 10.0
+    },
+    "super width": {
+      "normal": 1.0
+    }
+  },
+  {
+    "name": "Nita",
+    "url": "https://brawlstars.fandom.com/wiki/Nita",
+    "rarity": "Rare",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.1
+    },
+    "super charge per hit": {
+      "normal": 10.0
+    },
+    "projectile speed": {
+      "normal": 1196.0
+    },
+    "attack width": {
+      "normal": 1.67
+    },
+    "bear movement speed": {
+      "normal": 610702.0
+    },
+    "bear range": {
+      "normal": 2.0
+    },
+    "bear reload": {
+      "normal": 0.6
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "50%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Otis",
+    "url": "https://brawlstars.fandom.com/wiki/Otis",
+    "rarity": "Mythic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 9.0
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "projectiles per attack": {
+      "normal": 3.0,
+      "phat splatter": 4.0
+    },
+    "super charge per hit": {
+      "normal": 8.5
+    },
+    "attack spread": {
+      "normal": 11.0
+    },
+    "projectile speed": {
+      "normal": 3200.0
+    },
+    "attack width": {
+      "normal": 1.33
+    },
+    "duration": {
+      "normal": 3.0
+    },
+    "super width": {
+      "normal": 1.33
+    }
+  },
+  {
+    "name": "Pam",
+    "url": "https://brawlstars.fandom.com/wiki/Pam",
+    "rarity": "Epic",
+    "class": "Support",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 1.3
+    },
+    "projectiles per attack": {
+      "normal": 9.0
+    },
+    "super charge per hit": {
+      "normal": 6.825
+    },
+    "attack spread": {
+      "normal": 30.0
+    },
+    "projectile speed": {
+      "normal": 1196.0
+    },
+    "healing turret range": {
+      "normal": 3.33
+    }
+  },
+  {
+    "name": "Pearl",
+    "url": "https://brawlstars.fandom.com/wiki/Pearl",
+    "rarity": "Epic",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 3.33
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "projectiles per attack": {
+      "normal": 6.0
+    },
+    "super charge per hit": {
+      "normal": 38.75
+    },
+    "attack spread": {
+      "normal": 20.0
+    },
+    "projectile speed": {
+      "normal": 4000.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Penny",
+    "url": "https://brawlstars.fandom.com/wiki/Penny",
+    "rarity": "Super Rare",
+    "class": "Artillery",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 5.0
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "projectiles per attack": {
+      "normal": 46.0
+    },
+    "super charge per hit": {
+      "normal": 30.0
+    },
+    "projectile speed": {
+      "normal": 1196750.0
+    },
+    "attack width": {
+      "normal": 10.67
+    },
+    "cannon range": {
+      "normal": 13.33
+    },
+    "cannon reload": {
+      "normal": 3.5
+    }
+  },
+  {
+    "name": "Piper",
+    "url": "https://brawlstars.fandom.com/wiki/Piper",
+    "rarity": "Epic",
+    "class": "Marksman",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0,
+      "super": 1500.0,
+      "super and hypercharge": 2500.0
+    },
+    "range": {
+      "normal": 8.67
+    },
+    "reload": {
+      "normal": 2.3
+    },
+    "super charge per hit": {
+      "normal": 20.25
+    },
+    "projectile speed": {
+      "normal": 4000.0
+    },
+    "attack width": {
+      "normal": 0.67
+    },
+    "projectiles per super": {
+      "normal": 46.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "35%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Poco",
+    "url": "https://brawlstars.fandom.com/wiki/Poco",
+    "rarity": "Rare",
+    "class": "Support",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 9.33
+    },
+    "reload": {
+      "normal": 1.6
+    },
+    "super charge per hit": {
+      "normal": 21.0
+    },
+    "attack spread": {
+      "normal": 65.0
+    },
+    "projectile speed": {
+      "normal": 5000.0
+    },
+    "super spread": {
+      "normal": 65.0
+    }
+  },
+  {
+    "name": "R-T",
+    "url": "https://brawlstars.fandom.com/wiki/R-T",
+    "rarity": "Mythic",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0,
+      "split": 820.0
+    },
+    "range": {
+      "normal": 10.0,
+      "split": 3.33
+    },
+    "reload": {
+      "normal": 1.5,
+      "split": 1.8
+    },
+    "super charge per hit": {
+      "normal": 25.375
+    },
+    "attack spread": {
+      "normal": 360.0
+    },
+    "projectile speed": {
+      "normal": 4500.0
+    },
+    "attack width": {
+      "normal": 0.33
+    }
+  },
+  {
+    "name": "Rico",
+    "url": "https://brawlstars.fandom.com/wiki/Rico",
+    "rarity": "Super Rare",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0,
+      "robo retreat": 970.0,
+      "robo retreat and hypercharge": 1057.0
+    },
+    "range": {
+      "normal": 13.33
+    },
+    "reload": {
+      "normal": 1.2,
+      "reload gear": 1.02
+    },
+    "projectiles per attack": {
+      "normal": 5.0
+    },
+    "super charge per hit": {
+      "normal": 9.45
+    },
+    "attack spread": {
+      "normal": 7.5
+    },
+    "projectile speed": {
+      "normal": 4891.0
+    },
+    "attack width": {
+      "normal": 0.67
+    },
+    "projectiles per super": {
+      "normal": 12.0
+    },
+    "super spread": {
+      "normal": 10.0
+    },
+    "super width": {
+      "normal": 0.67
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Rosa",
+    "url": "https://brawlstars.fandom.com/wiki/Rosa",
+    "rarity": "Rare",
+    "class": "Tank",
+    "movement speed": {
+      "normal": 770.0,
+      "hypercharge": 963.0
+    },
+    "range": {
+      "normal": 3.67
+    },
+    "reload": {
+      "normal": 1.0
+    },
+    "projectiles per attack": {
+      "normal": 3.0
+    },
+    "super charge per hit": {
+      "normal": 8.625
+    },
+    "attack spread": {
+      "normal": 65.0
+    },
+    "projectile speed": {
+      "normal": 5000.0
+    },
+    "duration": {
+      "normal": 3.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "50%",
+      "speed": "+25%",
+      "damage": "+5%",
+      "shield": "+25%"
+    }
+  },
+  {
+    "name": "Ruffs",
+    "url": "https://brawlstars.fandom.com/wiki/Ruffs",
+    "rarity": "Mythic",
+    "class": "Support",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 7.67
+    },
+    "reload": {
+      "normal": 1.4
+    },
+    "projectiles per attack": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 33.5
+    },
+    "projectile speed": {
+      "normal": 1700.0
+    },
+    "attack width": {
+      "normal": 0.47
+    },
+    "supply drop range": {
+      "normal": 2.33
+    }
+  },
+  {
+    "name": "Sam",
+    "url": "https://brawlstars.fandom.com/wiki/Sam",
+    "rarity": "Epic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 770.0,
+      "after throwing knuckle busters; very fast": 970.0
+    },
+    "range": {
+      "normal": 8.67
+    },
+    "reload": {
+      "normal": 1.6,
+      "out knuckle busters; very fast": 0.9
+    },
+    "projectiles per attack": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 35.0,
+      "while retrieving knuckle busters": 17.5
+    },
+    "attack spread": {
+      "normal": 50.0,
+      "out knuckle busters": 25.0
+    },
+    "projectile speed": {
+      "normal": 2900.0,
+      "while retrieving knuckle busters": 3600.0
+    },
+    "super width": {
+      "normal": 1.67,
+      "while retrieving knuckle busters": 0.67
+    }
+  },
+  {
+    "name": "Sandy",
+    "url": "https://brawlstars.fandom.com/wiki/Sandy",
+    "rarity": "Legendary",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 770.0,
+      "hypercharge": 963.0,
+      "hypercharge and super": 1117.0
+    },
+    "range": {
+      "normal": 7.33
+    },
+    "reload": {
+      "normal": 1.8
+    },
+    "super charge per hit": {
+      "normal": 16.875
+    },
+    "attack spread": {
+      "normal": 40.0
+    },
+    "projectile speed": {
+      "normal": 2000.0
+    },
+    "duration": {
+      "normal": 9.0
+    },
+    "sandstorm range": {
+      "normal": 6.67
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+25%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Shelly",
+    "url": "https://brawlstars.fandom.com/wiki/Shelly",
+    "rarity": "Starting Brawler",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 770.0,
+      "hypercharge": 963.0
+    },
+    "range": {
+      "normal": 7.67
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "projectiles per attack": {
+      "normal": 5.0
+    },
+    "super charge per hit": {
+      "normal": 4.8
+    },
+    "attack spread": {
+      "normal": 30.0
+    },
+    "projectile speed": {
+      "normal": 4130.0
+    },
+    "projectiles per super": {
+      "normal": 912.0
+    },
+    "super spread": {
+      "normal": 50.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "30%",
+      "speed": "+25%",
+      "damage": "+5%",
+      "shield": "+25%"
+    }
+  },
+  {
+    "name": "Spike",
+    "url": "https://brawlstars.fandom.com/wiki/Spike",
+    "rarity": "Legendary",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 7.67
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "projectiles per attack": {
+      "normal": 7.0
+    },
+    "super charge per hit": {
+      "normal": 12.5
+    },
+    "projectile speed": {
+      "normal": 1739.0
+    },
+    "attack width": {
+      "normal": 10.33
+    },
+    "duration": {
+      "normal": 4.5
+    },
+    "thorny grenade range": {
+      "normal": 2.67
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "35%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Sprout",
+    "url": "https://brawlstars.fandom.com/wiki/Sprout",
+    "rarity": "Mythic",
+    "class": "Artillery",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 7.67
+    },
+    "reload": {
+      "normal": 1.7
+    },
+    "super charge per hit": {
+      "normal": 23.03
+    },
+    "projectile speed": {
+      "normal": 1739.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "duration": {
+      "normal": 10.0
+    },
+    "hypercharge": {
+      "hypercharge multiplier": "40%",
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Squeak",
+    "url": "https://brawlstars.fandom.com/wiki/Squeak",
+    "rarity": "Mythic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 8.33
+    },
+    "reload": {
+      "normal": 2.1
+    },
+    "super charge per hit": {
+      "normal": 12.5
+    },
+    "projectile speed": {
+      "normal": 16003000.0
+    },
+    "attack width": {
+      "normal": 0.33
+    },
+    "projectiles per super": {
+      "normal": 6.0
+    },
+    "super width": {
+      "normal": 0.67
+    }
+  },
+  {
+    "name": "Stu",
+    "url": "https://brawlstars.fandom.com/wiki/Stu",
+    "rarity": "Epic",
+    "class": "Assassin",
+    "movement speed": {
+      "normal": 720.0,
+      "speed zone": 820.0,
+      "super": 3000.0
+    },
+    "range": {
+      "normal": 2.33,
+      "zero drag": 4.0
+    },
+    "reload": {
+      "normal": 1.5
+    },
+    "projectiles per attack": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 10.0
+    },
+    "projectile speed": {
+      "normal": 3300.0
+    },
+    "attack width": {
+      "normal": 1.0
+    },
+    "super width": {
+      "normal": 2.0
+    }
+  },
+  {
+    "name": "Surge",
+    "url": "https://brawlstars.fandom.com/wiki/Surge",
+    "rarity": "Legendary",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 650.0,
+      "stage 1+; very fast": 820.0
+    },
+    "range": {
+      "normal": 3.33
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 17.0
+    },
+    "projectile speed": {
+      "normal": 35003000.0
+    },
+    "attack width": {
+      "normal": 1.0
+    }
+  },
+  {
+    "name": "Tara",
+    "url": "https://brawlstars.fandom.com/wiki/Tara",
+    "rarity": "Mythic",
+    "class": "Damage Dealer",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 6.67
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "projectiles per attack": {
+      "normal": 3.0
+    },
+    "super charge per hit": {
+      "normal": 18.0
+    },
+    "attack spread": {
+      "normal": 25.0
+    },
+    "projectile speed": {
+      "normal": 1522.0
+    }
+  },
+  {
+    "name": "Tick",
+    "url": "https://brawlstars.fandom.com/wiki/Tick",
+    "rarity": "Super Rare",
+    "class": "Artillery",
+    "movement speed": {
+      "normal": 720.0,
+      "hypercharge": 907.0
+    },
+    "range": {
+      "normal": 3.33
+    },
+    "reload": {
+      "normal": 2.4,
+      "automa-tick reload": 2.18
+    },
+    "projectiles per attack": {
+      "normal": 36.0
+    },
+    "super charge per hit": {
+      "normal": 35.0
+    },
+    "projectile speed": {
+      "normal": 1196.0
+    },
+    "head movement speed": {
+      "normal": 1200.0
+    },
+    "hypercharge": {
+      "speed": "+26%",
+      "damage": "+25%",
+      "shield": "+5%"
+    }
+  },
+  {
+    "name": "Willow",
+    "url": "https://brawlstars.fandom.com/wiki/Willow",
+    "rarity": "Mythic",
+    "class": "Controller",
+    "movement speed": {
+      "normal": 720.0
+    },
+    "range": {
+      "normal": 8.33
+    },
+    "reload": {
+      "normal": 2.0
+    },
+    "super charge per hit": {
+      "normal": 8.5
+    },
+    "projectile speed": {
+      "normal": 4130.0
+    },
+    "duration": {
+      "normal": 4.0
+    },
+    "super width": {
+      "normal": 0.33
+    }
+  }
+]
