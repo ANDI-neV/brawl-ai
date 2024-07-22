@@ -69,6 +69,26 @@ def get_brawler_data(brawler_name, brawler_url):
             else:
                 brawler_info[label] = parse_label_info(value)
 
+    level_tables = soup.find_all('table', class_='pi-horizontal-group')
+    brawler_info["level stats"] = {}
+    for table in level_tables:
+        rows = table.find_all('tr')
+        for row in rows:
+            columns = row.find_all('td')
+
+            for i in range(len(columns[1:])):
+                data_source = str.lower(columns[i+1].get('data-source'))
+                if data_source not in brawler_info["level stats"] and columns[i+1].text.strip().isdigit():
+                    brawler_info["level stats"][data_source] = {}
+                try:
+                    level = int(columns[0].text.strip())
+                    value = int(columns[i+1].text.strip())
+
+                    brawler_info["level stats"][data_source][level] = value
+                except ValueError:
+                    # Skip rows that don't contain valid integers
+                    continue
+
     return brawler_info
 
 def save_brawler_data(brawler_data):
