@@ -22,12 +22,23 @@ def get_brawler_list():
 def parse_label_info(value):
     values = re.findall(r'\d+\.?\d*', value)
     labels = [label.lower().strip("()") for label in re.findall(r'\((.*?)\)', value)]
-    label_dict = {"normal": float(values[0])}
+    label_dict = {}
 
-    for value, label in zip(values[1:], labels[1:]):
+    if len(values) > len(labels):
+        labels = ["normal"] + labels
+    else:
+        labels[0] = "normal"
+
+    for value, label in zip(values, labels):
         condition = label.replace("with", "").strip()
         label_dict[condition] = float(value)
     return label_dict
+
+def convert_percent_to_float(value):
+    return float(value.strip('%')) / 100
+
+def extract_text_with_br(element):
+    return ' BREAK '.join(element.stripped_strings)
 
 def get_brawler_data(brawler_name, brawler_url):
     response = requests.get(brawler_url)
@@ -39,7 +50,8 @@ def get_brawler_data(brawler_name, brawler_url):
     if infobox:
         for row in infobox.select('div.pi-data'):
             label = str.lower(row.select_one('h3').text.strip())
-            value = row.select_one('div.pi-data-value').text.strip()
+            value_element = row.select_one('div.pi-data-value')
+            value = extract_text_with_br(value_element)
 
             excluded_labels = ["release date", "voice actor"]
             string_labels = ["rarity", "class"]
@@ -53,10 +65,9 @@ def get_brawler_data(brawler_name, brawler_url):
             elif label in hyper_labels:
                 if "hypercharge" not in brawler_info:
                     brawler_info["hypercharge"] = {}
-                brawler_info["hypercharge"][label] = value
+                brawler_info["hypercharge"][label] = convert_percent_to_float(value.replace("+","").strip())
             else:
                 brawler_info[label] = parse_label_info(value)
-
 
     return brawler_info
 

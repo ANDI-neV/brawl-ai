@@ -16,7 +16,8 @@
       "reload gear": 1.275
     },
     "projectiles per attack": {
-      "normal": 618.0
+      "normal": 6.0,
+      "extra credits": 18.0
     },
     "super charge per hit": {
       "normal": 8.48
@@ -31,7 +32,8 @@
       "normal": 0.33
     },
     "damage booster range": {
-      "normal": 3.335
+      "normal": 3.33,
+      "boosted booster": 5.0
     }
   },
   {
@@ -48,9 +50,10 @@
     },
     "reload": {
       "normal": 0.22,
-      "7.48 seconds max;  reload gear": 8.8,
-      "5.86 seconds max;  scorchin' siphon": 0.187,
-      "4.96 seconds max;  scorchin' siphon and reload gear": 7.48
+      "8.8 seconds max; very fast": 8.8,
+      "7.48 seconds max;  reload gear": 0.187,
+      "5.86 seconds max;  scorchin' siphon": 7.48,
+      "4.96 seconds max;  scorchin' siphon and reload gear": 0.146
     },
     "projectiles per attack": {
       "normal": 40.0
@@ -95,10 +98,10 @@
       "normal": 8.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "35%",
-      "speed": "+24%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.35,
+      "speed": 0.24,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -119,7 +122,8 @@
       "full rage and mad as heck": 1.0
     },
     "super charge per hit": {
-      "normal": 3.75
+      "normal": 3.75,
+      "super charge gear": 4.125
     },
     "projectile speed": {
       "normal": 1196.0
@@ -153,13 +157,14 @@
       "normal": 1504.0
     },
     "projectiles per super": {
-      "normal": 53.0
+      "normal": 5.0,
+      "hypercharge": 3.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "30%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.3,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -215,16 +220,17 @@
       "normal": 4000.0
     },
     "attack width": {
-      "normal": 0.67
+      "normal": 0.67,
+      "bounce": 0.33
     },
     "super width": {
       "normal": 1.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -288,10 +294,10 @@
       "normal": 1.67
     },
     "hypercharge": {
-      "hypercharge multiplier": "50%",
-      "speed": "+24%",
-      "damage": "+5%",
-      "shield": "+25%"
+      "hypercharge multiplier": 0.5,
+      "speed": 0.24,
+      "damage": 0.05,
+      "shield": 0.25
     }
   },
   {
@@ -313,7 +319,8 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 33.48
+      "normal": 33.48,
+      "super totem": 50.22
     },
     "attack spread": {
       "normal": 15.0
@@ -336,7 +343,8 @@
       "bonnie; very fast": 820.0
     },
     "range": {
-      "normal": 7.331
+      "normal": 7.33,
+      "black powder": 10.0
     },
     "reload": {
       "normal": 1.0,
@@ -386,18 +394,20 @@
       "normal": 870.0
     },
     "attack width": {
-      "normal": 0.671
+      "normal": 0.67,
+      "rocket fuel": 1.0
     },
     "projectiles per super": {
       "normal": 9.0,
-      "hypercharge": 13.0,
-      "more rockets and hypercharge": 28.0
+      "more rockets": 13.0,
+      "hypercharge": 28.0,
+      "more rockets and hypercharge": 35.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "45%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.45,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -421,7 +431,8 @@
       "normal": 5.0
     },
     "super charge per hit": {
-      "normal": 36.0
+      "normal": 36.0,
+      "super charge gear": 39.6
     },
     "attack spread": {
       "normal": 45.0
@@ -430,10 +441,10 @@
       "normal": 2853.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "35%",
-      "speed": "+25%",
-      "damage": "+5%",
-      "shield": "+25%"
+      "hypercharge multiplier": 0.35,
+      "speed": 0.25,
+      "damage": 0.05,
+      "shield": 0.25
     }
   },
   {
@@ -452,7 +463,8 @@
       "normal": 1.8
     },
     "super charge per hit": {
-      "normal": 34.5
+      "normal": 34.5,
+      "close to max range": 17.25
     },
     "attack spread": {
       "normal": 45.0
@@ -499,10 +511,10 @@
       "normal": 1.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "25%",
-      "speed": "+25%",
-      "damage": "+15%",
-      "shield": "+15%"
+      "hypercharge multiplier": 0.25,
+      "speed": 0.25,
+      "damage": 0.15,
+      "shield": 0.15
     }
   },
   {
@@ -520,7 +532,8 @@
       "normal": 1.45
     },
     "projectiles per attack": {
-      "normal": 13.0
+      "normal": 1.0,
+      "booster shots": 3.0
     },
     "super charge per hit": {
       "normal": 24.0
@@ -548,7 +561,8 @@
       "normal": 7.5
     },
     "projectile speed": {
-      "normal": 30003312.0
+      "normal": 3000.0,
+      "power throw": 3312.0
     },
     "attack width": {
       "normal": 1.67
@@ -588,10 +602,10 @@
       "normal": 1.33
     },
     "hypercharge": {
-      "hypercharge multiplier": "60%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.6,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -676,28 +690,31 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 5.67,
-      "stage 2+; long": 8.33
+      "normal": 8.33,
+      "stage 2+; long": 2.0
     },
     "reload": {
       "normal": 2.0
     },
     "projectiles per attack": {
       "normal": 1.0,
-      "stage 2": 1.0,
+      "stage 1": 1.0,
+      "stage 2": 2.0,
       "stage 3": 2.0
     },
     "super charge per hit": {
       "normal": 10.0
     },
     "attack spread": {
-      "normal": 125.0
+      "normal": 125.0,
+      "stage 3": 3.0
     },
     "projectile speed": {
       "normal": 3500.0
     },
     "attack width": {
-      "normal": 1.0
+      "normal": 1.0,
+      "stage 1 and 2": 1.0
     },
     "projectiles per super": {
       "normal": 16.0
@@ -729,10 +746,10 @@
       "normal": 1.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "30%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.3,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -754,7 +771,8 @@
       "reload gear": 1.19
     },
     "projectiles per attack": {
-      "normal": 61.0
+      "normal": 6.0,
+      "silver bullet": 1.0
     },
     "super charge per hit": {
       "normal": 6.96
@@ -763,19 +781,21 @@
       "normal": 4891.0
     },
     "attack width": {
-      "normal": 0.33
+      "normal": 0.33,
+      "silver bullet": 0.67
     },
     "projectiles per super": {
       "normal": 12.0
     },
     "super width": {
-      "normal": 0.671
+      "normal": 0.67,
+      "hypercharge": 1.474
     },
     "hypercharge": {
-      "hypercharge multiplier": "35%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.35,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -797,7 +817,8 @@
       "super": 0.84
     },
     "projectiles per attack": {
-      "normal": 21.0
+      "normal": 2.0,
+      "poison mushroom": 1.0
     },
     "super charge per hit": {
       "normal": 15.75
@@ -806,7 +827,8 @@
       "normal": 3800.0
     },
     "attack width": {
-      "normal": 0.671
+      "normal": 0.67,
+      "poison mushroom": 1.33
     },
     "duration": {
       "normal": 8.0
@@ -815,10 +837,10 @@
       "normal": 1.33
     },
     "hypercharge": {
-      "hypercharge multiplier": "25%",
-      "speed": "+24%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.25,
+      "speed": 0.24,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -841,7 +863,8 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 6.0
+      "normal": 6.0,
+      "poison": 1.5
     },
     "attack spread": {
       "normal": 22.5
@@ -856,10 +879,10 @@
       "normal": 0.33
     },
     "hypercharge": {
-      "hypercharge multiplier": "60%",
-      "speed": "+24%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.6,
+      "speed": 0.24,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -907,7 +930,8 @@
       "normal": 1.5
     },
     "super charge per hit": {
-      "normal": 21.0
+      "normal": 21.0,
+      "extra mustard": 42.0
     },
     "duration": {
       "normal": 5.0
@@ -983,10 +1007,10 @@
       "normal": 2.67
     },
     "hypercharge": {
-      "hypercharge multiplier": "30%",
-      "speed": "+25%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.3,
+      "speed": 0.25,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1013,8 +1037,9 @@
     },
     "super charge per hit": {
       "normal": 8.37,
-      "hypercharge": 9.207,
-      "super charge gear and hypercharge": 16.74
+      "super charge gear": 9.207,
+      "hypercharge": 16.74,
+      "super charge gear and hypercharge": 17.577
     },
     "projectile speed": {
       "normal": 3500.0
@@ -1023,10 +1048,10 @@
       "normal": 2.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+24%",
-      "damage": "+15%",
-      "shield": "+15%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.24,
+      "damage": 0.15,
+      "shield": 0.15
     }
   },
   {
@@ -1051,7 +1076,8 @@
       "normal": 4.0
     },
     "super charge per hit": {
-      "normal": 30.0
+      "normal": 30.0,
+      "super charge gear": 33.0
     },
     "projectile speed": {
       "normal": 3261.0
@@ -1060,10 +1086,10 @@
       "normal": 1.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "30%",
-      "speed": "+25%",
-      "damage": "+5%",
-      "shield": "+25%"
+      "hypercharge multiplier": 0.3,
+      "speed": 0.25,
+      "damage": 0.05,
+      "shield": 0.25
     }
   },
   {
@@ -1094,10 +1120,10 @@
       "normal": 5.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "30%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.3,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1156,16 +1182,18 @@
       "normal": 25.2
     },
     "projectile speed": {
-      "normal": 32004500.0
+      "normal": 3200.0,
+      "shoe": 4500.0
     },
     "attack width": {
-      "normal": 20.67
+      "normal": 2.0,
+      "shoe": 0.67
     },
     "hypercharge": {
-      "hypercharge multiplier": "20%",
-      "speed": "+25%",
-      "damage": "+15%",
-      "shield": "+15%"
+      "hypercharge multiplier": 0.2,
+      "speed": 0.25,
+      "damage": 0.15,
+      "shield": 0.15
     }
   },
   {
@@ -1194,13 +1222,14 @@
       "normal": 6000.0
     },
     "super spread": {
-      "normal": 65.0
+      "normal": 65.0,
+      "hypercharge": 360.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+26%",
-      "damage": "+5%",
-      "shield": "+25%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.26,
+      "damage": 0.05,
+      "shield": 0.25
     }
   },
   {
@@ -1234,13 +1263,14 @@
       "normal": 4.0
     },
     "super width": {
-      "normal": 46.0
+      "normal": 4.0,
+      "hypercharge": 6.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "30%",
-      "speed": "+26%",
-      "damage": "+15%",
-      "shield": "+15%"
+      "hypercharge multiplier": 0.3,
+      "speed": 0.26,
+      "damage": 0.15,
+      "shield": 0.15
     }
   },
   {
@@ -1279,15 +1309,16 @@
       "normal": 1.0
     },
     "projectiles per super": {
-      "normal": 13.0
+      "normal": 1.0,
+      "hypercharge": 3.0
     },
     "super width": {
       "normal": 1.33
     },
     "hypercharge": {
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1308,11 +1339,13 @@
       "normal": 29.0
     },
     "projectile speed": {
-      "normal": 38043200.0,
+      "normal": 3804.0,
+      "walking cane; launched": 3200.0,
       "walking cane; hooked": 2000.0
     },
     "attack width": {
-      "normal": 0.331
+      "normal": 0.33,
+      "walking cane": 1.33
     }
   },
   {
@@ -1331,16 +1364,19 @@
       "reload gear": 1.445
     },
     "projectiles per attack": {
-      "normal": 9.0
+      "normal": 9.0,
+      "coin shower": 12.0
     },
     "super charge per hit": {
-      "normal": 7.59
+      "normal": 7.59,
+      "close to max range": 15.18
     },
     "attack spread": {
       "normal": 15.0
     },
     "projectile speed": {
-      "normal": 32003000.0
+      "normal": 3200.0,
+      "return": 3000.0
     },
     "projectiles per super": {
       "normal": 5.0
@@ -1365,13 +1401,15 @@
       "normal": 2.0
     },
     "projectiles per attack": {
-      "normal": 412.0
+      "normal": 4.0,
+      "radio check": 12.0
     },
     "super charge per hit": {
       "normal": 22.0
     },
     "projectile speed": {
-      "normal": 8003000.0
+      "normal": 800.0,
+      "split": 3000.0
     },
     "attack width": {
       "normal": 0.83
@@ -1458,7 +1496,8 @@
       "normal": 1.8
     },
     "super charge per hit": {
-      "normal": 25.42
+      "normal": 25.42,
+      "super charge gear": 27.962
     },
     "attack spread": {
       "normal": 360.0
@@ -1467,10 +1506,10 @@
       "normal": 1.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+25%",
-      "damage": "+5%",
-      "shield": "+25%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.25,
+      "damage": 0.05,
+      "shield": 0.25
     }
   },
   {
@@ -1524,7 +1563,8 @@
       "normal": 6.305
     },
     "projectile speed": {
-      "normal": 11963478.0
+      "normal": 1196.0,
+      "scrappy": 3478.0
     },
     "attack width": {
       "normal": 1.0
@@ -1536,13 +1576,14 @@
       "normal": 9.0
     },
     "scrappy reload": {
-      "normal": 0.3
+      "normal": 0.3,
+      "recoil spring": 0.15
     },
     "hypercharge": {
-      "hypercharge multiplier": "60%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.6,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1573,7 +1614,8 @@
     },
     "duration": {
       "normal": 2.0,
-      "overly attached": 10.0
+      "attached": 10.0,
+      "overly attached": 15.0
     }
   },
   {
@@ -1598,7 +1640,8 @@
       "normal": 12.5
     },
     "projectile speed": {
-      "normal": 34002000.0
+      "normal": 3400.0,
+      "order: swap": 2000.0
     },
     "projectiles per super": {
       "normal": 8.0
@@ -1634,7 +1677,8 @@
       "normal": 4.0
     },
     "super charge per hit": {
-      "normal": 12.6
+      "normal": 12.6,
+      "close to max range": 3.78
     },
     "attack spread": {
       "normal": 17.5
@@ -1643,13 +1687,14 @@
       "normal": 3500.0
     },
     "duration": {
-      "normal": 6.0
+      "normal": 6.0,
+      "lingering smoke gear": 8.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "30%",
-      "speed": "+24%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.3,
+      "speed": 0.24,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1671,7 +1716,8 @@
       "normal": 12.5
     },
     "projectile speed": {
-      "normal": 38002000.0
+      "normal": 3800.0,
+      "repot": 2000.0
     },
     "attack width": {
       "normal": 2.0
@@ -1727,7 +1773,8 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 1.0
+      "normal": 1.0,
+      "super charge gear": 1.1
     },
     "projectile speed": {
       "normal": 1739.0
@@ -1742,10 +1789,10 @@
       "normal": 3.67
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1776,10 +1823,10 @@
       "normal": 360.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1846,10 +1893,10 @@
       "normal": 4.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+24%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.24,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1871,7 +1918,8 @@
       "mecha;  toolbox": 0.715
     },
     "projectiles per attack": {
-      "normal": 216.0
+      "normal": 2.0,
+      "mecha": 16.0
     },
     "super charge per hit": {
       "normal": 21.25
@@ -1880,10 +1928,12 @@
       "normal": 10.0
     },
     "projectile speed": {
-      "normal": 40004500.0
+      "normal": 4000.0,
+      "mecha": 4500.0
     },
     "attack width": {
-      "normal": 12.0
+      "normal": 1.0,
+      "mecha": 2.0
     },
     "super spread": {
       "normal": 150.0
@@ -1914,7 +1964,8 @@
       "normal": 360.0
     },
     "projectile speed": {
-      "normal": 4500860.0,
+      "normal": 4500.0,
+      "monster notes": 860.0,
       "monster notes;  perfect pitch": 1076.0
     },
     "attack width": {
@@ -1954,10 +2005,10 @@
       "normal": 6.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "50%",
-      "speed": "+24%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.5,
+      "speed": 0.24,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -1979,7 +2030,8 @@
       "normal": 30.15
     },
     "projectile speed": {
-      "normal": 27184077.0
+      "normal": 2718.0,
+      "bat storm gear": 4077.0
     },
     "super width": {
       "normal": 2.67
@@ -2000,7 +2052,8 @@
       "normal": 1.6
     },
     "super charge per hit": {
-      "normal": 5.59
+      "normal": 5.59,
+      "porter reinforcements": 4.3
     },
     "projectile speed": {
       "normal": 1196.0,
@@ -2040,7 +2093,8 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 22.5
+      "normal": 22.5,
+      "super charge gear": 24.75
     },
     "attack spread": {
       "normal": 50.0
@@ -2080,19 +2134,21 @@
       "normal": 1.67
     },
     "bear movement speed": {
-      "normal": 610702.0
+      "normal": 610.0,
+      "hypercharge": 702.0
     },
     "bear range": {
       "normal": 2.0
     },
     "bear reload": {
-      "normal": 0.6
+      "normal": 0.6,
+      "hyper bear": 0.24
     },
     "hypercharge": {
-      "hypercharge multiplier": "50%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.5,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -2111,10 +2167,12 @@
     },
     "projectiles per attack": {
       "normal": 3.0,
-      "phat splatter": 4.0
+      "ink refills": 4.0,
+      "phat splatter": 1.0
     },
     "super charge per hit": {
-      "normal": 8.5
+      "normal": 8.5,
+      "super charge gear": 9.35
     },
     "attack spread": {
       "normal": 11.0
@@ -2126,7 +2184,8 @@
       "normal": 1.33
     },
     "duration": {
-      "normal": 3.0
+      "normal": 3.0,
+      "stencil glue": 4.0
     },
     "super width": {
       "normal": 1.33
@@ -2190,10 +2249,10 @@
       "normal": 4000.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -2211,16 +2270,20 @@
       "normal": 2.0
     },
     "projectiles per attack": {
-      "normal": 46.0
+      "normal": 4.0,
+      "heavy coffers": 6.0
     },
     "super charge per hit": {
-      "normal": 30.0
+      "normal": 30.0,
+      "fire": 6.6
     },
     "projectile speed": {
-      "normal": 1196750.0
+      "normal": 1196.0,
+      "cannonball": 750.0
     },
     "attack width": {
-      "normal": 10.67
+      "normal": 1.0,
+      "coins": 0.67
     },
     "cannon range": {
       "normal": 13.33
@@ -2256,13 +2319,14 @@
       "normal": 0.67
     },
     "projectiles per super": {
-      "normal": 46.0
+      "normal": 4.0,
+      "hypercharge": 6.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "35%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.35,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -2310,7 +2374,8 @@
       "split": 1.8
     },
     "super charge per hit": {
-      "normal": 25.375
+      "normal": 25.375,
+      "split": 44.95
     },
     "attack spread": {
       "normal": 360.0
@@ -2365,10 +2430,10 @@
       "normal": 0.67
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -2402,10 +2467,10 @@
       "normal": 3.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "50%",
-      "speed": "+25%",
-      "damage": "+5%",
-      "shield": "+25%"
+      "hypercharge multiplier": 0.5,
+      "speed": 0.25,
+      "damage": 0.05,
+      "shield": 0.25
     }
   },
   {
@@ -2506,10 +2571,10 @@
       "normal": 6.67
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+25%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.25,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -2534,22 +2599,25 @@
       "normal": 4.8
     },
     "attack spread": {
-      "normal": 30.0
+      "normal": 30.0,
+      "clay pigeons": 10.0
     },
     "projectile speed": {
       "normal": 4130.0
     },
     "projectiles per super": {
-      "normal": 912.0
+      "normal": 9.0,
+      "hypercharge": 12.0
     },
     "super spread": {
-      "normal": 50.0
+      "normal": 50.0,
+      "hypercharge": 67.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "30%",
-      "speed": "+25%",
-      "damage": "+5%",
-      "shield": "+25%"
+      "hypercharge multiplier": 0.3,
+      "speed": 0.25,
+      "damage": 0.05,
+      "shield": 0.25
     }
   },
   {
@@ -2577,7 +2645,8 @@
       "normal": 1739.0
     },
     "attack width": {
-      "normal": 10.33
+      "normal": 1.0,
+      "spike": 0.33
     },
     "duration": {
       "normal": 4.5
@@ -2586,10 +2655,10 @@
       "normal": 2.67
     },
     "hypercharge": {
-      "hypercharge multiplier": "35%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.35,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -2608,7 +2677,8 @@
       "normal": 1.7
     },
     "super charge per hit": {
-      "normal": 23.03
+      "normal": 23.03,
+      "super charge gear": 25.333
     },
     "projectile speed": {
       "normal": 1739.0
@@ -2620,10 +2690,10 @@
       "normal": 10.0
     },
     "hypercharge": {
-      "hypercharge multiplier": "40%",
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "hypercharge multiplier": 0.4,
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -2644,7 +2714,8 @@
       "normal": 12.5
     },
     "projectile speed": {
-      "normal": 16003000.0
+      "normal": 1600.0,
+      "blob": 3000.0
     },
     "attack width": {
       "normal": 0.33
@@ -2696,7 +2767,8 @@
     "class": "Damage Dealer",
     "movement speed": {
       "normal": 650.0,
-      "stage 1+; very fast": 820.0
+      "slow": 820.0,
+      "stage 1+; very fast": 1.0
     },
     "range": {
       "normal": 3.33
@@ -2708,7 +2780,8 @@
       "normal": 17.0
     },
     "projectile speed": {
-      "normal": 35003000.0
+      "normal": 3500.0,
+      "split": 3000.0
     },
     "attack width": {
       "normal": 1.0
@@ -2758,7 +2831,8 @@
       "automa-tick reload": 2.18
     },
     "projectiles per attack": {
-      "normal": 36.0
+      "normal": 3.0,
+      "mine mania": 6.0
     },
     "super charge per hit": {
       "normal": 35.0
@@ -2770,9 +2844,9 @@
       "normal": 1200.0
     },
     "hypercharge": {
-      "speed": "+26%",
-      "damage": "+25%",
-      "shield": "+5%"
+      "speed": 0.26,
+      "damage": 0.25,
+      "shield": 0.05
     }
   },
   {
@@ -2790,7 +2864,8 @@
       "normal": 2.0
     },
     "super charge per hit": {
-      "normal": 8.5
+      "normal": 8.5,
+      "spellbound": 25.5
     },
     "projectile speed": {
       "normal": 4130.0
