@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
 import json
 import os
 import re
@@ -40,12 +39,12 @@ def convert_percent_to_float(value):
 def extract_text_with_br(element):
     return ' BREAK '.join(element.stripped_strings)
 
-def get_brawler_data(brawler_name, brawler_url):
+def get_brawler_data(brawler_name, brawler_url, index):
     response = requests.get(brawler_url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
     infobox = soup.select_one('aside.portable-infobox')
-    brawler_info = {"name": brawler_name, "url": brawler_url}
+    brawler_info = {"name": brawler_name, "url": brawler_url, "index": index}
 
     if infobox:
         for row in infobox.select('div.pi-data'):
@@ -95,14 +94,33 @@ def save_brawler_data(brawler_data):
     with open(os.path.join(BRAWLERS_DIR, 'brawlers.json'), 'w') as f:
         json.dump(brawler_data, f, indent=2)
 
+def get_highest_brawler_index():
+    return int(lambda brawler_data: max([brawler.get('index') for brawler in brawler_data]))
+
 def main():
     brawler_list = get_brawler_list()
     brawler_data = []
 
+    index = 0
     for brawler_name, brawler_url in brawler_list:
         print(f"Fetching data for {brawler_name}")
-        brawler_details = get_brawler_data(brawler_name, brawler_url)
+        with open('./out/brawlers/brawlers.json', 'r') as json_file:
+            data = json.load(json_file)
+
+        brawler_found = False
+        for entry in data:
+            if entry.get('name') == brawler_name:
+                brawler_found = True
+                index = entry.get('index')
+                break
+
+        if brawler_found:
+            brawler_details = get_brawler_data(brawler_name, brawler_url, index)
+        else:
+            brawler_details = get_brawler_data(brawler_name, brawler_url, get_highest_brawler_index() + 1)
+
         brawler_data.append(brawler_details)
+        index += 1
 
     save_brawler_data(brawler_data)
     print("Brawler data successfully fetched and saved.")
