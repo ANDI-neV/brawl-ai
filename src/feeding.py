@@ -5,15 +5,10 @@ import time
 import random
 from datetime import datetime
 
-
-
-
 api = DevBrawlAPI()
 db = Database()
 random.seed(datetime.now().timestamp())
 firstplayer = "2QYUPPUG8"
-
-
 
 if(True): 
     starttime = time.time()
@@ -25,7 +20,7 @@ if(True):
             playerapi["name"]
         )
         db.insert_player(player)
-    runtime = 60 * 3
+    runtime = 60 * 4
     while (time.time() - starttime) < 60 * runtime:
         print("Time left: " + str((60 * runtime - (time.time() - starttime))/ 60) + " min")
         player = db.get_unchecked_player()
