@@ -10,11 +10,11 @@ OUT_DIR = "./out"
 BRAWLERS_DIR = os.path.join(OUT_DIR, "brawlers")
 
 def get_brawler_list():
-    repsonse = requests.get(BRAWLERS_CATEGORY_URL)
-    soup = BeautifulSoup(repsonse.text, 'html.parser')
+    response = requests.get(BRAWLERS_CATEGORY_URL)
+    soup = BeautifulSoup(response.text, 'html.parser')
     brawler_links = soup.select("div.category-page__members a.category-page__member-link")
     brawler_links = list(filter(lambda link: 'Category' not in link['href'], brawler_links))
-    brawler_names = list(filter(lambda k: 'Category' not in k, [link.text.strip() for link in brawler_links]))
+    brawler_names = list(filter(lambda k: 'Category' not in k, [str.lower(link.text.strip()) for link in brawler_links]))
     brawler_urls = [BASE_URL + link['href'] for link in brawler_links]
     return list(zip(brawler_names, brawler_urls))
 
@@ -94,33 +94,34 @@ def save_brawler_data(brawler_data):
     with open(os.path.join(BRAWLERS_DIR, 'brawlers.json'), 'w') as f:
         json.dump(brawler_data, f, indent=2)
 
-def get_highest_brawler_index():
-    return int(lambda brawler_data: max([brawler.get('index') for brawler in brawler_data]))
+def get_highest_brawler_index(brawler_data):
+    return max([brawler.get('index', 0) for brawler in brawler_data.values()], default=0)
 
 def main():
     brawler_list = get_brawler_list()
-    brawler_data = []
+    brawler_data = {}
 
-    index = 0
+    if not os.path.exists(BRAWLERS_DIR):
+        os.makedirs(BRAWLERS_DIR)
+
+    if os.path.exists(os.path.join(BRAWLERS_DIR, 'brawlers.json')):
+        with open(os.path.join(BRAWLERS_DIR, 'brawlers.json'), 'r') as json_file:
+            loaded_data = json.load(json_file)
+            if isinstance(loaded_data, dict):
+                brawler_data = loaded_data
+            else:
+                print("Warning: Loaded data is not a dictionary. Resetting to an empty dictionary.")
+                brawler_data = {}
+
     for brawler_name, brawler_url in brawler_list:
         print(f"Fetching data for {brawler_name}")
-        with open('./out/brawlers/brawlers.json', 'r') as json_file:
-            data = json.load(json_file)
 
-        brawler_found = False
-        for entry in data:
-            if entry.get('name') == brawler_name:
-                brawler_found = True
-                index = entry.get('index')
-                break
-
-        if brawler_found:
-            brawler_details = get_brawler_data(brawler_name, brawler_url, index)
+        if brawler_name in brawler_data:
+            brawler_details = get_brawler_data(brawler_name, brawler_url, brawler_data[brawler_name].get('index'))
         else:
-            brawler_details = get_brawler_data(brawler_name, brawler_url, get_highest_brawler_index() + 1)
+            brawler_details = get_brawler_data(brawler_name, brawler_url, get_highest_brawler_index(brawler_data) + 1)
 
-        brawler_data.append(brawler_details)
-        index += 1
+        brawler_data[str.lower(brawler_name)] = brawler_details
 
     save_brawler_data(brawler_data)
     print("Brawler data successfully fetched and saved.")

@@ -1,8 +1,8 @@
-[
-  {
-    "name": "8-Bit",
+{
+  "8-bit": {
+    "name": "8-bit",
     "url": "https://brawlstars.fandom.com/wiki/8-Bit",
-    "index": 0,
+    "index": 1,
     "rarity": "Super Rare",
     "class": "Damage Dealer",
     "movement speed": {
@@ -78,10 +78,10 @@
       }
     }
   },
-  {
-    "name": "Amber",
+  "amber": {
+    "name": "amber",
     "url": "https://brawlstars.fandom.com/wiki/Amber",
-    "index": 1,
+    "index": 2,
     "rarity": "Legendary",
     "class": "Controller",
     "movement speed": {
@@ -185,10 +185,10 @@
       }
     }
   },
-  {
-    "name": "Angelo",
+  "angelo": {
+    "name": "angelo",
     "url": "https://brawlstars.fandom.com/wiki/Angelo",
-    "index": 2,
+    "index": 3,
     "rarity": "Epic",
     "class": "Marksman",
     "movement speed": {
@@ -288,10 +288,10 @@
       }
     }
   },
-  {
-    "name": "Ash",
+  "ash": {
+    "name": "ash",
     "url": "https://brawlstars.fandom.com/wiki/Ash",
-    "index": 3,
+    "index": 4,
     "rarity": "Epic",
     "class": "Tank",
     "movement speed": {
@@ -407,10 +407,10 @@
       }
     }
   },
-  {
-    "name": "Barley",
+  "barley": {
+    "name": "barley",
     "url": "https://brawlstars.fandom.com/wiki/Barley",
-    "index": 4,
+    "index": 5,
     "rarity": "Rare",
     "class": "Artillery",
     "movement speed": {
@@ -493,10 +493,10 @@
       }
     }
   },
-  {
-    "name": "Bea",
+  "bea": {
+    "name": "bea",
     "url": "https://brawlstars.fandom.com/wiki/Bea",
-    "index": 5,
+    "index": 6,
     "rarity": "Epic",
     "class": "Marksman",
     "movement speed": {
@@ -592,10 +592,10 @@
       }
     }
   },
-  {
-    "name": "Belle",
+  "belle": {
+    "name": "belle",
     "url": "https://brawlstars.fandom.com/wiki/Belle",
-    "index": 6,
+    "index": 7,
     "rarity": "Epic",
     "class": "Marksman",
     "movement speed": {
@@ -690,10 +690,10 @@
       }
     }
   },
-  {
-    "name": "Berry",
+  "berry": {
+    "name": "berry",
     "url": "https://brawlstars.fandom.com/wiki/Berry",
-    "index": 7,
+    "index": 8,
     "rarity": "Epic",
     "class": "Support",
     "movement speed": {
@@ -806,10 +806,10 @@
       }
     }
   },
-  {
-    "name": "Bibi",
+  "bibi": {
+    "name": "bibi",
     "url": "https://brawlstars.fandom.com/wiki/Bibi",
-    "index": 8,
+    "index": 9,
     "rarity": "Epic",
     "class": "Tank",
     "movement speed": {
@@ -894,10 +894,10 @@
       }
     }
   },
-  {
-    "name": "Bo",
+  "bo": {
+    "name": "bo",
     "url": "https://brawlstars.fandom.com/wiki/Bo",
-    "index": 9,
+    "index": 10,
     "rarity": "Epic",
     "class": "Controller",
     "movement speed": {
@@ -968,10 +968,10 @@
       }
     }
   },
-  {
-    "name": "Bonnie",
+  "bonnie": {
+    "name": "bonnie",
     "url": "https://brawlstars.fandom.com/wiki/Bonnie",
-    "index": 10,
+    "index": 11,
     "rarity": "Epic",
     "class": "Marksman",
     "movement speed": {
@@ -1095,10 +1095,10 @@
       }
     }
   },
-  {
-    "name": "Brock",
+  "brock": {
+    "name": "brock",
     "url": "https://brawlstars.fandom.com/wiki/Brock",
-    "index": 11,
+    "index": 12,
     "rarity": "Rare",
     "class": "Marksman",
     "movement speed": {
@@ -1196,10 +1196,10 @@
       }
     }
   },
-  {
-    "name": "Bull",
+  "bull": {
+    "name": "bull",
     "url": "https://brawlstars.fandom.com/wiki/Bull",
-    "index": 12,
+    "index": 13,
     "rarity": "Rare",
     "class": "Tank",
     "movement speed": {
@@ -1282,10 +1282,10 @@
       }
     }
   },
-  {
-    "name": "Buster",
+  "buster": {
+    "name": "buster",
     "url": "https://brawlstars.fandom.com/wiki/Buster",
-    "index": 13,
+    "index": 14,
     "rarity": "Mythic",
     "class": "Tank",
     "movement speed": {
@@ -1376,10 +1376,10 @@
       }
     }
   },
-  {
-    "name": "Buzz",
+  "buzz": {
+    "name": "buzz",
     "url": "https://brawlstars.fandom.com/wiki/Buzz",
-    "index": 14,
+    "index": 15,
     "rarity": "Mythic",
     "class": "Assassin",
     "movement speed": {
@@ -1443,10 +1443,10 @@
       }
     }
   },
-  {
-    "name": "Byron",
+  "byron": {
+    "name": "byron",
     "url": "https://brawlstars.fandom.com/wiki/Byron",
-    "index": 15,
+    "index": 16,
     "rarity": "Mythic",
     "class": "Support",
     "movement speed": {
@@ -1520,10 +1520,10 @@
       }
     }
   },
-  {
-    "name": "Carl",
+  "carl": {
+    "name": "carl",
     "url": "https://brawlstars.fandom.com/wiki/Carl",
-    "index": 16,
+    "index": 17,
     "rarity": "Super Rare",
     "class": "Damage Dealer",
     "movement speed": {
@@ -1598,10 +1598,10 @@
       }
     }
   },
-  {
-    "name": "Charlie",
+  "charlie": {
+    "name": "charlie",
     "url": "https://brawlstars.fandom.com/wiki/Charlie",
-    "index": 17,
+    "index": 18,
     "rarity": "Mythic",
     "class": "Controller",
     "movement speed": {
@@ -1695,10 +1695,10 @@
       }
     }
   },
-  {
-    "name": "Chester",
+  "chester": {
+    "name": "chester",
     "url": "https://brawlstars.fandom.com/wiki/Chester",
-    "index": 18,
+    "index": 19,
     "rarity": "Legendary",
     "class": "Damage Dealer",
     "movement speed": {
@@ -1829,10 +1829,10 @@
       }
     }
   },
-  {
-    "name": "Chuck",
+  "chuck": {
+    "name": "chuck",
     "url": "https://brawlstars.fandom.com/wiki/Chuck",
-    "index": 19,
+    "index": 20,
     "rarity": "Mythic",
     "class": "Damage Dealer",
     "movement speed": {
@@ -1927,10 +1927,10 @@
       }
     }
   },
-  {
-    "name": "Clancy",
+  "clancy": {
+    "name": "clancy",
     "url": "https://brawlstars.fandom.com/wiki/Clancy",
-    "index": 20,
+    "index": 21,
     "rarity": "Mythic",
     "class": "Damage Dealer",
     "movement speed": {
@@ -2021,10 +2021,10 @@
       }
     }
   },
-  {
-    "name": "Colette",
+  "colette": {
+    "name": "colette",
     "url": "https://brawlstars.fandom.com/wiki/Colette",
-    "index": 21,
+    "index": 22,
     "rarity": "Epic",
     "class": "Damage Dealer",
     "movement speed": {
@@ -2128,10 +2128,10 @@
       }
     }
   },
-  {
-    "name": "Colt",
+  "colt": {
+    "name": "colt",
     "url": "https://brawlstars.fandom.com/wiki/Colt",
-    "index": 22,
+    "index": 23,
     "rarity": "Rare",
     "class": "Damage Dealer",
     "movement speed": {
@@ -2216,10 +2216,10 @@
       }
     }
   },
-  {
-    "name": "Cordelius",
+  "cordelius": {
+    "name": "cordelius",
     "url": "https://brawlstars.fandom.com/wiki/Cordelius",
-    "index": 23,
+    "index": 24,
     "rarity": "Legendary",
     "class": "Assassin",
     "movement speed": {
@@ -2290,10 +2290,10 @@
       }
     }
   },
-  {
-    "name": "Crow",
+  "crow": {
+    "name": "crow",
     "url": "https://brawlstars.fandom.com/wiki/Crow",
-    "index": 24,
+    "index": 25,
     "rarity": "Legendary",
     "class": "Assassin",
     "movement speed": {
@@ -2405,10 +2405,10 @@
       }
     }
   },
-  {
-    "name": "Darryl",
+  "darryl": {
+    "name": "darryl",
     "url": "https://brawlstars.fandom.com/wiki/Darryl",
-    "index": 25,
+    "index": 26,
     "rarity": "Super Rare",
     "class": "Tank",
     "movement speed": {
@@ -2483,10 +2483,10 @@
       }
     }
   },
-  {
-    "name": "Doug",
+  "doug": {
+    "name": "doug",
     "url": "https://brawlstars.fandom.com/wiki/Doug",
-    "index": 26,
+    "index": 27,
     "rarity": "Mythic",
     "class": "Support",
     "movement speed": {
@@ -2554,10 +2554,10 @@
       }
     }
   },
-  {
-    "name": "Draco",
+  "draco": {
+    "name": "draco",
     "url": "https://brawlstars.fandom.com/wiki/Draco",
-    "index": 27,
+    "index": 28,
     "rarity": "Legendary",
     "class": "Tank",
     "movement speed": {
@@ -2643,10 +2643,10 @@
       }
     }
   },
-  {
-    "name": "Dynamike",
+  "dynamike": {
+    "name": "dynamike",
     "url": "https://brawlstars.fandom.com/wiki/Dynamike",
-    "index": 28,
+    "index": 29,
     "rarity": "Super Rare",
     "class": "Artillery",
     "movement speed": {
@@ -2733,10 +2733,10 @@
       }
     }
   },
-  {
-    "name": "Edgar",
+  "edgar": {
+    "name": "edgar",
     "url": "https://brawlstars.fandom.com/wiki/Edgar",
-    "index": 29,
+    "index": 30,
     "rarity": "Epic",
     "class": "Assassin",
     "movement speed": {
@@ -2828,10 +2828,10 @@
       }
     }
   },
-  {
-    "name": "El Primo",
+  "el primo": {
+    "name": "el primo",
     "url": "https://brawlstars.fandom.com/wiki/El_Primo",
-    "index": 30,
+    "index": 31,
     "rarity": "Rare",
     "class": "Tank",
     "movement speed": {
@@ -2920,10 +2920,10 @@
       }
     }
   },
-  {
-    "name": "Emz",
+  "emz": {
+    "name": "emz",
     "url": "https://brawlstars.fandom.com/wiki/Emz",
-    "index": 31,
+    "index": 32,
     "rarity": "Epic",
     "class": "Controller",
     "movement speed": {
@@ -3008,10 +3008,10 @@
       }
     }
   },
-  {
-    "name": "Eve",
+  "eve": {
+    "name": "eve",
     "url": "https://brawlstars.fandom.com/wiki/Eve",
-    "index": 32,
+    "index": 33,
     "rarity": "Mythic",
     "class": "Damage Dealer",
     "movement speed": {
@@ -3138,10 +3138,10 @@
       }
     }
   },
-  {
-    "name": "Fang",
+  "fang": {
+    "name": "fang",
     "url": "https://brawlstars.fandom.com/wiki/Fang",
-    "index": 33,
+    "index": 34,
     "rarity": "Mythic",
     "class": "Assassin",
     "movement speed": {
@@ -3239,10 +3239,10 @@
       }
     }
   },
-  {
-    "name": "Frank",
+  "frank": {
+    "name": "frank",
     "url": "https://brawlstars.fandom.com/wiki/Frank",
-    "index": 34,
+    "index": 35,
     "rarity": "Epic",
     "class": "Tank",
     "movement speed": {
@@ -3322,10 +3322,10 @@
       }
     }
   },
-  {
-    "name": "Gale",
+  "gale": {
+    "name": "gale",
     "url": "https://brawlstars.fandom.com/wiki/Gale",
-    "index": 35,
+    "index": 36,
     "rarity": "Epic",
     "class": "Controller",
     "movement speed": {
@@ -3405,10 +3405,10 @@
       }
     }
   },
-  {
-    "name": "Gene",
+  "gene": {
+    "name": "gene",
     "url": "https://brawlstars.fandom.com/wiki/Gene",
-    "index": 36,
+    "index": 37,
     "rarity": "Mythic",
     "class": "Controller",
     "movement speed": {
@@ -3519,10 +3519,10 @@
       }
     }
   },
-  {
-    "name": "Gray",
+  "gray": {
+    "name": "gray",
     "url": "https://brawlstars.fandom.com/wiki/Gray",
-    "index": 37,
+    "index": 38,
     "rarity": "Mythic",
     "class": "Support",
     "movement speed": {
@@ -3580,10 +3580,10 @@
       }
     }
   },
-  {
-    "name": "Griff",
+  "griff": {
+    "name": "griff",
     "url": "https://brawlstars.fandom.com/wiki/Griff",
-    "index": 38,
+    "index": 39,
     "rarity": "Epic",
     "class": "Controller",
     "movement speed": {
@@ -3679,10 +3679,10 @@
       }
     }
   },
-  {
-    "name": "Grom",
+  "grom": {
+    "name": "grom",
     "url": "https://brawlstars.fandom.com/wiki/Grom",
-    "index": 39,
+    "index": 40,
     "rarity": "Epic",
     "class": "Artillery",
     "movement speed": {
@@ -3757,10 +3757,10 @@
       }
     }
   },
-  {
-    "name": "Gus",
+  "gus": {
+    "name": "gus",
     "url": "https://brawlstars.fandom.com/wiki/Gus",
-    "index": 40,
+    "index": 41,
     "rarity": "Super Rare",
     "class": "Support",
     "movement speed": {
@@ -3846,10 +3846,10 @@
       }
     }
   },
-  {
-    "name": "Hank",
+  "hank": {
+    "name": "hank",
     "url": "https://brawlstars.fandom.com/wiki/Hank",
-    "index": 41,
+    "index": 42,
     "rarity": "Epic",
     "class": "Tank",
     "movement speed": {
@@ -3932,10 +3932,10 @@
       }
     }
   },
-  {
-    "name": "Jacky",
+  "jacky": {
+    "name": "jacky",
     "url": "https://brawlstars.fandom.com/wiki/Jacky",
-    "index": 42,
+    "index": 43,
     "rarity": "Super Rare",
     "class": "Tank",
     "movement speed": {
@@ -3994,10 +3994,10 @@
       }
     }
   },
-  {
-    "name": "Janet",
+  "janet": {
+    "name": "janet",
     "url": "https://brawlstars.fandom.com/wiki/Janet",
-    "index": 43,
+    "index": 44,
     "rarity": "Mythic",
     "class": "Marksman",
     "movement speed": {
@@ -4075,10 +4075,10 @@
       }
     }
   },
-  {
-    "name": "Jessie",
+  "jessie": {
+    "name": "jessie",
     "url": "https://brawlstars.fandom.com/wiki/Jessie",
-    "index": 44,
+    "index": 45,
     "rarity": "Super Rare",
     "class": "Controller",
     "movement speed": {
@@ -4203,10 +4203,10 @@
       }
     }
   },
-  {
-    "name": "Kit",
+  "kit": {
+    "name": "kit",
     "url": "https://brawlstars.fandom.com/wiki/Kit",
-    "index": 45,
+    "index": 46,
     "rarity": "Legendary",
     "class": "Support",
     "movement speed": {
@@ -4287,26 +4287,13 @@
         "9": 1800,
         "10": 1900,
         "11": 2000
-      },
-      "super2": {
-        "1": 300,
-        "2": 330,
-        "3": 360,
-        "4": 390,
-        "5": 420,
-        "6": 450,
-        "7": 480,
-        "8": 510,
-        "9": 540,
-        "10": 570,
-        "11": 600
       }
     }
   },
-  {
-    "name": "Larry & Lawrie",
+  "larry & lawrie": {
+    "name": "larry & lawrie",
     "url": "https://brawlstars.fandom.com/wiki/Larry_%26_Lawrie",
-    "index": 46,
+    "index": 47,
     "rarity": "Epic",
     "class": "Artillery",
     "movement speed": {
@@ -4396,10 +4383,10 @@
       }
     }
   },
-  {
-    "name": "Leon",
+  "leon": {
+    "name": "leon",
     "url": "https://brawlstars.fandom.com/wiki/Leon",
-    "index": 47,
+    "index": 48,
     "rarity": "Legendary",
     "class": "Assassin",
     "movement speed": {
@@ -4484,10 +4471,10 @@
       }
     }
   },
-  {
-    "name": "Lily",
+  "lily": {
+    "name": "lily",
     "url": "https://brawlstars.fandom.com/wiki/Lily",
-    "index": 48,
+    "index": 49,
     "rarity": "Mythic",
     "class": "Assassin",
     "movement speed": {
@@ -4560,10 +4547,10 @@
       }
     }
   },
-  {
-    "name": "Lola",
+  "lola": {
+    "name": "lola",
     "url": "https://brawlstars.fandom.com/wiki/Lola",
-    "index": 49,
+    "index": 50,
     "rarity": "Epic",
     "class": "Damage Dealer",
     "movement speed": {
@@ -4642,10 +4629,10 @@
       }
     }
   },
-  {
-    "name": "Lou",
+  "lou": {
+    "name": "lou",
     "url": "https://brawlstars.fandom.com/wiki/Lou",
-    "index": 50,
+    "index": 51,
     "rarity": "Mythic",
     "class": "Controller",
     "movement speed": {
@@ -4725,10 +4712,10 @@
       }
     }
   },
-  {
-    "name": "Maisie",
+  "maisie": {
+    "name": "maisie",
     "url": "https://brawlstars.fandom.com/wiki/Maisie",
-    "index": 51,
+    "index": 52,
     "rarity": "Epic",
     "class": "Marksman",
     "movement speed": {
@@ -4801,10 +4788,10 @@
       }
     }
   },
-  {
-    "name": "Mandy",
+  "mandy": {
+    "name": "mandy",
     "url": "https://brawlstars.fandom.com/wiki/Mandy",
-    "index": 52,
+    "index": 53,
     "rarity": "Epic",
     "class": "Marksman",
     "movement speed": {
@@ -4873,10 +4860,10 @@
       }
     }
   },
-  {
-    "name": "Max",
+  "max": {
+    "name": "max",
     "url": "https://brawlstars.fandom.com/wiki/Max",
-    "index": 53,
+    "index": 54,
     "rarity": "Mythic",
     "class": "Support",
     "movement speed": {
@@ -4942,10 +4929,10 @@
       }
     }
   },
-  {
-    "name": "Meg",
+  "meg": {
+    "name": "meg",
     "url": "https://brawlstars.fandom.com/wiki/Meg",
-    "index": 54,
+    "index": 55,
     "rarity": "Legendary",
     "class": "Tank",
     "movement speed": {
@@ -5062,10 +5049,10 @@
       }
     }
   },
-  {
-    "name": "Melodie",
+  "melodie": {
+    "name": "melodie",
     "url": "https://brawlstars.fandom.com/wiki/Melodie",
-    "index": 55,
+    "index": 56,
     "rarity": "Mythic",
     "class": "Assassin",
     "movement speed": {
@@ -5143,10 +5130,10 @@
       }
     }
   },
-  {
-    "name": "Mico",
+  "mico": {
+    "name": "mico",
     "url": "https://brawlstars.fandom.com/wiki/Mico",
-    "index": 56,
+    "index": 57,
     "rarity": "Mythic",
     "class": "Assassin",
     "movement speed": {
@@ -5162,7 +5149,8 @@
       "normal": 2.6
     },
     "super charge per hit": {
-      "normal": 14.875
+      "normal": 30.0,
+      "hypercharge": 37.5
     },
     "projectile speed": {
       "normal": 5200.0
@@ -5225,10 +5213,10 @@
       }
     }
   },
-  {
-    "name": "Mortis",
+  "mortis": {
+    "name": "mortis",
     "url": "https://brawlstars.fandom.com/wiki/Mortis",
-    "index": 57,
+    "index": 58,
     "rarity": "Mythic",
     "class": "Assassin",
     "movement speed": {
@@ -5313,10 +5301,10 @@
       }
     }
   },
-  {
-    "name": "Mr. P",
+  "mr. p": {
+    "name": "mr. p",
     "url": "https://brawlstars.fandom.com/wiki/Mr._P",
-    "index": 58,
+    "index": 59,
     "rarity": "Mythic",
     "class": "Controller",
     "movement speed": {
@@ -5433,10 +5421,10 @@
       }
     }
   },
-  {
-    "name": "Nani",
+  "nani": {
+    "name": "nani",
     "url": "https://brawlstars.fandom.com/wiki/Nani",
-    "index": 59,
+    "index": 60,
     "rarity": "Epic",
     "class": "Marksman",
     "movement speed": {
@@ -5514,10 +5502,10 @@
       }
     }
   },
-  {
-    "name": "Nita",
+  "nita": {
+    "name": "nita",
     "url": "https://brawlstars.fandom.com/wiki/Nita",
-    "index": 60,
+    "index": 61,
     "rarity": "Rare",
     "class": "Damage Dealer",
     "movement speed": {
@@ -5616,10 +5604,10 @@
       }
     }
   },
-  {
-    "name": "Otis",
+  "otis": {
+    "name": "otis",
     "url": "https://brawlstars.fandom.com/wiki/Otis",
-    "index": 61,
+    "index": 62,
     "rarity": "Mythic",
     "class": "Controller",
     "movement speed": {
@@ -5705,10 +5693,10 @@
       }
     }
   },
-  {
-    "name": "Pam",
+  "pam": {
+    "name": "pam",
     "url": "https://brawlstars.fandom.com/wiki/Pam",
-    "index": 62,
+    "index": 63,
     "rarity": "Epic",
     "class": "Support",
     "movement speed": {
@@ -5807,10 +5795,10 @@
       }
     }
   },
-  {
-    "name": "Pearl",
+  "pearl": {
+    "name": "pearl",
     "url": "https://brawlstars.fandom.com/wiki/Pearl",
-    "index": 63,
+    "index": 64,
     "rarity": "Epic",
     "class": "Damage Dealer",
     "movement speed": {
@@ -5909,10 +5897,10 @@
       }
     }
   },
-  {
-    "name": "Penny",
+  "penny": {
+    "name": "penny",
     "url": "https://brawlstars.fandom.com/wiki/Penny",
-    "index": 64,
+    "index": 65,
     "rarity": "Super Rare",
     "class": "Artillery",
     "movement speed": {
@@ -6039,10 +6027,10 @@
       }
     }
   },
-  {
-    "name": "Piper",
+  "piper": {
+    "name": "piper",
     "url": "https://brawlstars.fandom.com/wiki/Piper",
-    "index": 65,
+    "index": 66,
     "rarity": "Epic",
     "class": "Marksman",
     "movement speed": {
@@ -6143,10 +6131,10 @@
       }
     }
   },
-  {
-    "name": "Poco",
+  "poco": {
+    "name": "poco",
     "url": "https://brawlstars.fandom.com/wiki/Poco",
-    "index": 66,
+    "index": 67,
     "rarity": "Rare",
     "class": "Support",
     "movement speed": {
@@ -6229,10 +6217,10 @@
       }
     }
   },
-  {
-    "name": "R-T",
+  "r-t": {
+    "name": "r-t",
     "url": "https://brawlstars.fandom.com/wiki/R-T",
-    "index": 67,
+    "index": 68,
     "rarity": "Mythic",
     "class": "Damage Dealer",
     "movement speed": {
@@ -6315,10 +6303,10 @@
       }
     }
   },
-  {
-    "name": "Rico",
+  "rico": {
+    "name": "rico",
     "url": "https://brawlstars.fandom.com/wiki/Rico",
-    "index": 68,
+    "index": 69,
     "rarity": "Super Rare",
     "class": "Damage Dealer",
     "movement speed": {
@@ -6425,10 +6413,10 @@
       }
     }
   },
-  {
-    "name": "Rosa",
+  "rosa": {
+    "name": "rosa",
     "url": "https://brawlstars.fandom.com/wiki/Rosa",
-    "index": 69,
+    "index": 70,
     "rarity": "Rare",
     "class": "Tank",
     "movement speed": {
@@ -6508,10 +6496,10 @@
       }
     }
   },
-  {
-    "name": "Ruffs",
+  "ruffs": {
+    "name": "ruffs",
     "url": "https://brawlstars.fandom.com/wiki/Ruffs",
-    "index": 70,
+    "index": 71,
     "rarity": "Mythic",
     "class": "Support",
     "movement speed": {
@@ -6587,10 +6575,10 @@
       }
     }
   },
-  {
-    "name": "Sam",
+  "sam": {
+    "name": "sam",
     "url": "https://brawlstars.fandom.com/wiki/Sam",
-    "index": 71,
+    "index": 72,
     "rarity": "Epic",
     "class": "Assassin",
     "movement speed": {
@@ -6691,10 +6679,10 @@
       }
     }
   },
-  {
-    "name": "Sandy",
+  "sandy": {
+    "name": "sandy",
     "url": "https://brawlstars.fandom.com/wiki/Sandy",
-    "index": 72,
+    "index": 73,
     "rarity": "Legendary",
     "class": "Controller",
     "movement speed": {
@@ -6768,10 +6756,10 @@
       }
     }
   },
-  {
-    "name": "Shelly",
+  "shelly": {
+    "name": "shelly",
     "url": "https://brawlstars.fandom.com/wiki/Shelly",
-    "index": 73,
+    "index": 74,
     "rarity": "Starting Brawler",
     "class": "Damage Dealer",
     "movement speed": {
@@ -6858,10 +6846,10 @@
       }
     }
   },
-  {
-    "name": "Spike",
+  "spike": {
+    "name": "spike",
     "url": "https://brawlstars.fandom.com/wiki/Spike",
-    "index": 74,
+    "index": 75,
     "rarity": "Legendary",
     "class": "Damage Dealer",
     "movement speed": {
@@ -6967,10 +6955,10 @@
       }
     }
   },
-  {
-    "name": "Sprout",
+  "sprout": {
+    "name": "sprout",
     "url": "https://brawlstars.fandom.com/wiki/Sprout",
-    "index": 75,
+    "index": 76,
     "rarity": "Mythic",
     "class": "Artillery",
     "movement speed": {
@@ -7038,10 +7026,10 @@
       }
     }
   },
-  {
-    "name": "Squeak",
+  "squeak": {
+    "name": "squeak",
     "url": "https://brawlstars.fandom.com/wiki/Squeak",
-    "index": 76,
+    "index": 77,
     "rarity": "Mythic",
     "class": "Controller",
     "movement speed": {
@@ -7111,10 +7099,10 @@
       }
     }
   },
-  {
-    "name": "Stu",
+  "stu": {
+    "name": "stu",
     "url": "https://brawlstars.fandom.com/wiki/Stu",
-    "index": 77,
+    "index": 78,
     "rarity": "Epic",
     "class": "Assassin",
     "movement speed": {
@@ -7211,10 +7199,10 @@
       }
     }
   },
-  {
-    "name": "Surge",
+  "surge": {
+    "name": "surge",
     "url": "https://brawlstars.fandom.com/wiki/Surge",
-    "index": 78,
+    "index": 79,
     "rarity": "Legendary",
     "class": "Damage Dealer",
     "movement speed": {
@@ -7293,10 +7281,10 @@
       }
     }
   },
-  {
-    "name": "Tara",
+  "tara": {
+    "name": "tara",
     "url": "https://brawlstars.fandom.com/wiki/Tara",
-    "index": 79,
+    "index": 80,
     "rarity": "Mythic",
     "class": "Damage Dealer",
     "movement speed": {
@@ -7376,10 +7364,10 @@
       }
     }
   },
-  {
-    "name": "Tick",
+  "tick": {
+    "name": "tick",
     "url": "https://brawlstars.fandom.com/wiki/Tick",
-    "index": 80,
+    "index": 81,
     "rarity": "Super Rare",
     "class": "Artillery",
     "movement speed": {
@@ -7473,10 +7461,10 @@
       }
     }
   },
-  {
-    "name": "Willow",
+  "willow": {
+    "name": "willow",
     "url": "https://brawlstars.fandom.com/wiki/Willow",
-    "index": 81,
+    "index": 82,
     "rarity": "Mythic",
     "class": "Controller",
     "movement speed": {
@@ -7537,4 +7525,4 @@
       }
     }
   }
-]
+}
