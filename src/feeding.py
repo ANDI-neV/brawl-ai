@@ -20,7 +20,7 @@ if(True):
             playerapi["name"]
         )
         db.insert_player(player)
-    runtime = 60 * 4
+    runtime = 60 * 18
     while (time.time() - starttime) < 60 * runtime:
         print("Time left: " + str((60 * runtime - (time.time() - starttime))/ 60) + " min")
         player = db.get_unchecked_player()
