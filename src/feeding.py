@@ -25,7 +25,11 @@ if(True):
         print("Time left: " + str((60 * runtime - (time.time() - starttime))/ 60) + " min")
         player = db.get_unchecked_player()
         restTime = time.time()
-        playerTag = player[0]
+        playerTag = ""
+        try:
+            playerTag = player[0]
+        except Exception as e:
+            print(player)
         db.set_player_checked(playerTag)
         battlelog = api.getPlayerBattlelog(playerTag)
         if battlelog:
