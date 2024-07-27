@@ -1,19 +1,17 @@
 # we do stuff here
-import torch
 import pandas as pd
 import os
 import json
 import numpy as np
-import requests
-from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sqlalchemy import create_engine
+from sklearn.preprocessing import MinMaxScaler
 from db import Database
 
 
 def prepare_training_data():
     engine = create_engine('sqlite:///../games.db')
 
-    match_data = pd.read_sql_query("SELECT * FROM battles WHERE mode='gemGrab'", con=engine)
+    match_data = pd.read_sql_query("SELECT * FROM battles WHERE mode='hotZone'", con=engine)
 
     match_data = match_data.drop(["id", "battleTime", "mode", "map"], axis=1)
 
@@ -23,33 +21,66 @@ def prepare_training_data():
     return match_data, brawler_data
 
 def get_brawler_features(brawler_name, brawler_data):
-    print("brawler name:" + brawler_name)
-    print(brawler_data[brawler_name])
     brawler = brawler_data[brawler_name]
     features = {
-        'movement_speed_normal': brawler['movement speed']['normal'],
-        'range_normal': brawler['range']['normal'],
-        'reload_normal': brawler['reload']['normal'],
-        'projectile_speed_normal': brawler['projectile speed']['normal'],
+        'index': brawler['index'],
+        #'movement_speed_normal': brawler['movement speed']['normal'],
+        #'range_normal': brawler['range']['normal'],
+        #'reload_normal': brawler['reload']['normal'], reload feature is only available for 80/82 brawlers
+        #'projectile_speed_normal': brawler['projectile speed']['normal'], projectile speed feature is only available for 81/82 brawlers
+        #f'health': brawler['level stats']['health']['11'],
     }
     return features
 
-def create_brawler_matrix(match_data, brawler_data):
-    matrix = np.zeros((len(match_data), 24))
-    print(matrix)
-    for i in range(1, 4):
-        for team in ['a', 'b']:
-            brawler_col = f'{team}{i}'
-            brawler_name = str.lower(match_data[brawler_col])
-            print(brawler_name)
-            features = get_brawler_features(brawler_name, brawler_data)
-            matrix = np.append(matrix, list(features.values()))
-            print(matrix)
 
-    return matrix, match_data['result']
+def create_brawler_matrix(match_data, brawler_data, limit=None):
+    vectors = []
+    results = []
 
+    if limit is not None:
+        match_data = match_data.head(limit)
+
+    for index, row in match_data.iterrows():
+        match_vector = []
+        for i in range(1, 4):
+            for team in ['a', 'b']:
+                brawler_col = f'{team}{i}'
+                brawler_name = str.lower(row[brawler_col])
+                features = get_brawler_features(brawler_name, brawler_data)
+                vector = list(features.values())
+                match_vector.extend(vector)
+
+        print(match_vector)
+        vectors.append(match_vector)
+        results.append(row['result'])
+
+    return np.array(vectors), np.array(results)
 
 match_data, brawler_data = prepare_training_data()
-print(match_data.iloc[0])
-print(brawler_data['shelly'])
-create_brawler_matrix(match_data.iloc[0], brawler_data)
+print(match_data.head())
+print("amount of battles: ", len(match_data))
+
+X, y = create_brawler_matrix(match_data, brawler_data)
+
+from sklearn.model_selection import train_test_split
+import tensorflow as tf
+from tensorflow.keras import layers, models
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+model = models.Sequential([
+    layers.Dense(128, activation='relu', input_shape=(X_train.shape[1],)),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(1, activation='sigmoid')
+])
+
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+# Train the model
+model.fit(X_train, y_train, epochs=100, batch_size=32, validation_split=0.2)
+
+# Evaluate the model
+test_loss, test_acc = model.evaluate(X_test, y_test, verbose=2)
+print(f'Test accuracy: {test_acc}')
