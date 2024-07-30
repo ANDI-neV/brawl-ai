@@ -1,5 +1,6 @@
 import sqlite3
 import random
+import time
 
 class Database:
     def __init__(self):
@@ -84,4 +85,10 @@ class Database:
     def reset(self):
         self.cur.execute("DELETE FROM battles")
         self.cur.execute("UPDATE players SET checked=0")
+        self.conn.commit()
+
+    def deleteOldBattles(self):
+        currentunix = int(time.time())
+        days = currentunix - 86400 * 60 # 60 days
+        self.cur.execute("DELETE FROM battles WHERE battleTime < ?", (days,))
         self.conn.commit()

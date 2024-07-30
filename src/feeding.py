@@ -10,6 +10,8 @@ db = Database()
 random.seed(datetime.now().timestamp())
 firstplayer = "2QYUPPUG8"
 
+
+
 if(True): 
     starttime = time.time()
 
