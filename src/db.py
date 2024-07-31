@@ -2,6 +2,9 @@ import sqlite3
 import random
 import time
 
+def amongus():
+    print("Among Us")
+
 class Database:
     def __init__(self):
         self.conn = sqlite3.connect("games.db")

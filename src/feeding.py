@@ -1,4 +1,4 @@
-from ai.datasource import DevBrawlAPI
+from backend.datasource import DevBrawlAPI
 from db import Database
 import json
 import time
