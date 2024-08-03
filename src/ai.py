@@ -5,12 +5,13 @@ import json
 import numpy as np
 from sqlalchemy import create_engine
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.datasets import make_classification
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset, random_split
+from joblib import dump
 
 def prepare_training_data():
     engine = create_engine('sqlite:///../games.db')
@@ -26,10 +27,12 @@ def prepare_brawler_data():
         brawler_data = json.load(json_file)
 
     return brawler_data
-def get_brawler_features(brawler_name, brawler_data):
+def get_brawler_features(brawler_name, brawler_data, encoder):
     brawler = brawler_data[brawler_name]
+    index_encoded = encoder.transform([[brawler['index']]]).toarray()[0]
+    print(index_encoded)
     features = {
-        'index': brawler['index'],
+        'index': index_encoded,
         'movement_speed_normal': brawler['movement speed']['normal'],
         'range_normal': brawler['range']['normal'],
         #'reload_normal': brawler['reload']['normal'], reload feature is only available for 80/82 brawlers
@@ -39,9 +42,13 @@ def get_brawler_features(brawler_name, brawler_data):
     return features
 
 
-def create_brawler_matrix(match_data, brawler_data, limit=None, index_weight=1):
+def create_brawler_matrix(match_data, brawler_data, limit=None):
     vectors = []
     results = []
+    unique_indices = np.array([[brawler['index']] for brawler in brawler_data.values()])
+    print(unique_indices)
+    encoder = OneHotEncoder()
+    encoder.fit(unique_indices)
 
     if limit is not None:
         match_data = match_data.head(limit)
@@ -54,10 +61,10 @@ def create_brawler_matrix(match_data, brawler_data, limit=None, index_weight=1):
             for i in range(1, 4):
                 brawler_col = f'{team}{i}'
                 brawler_name = str.lower(row[brawler_col])
-                features = get_brawler_features(brawler_name, brawler_data)
-                features['index'] *= index_weight
+                features = get_brawler_features(brawler_name, brawler_data, encoder)
                 vector = list(features.values())
                 team_vectors.append(vector)
+                print(team_vectors)
 
             team_vectors.sort(key=lambda x: x[0])
             for vector in team_vectors:
@@ -150,9 +157,11 @@ def train_model():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("Num GPUs Available: ", torch.cuda.device_count())
 
-    X, y = create_brawler_matrix(match_data, brawler_data, index_weight=5)
+    X, y = create_brawler_matrix(match_data, brawler_data)
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
+
+    dump(scaler, 'std_scaler.bin', compress=True)
 
     X_tensor = torch.tensor(X, dtype=torch.float32)
     y_tensor = torch.tensor(y, dtype=torch.float32).unsqueeze(1)
@@ -224,9 +233,10 @@ def normalize_input_data(input_data, scaler):
     return normalized_data
 
 def predict_win_probability(model, input_data, device):
-    model.eval()
     with torch.no_grad():
         input_tensor = torch.tensor(input_data, dtype=torch.float32).to(device)
         output = model(input_tensor)
         probability = output.cpu().numpy()[0][0]
     return probability
+
+train_model()
