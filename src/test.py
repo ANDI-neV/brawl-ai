@@ -23,8 +23,11 @@ combination = {
 input_data = prepare_input_data(combination, brawler_data, encoder, scaler)
 
 model = BrawlStarsNN(input_data.shape[1]).to(device)
-model.load_state_dict(torch.load('brawl_stars_model_undermine.pth'))
+model.load_state_dict(torch.load('brawl_stars_model_undermine2.pth'))
 model.eval()
 
-win_probability = predict_win_probability(model, input_data, device)
-print(f'Win Probability: {win_probability:.4f}')
+partial_comp = {'b1': 'shelly'}
+best_picks = predict_best_pick(model, partial_comp, brawler_data, encoder, scaler, device, first_pick=False)
+print("Top 5 recommended next picks based on predicted win rate:")
+for brawler, win_rate in best_picks[:5]:
+    print(f"{brawler}: {win_rate:.4f}")

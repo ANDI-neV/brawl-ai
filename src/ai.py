@@ -46,7 +46,44 @@ class BrawlStarsNN(nn.Module):
         x = torch.sigmoid(self.fc4(x))
         return x
 
-def create_brawler_matrix(match_data, brawler_data, scaler, encoder, limit=None):
+
+picking_combinations1 = [['a1'], ['a1', 'b1'], ['a1', 'b1', 'b2'], ['a1', 'b1', 'b2', 'a2'],
+                                 ['a1', 'b1', 'b2', 'a2', 'a3'], ['a1', 'b1', 'b2', 'a2', 'a3', 'b3']]
+picking_combinations2 = [['b1'], ['b1', 'a1'], ['b1', 'a1', 'a2'], ['b1', 'a1', 'a2', 'b2'],
+                                 ['b1', 'a1', 'a2', 'b2', 'b3'], ['b1', 'a1', 'a2', 'b2', 'b3', 'a3']]
+
+all_players = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3']
+
+
+def get_brawler_vector(brawler_name, brawler_data, encoder, scaler):
+    brawler = brawler_data[brawler_name]
+
+    # One-hot encode brawler index
+    index_encoded = encoder.transform([[brawler['index']]]).toarray()[0]
+
+    # Get continuous features
+    continuous_features = [
+        brawler['movement speed']['normal'],
+        brawler['range']['normal'],
+        brawler['level stats']['health']['11']
+    ]
+    continuous_features_scaled = scaler.transform([continuous_features])[0]
+
+    # Combine features
+    brawler_vector = np.concatenate((index_encoded, continuous_features_scaled))
+    return brawler_vector
+
+def get_match_vector(combination, match_dictionary, dummy_vector):
+    match_vector = []
+    for player in all_players:
+        if player in combination:
+            match_vector.append(match_dictionary[player])
+        else:
+            match_vector.append(dummy_vector)
+    match_vector = np.concatenate(match_vector)
+    return match_vector
+
+def create_brawler_matrix(match_data, brawler_data, scaler, encoder, limit=None, include_phases=False):
     vectors = []
     results = []
 
@@ -54,36 +91,30 @@ def create_brawler_matrix(match_data, brawler_data, scaler, encoder, limit=None)
         match_data = match_data.head(limit)
 
     for index, row in match_data.iterrows():
-        match_vector = []
+        match_dictionary = {}
+        dummy_vector = None
         for team in ['a', 'b']:
-            team_vector = []
             for i in range(1, 4):
                 brawler_col = f'{team}{i}'
                 brawler_name = str.lower(row[brawler_col])
-                brawler = brawler_data[brawler_name]
+                brawler_vector = get_brawler_vector(brawler_name, brawler_data, encoder, scaler)
 
-                # One-hot encode brawler index
-                index_encoded = encoder.transform([[brawler['index']]]).toarray()[0]
+                if dummy_vector is None:
+                    dummy_vector = np.zeros(brawler_vector.shape)
 
-                # Get continuous features
-                continuous_features = [
-                    brawler['movement speed']['normal'],
-                    brawler['range']['normal'],
-                    brawler['level stats']['health']['11']
-                ]
-                continuous_features_scaled = scaler.transform([continuous_features])[0]
+                match_dictionary[brawler_col] = brawler_vector
 
-                # Combine features
-                brawler_vector = np.concatenate((index_encoded, continuous_features_scaled))
-                team_vector.extend(brawler_vector)
-
-            match_vector.extend(team_vector)
-
-        vectors.append(match_vector)
-        results.append(row['result'])
+        if include_phases:
+            for combination in picking_combinations1 + picking_combinations2:
+                match_vector = get_match_vector(combination, match_dictionary, dummy_vector)
+                vectors.append(match_vector)
+                results.append(row['result'])
+        else:
+            match_vector = np.concatenate([match_dictionary[player] for player in all_players])
+            vectors.append(match_vector)
+            results.append(row['result'])
 
     return np.array(vectors), np.array(results)
-
 
 def train_model(X, y, epochs=80, batch_size=64, learning_rate=0.001):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -130,6 +161,37 @@ def train_model(X, y, epochs=80, batch_size=64, learning_rate=0.001):
 
     return model
 
+
+def predict_best_pick(model, partial_comp, brawler_data, encoder, scaler, device, first_pick):
+    picking_combination = picking_combinations1 if first_pick else picking_combinations2
+
+    next_pick_combination = None
+    if partial_comp != {}:
+        next_pick_position = picking_combination.index([k for k in partial_comp.keys()]) + 1
+        next_pick_combination = picking_combination[next_pick_position]
+    else:
+        next_pick_combination = picking_combination[0]
+
+
+    match_dictionary = {k : get_brawler_vector(v, brawler_data, encoder, scaler) for k in partial_comp.keys() for v in partial_comp.values()}
+    brawler_win_rates = {}
+    model.eval()
+    with torch.no_grad():
+        for brawler_name in brawler_data.keys():
+            if brawler_name not in partial_comp.values():
+                brawler_vector = get_brawler_vector(brawler_name, brawler_data, encoder, scaler)
+                match_dictionary[[player for player in next_pick_combination if player not in partial_comp.keys()][0]] = brawler_vector
+
+                dummy_vector = np.zeros(brawler_vector.shape)
+                match_vector = get_match_vector(next_pick_combination, match_dictionary, dummy_vector)
+
+                input_tensor = torch.FloatTensor(match_vector).unsqueeze(0).to(device)
+                win_rate = model(input_tensor).item()
+                brawler_win_rates[brawler_name] = win_rate
+
+    return sorted(brawler_win_rates.items(), key=lambda x: x[1], reverse=True)
+
+
 if __name__ == '__main__':
     match_data = prepare_training_data()
     brawler_data = prepare_brawler_data()
@@ -150,13 +212,13 @@ if __name__ == '__main__':
     dump(scaler, 'scaler.joblib')
 
     # Create feature matrix
-    X, y = create_brawler_matrix(match_data, brawler_data, scaler, encoder)
+    X, y = create_brawler_matrix(match_data, brawler_data, scaler, encoder, include_phases=True)
 
     # Train the model
     model = train_model(X, y)
 
     # Save the model
-    torch.save(model.state_dict(), 'brawl_stars_model_undermine.pth')
+    torch.save(model.state_dict(), 'brawl_stars_model_undermine2.pth')
 
 
 def get_brawler_features(brawler_name, brawler_data):
