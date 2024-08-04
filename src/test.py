@@ -1,5 +1,4 @@
 import torch
-from db import amongus
 from src.ai import *
 from torchsummary import summary
 from joblib import load
@@ -7,18 +6,19 @@ from joblib import load
 brawler_data = prepare_brawler_data()
 
 combination = {
-    'a1': 'bea',
-    'a2': 'belle',
-    'a3': 'berry',
-    'b1': 'bibi',
-    'b2': 'bo',
-    'b3': 'bonnie'
+    'a1': 'angelo',
+    'a2': 'piper',
+    'a3': 'brock',
+    'b1': 'shelly',
+    'b2': 'poco',
+    'b3': 'sprout'
 }
 
 input_data = prepare_input_data(combination, brawler_data)
 
-scaler = load('std_scaler.bin')
-normalized_data = normalize_input_data(input_data, scaler)
+#scaler = load('std_scaler.bin')
+normalized_data = input_data
+#normalized_data = normalize_input_data(input_data, scaler)
 print(normalized_data)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

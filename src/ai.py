@@ -27,26 +27,21 @@ def prepare_brawler_data():
         brawler_data = json.load(json_file)
 
     return brawler_data
-def get_brawler_features(brawler_name, brawler_data, encoder):
+def get_brawler_features(brawler_name, brawler_data, encoder, index_weight=10):
     brawler = brawler_data[brawler_name]
-    index_encoded = encoder.transform([[brawler['index']]]).toarray()[0]
-    print(index_encoded)
-    features = {
-        'index': index_encoded,
-        'movement_speed_normal': brawler['movement speed']['normal'],
-        'range_normal': brawler['range']['normal'],
-        #'reload_normal': brawler['reload']['normal'], reload feature is only available for 80/82 brawlers
-        #'projectile_speed_normal': brawler['projectile speed']['normal'], projectile speed feature is only available for 81/82 brawlers
-        f'health': brawler['level stats']['health']['11'],
-    }
-    return features
+    index_encoded = encoder.transform([[brawler['index']]]).toarray()[0] * index_weight
+    continuous_features = [
+        brawler['movement speed']['normal'],
+        brawler['range']['normal'],
+        brawler['level stats']['health']['11']
+    ]
+    return index_encoded, continuous_features
 
 
-def create_brawler_matrix(match_data, brawler_data, limit=None):
+def create_brawler_matrix(match_data, brawler_data, scaler, limit=None, index_weight=10):
     vectors = []
     results = []
     unique_indices = np.array([[brawler['index']] for brawler in brawler_data.values()])
-    print(unique_indices)
     encoder = OneHotEncoder()
     encoder.fit(unique_indices)
 
@@ -61,12 +56,12 @@ def create_brawler_matrix(match_data, brawler_data, limit=None):
             for i in range(1, 4):
                 brawler_col = f'{team}{i}'
                 brawler_name = str.lower(row[brawler_col])
-                features = get_brawler_features(brawler_name, brawler_data, encoder)
-                vector = list(features.values())
+                index_encoded, continuous_features = get_brawler_features(brawler_name, brawler_data, encoder, index_weight)
+                continuous_features_scaled = scaler.transform([continuous_features])[0]
+                vector = np.concatenate((index_encoded, continuous_features_scaled))
                 team_vectors.append(vector)
-                print(team_vectors)
 
-            team_vectors.sort(key=lambda x: x[0])
+            team_vectors.sort(key=lambda x: np.argmax(x[:encoder.categories_[0].shape[0]]))
             for vector in team_vectors:
                 match_vector.extend(vector)
 
@@ -89,7 +84,10 @@ def create_brawler_matrix(match_data, brawler_data, limit=None):
 class NeuralNetwork(nn.Module):
     def __init__(self, input_size):
         super(NeuralNetwork, self).__init__()
-        self.fc1 = nn.Linear(input_size, 512)
+        self.fc0 = nn.Linear(input_size, 1024)
+        self.bn0 = nn.BatchNorm1d(1024)
+        self.dropout0 = nn.Dropout(0.5)
+        self.fc1 = nn.Linear(1024, 512)
         self.bn1 = nn.BatchNorm1d(512)
         self.dropout1 = nn.Dropout(0.5)
         self.fc2 = nn.Linear(512, 256)
@@ -105,6 +103,7 @@ class NeuralNetwork(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
+        x = self.dropout0(self.bn0(torch.relu(self.fc0(x))))
         x = self.dropout1(self.bn1(torch.relu(self.fc1(x))))
         x = self.dropout2(self.bn2(torch.relu(self.fc2(x))))
         x = self.dropout3(self.bn3(torch.relu(self.fc3(x))))
@@ -157,9 +156,18 @@ def train_model():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("Num GPUs Available: ", torch.cuda.device_count())
 
-    X, y = create_brawler_matrix(match_data, brawler_data)
+    continuous_features = []
+    for brawler_name, brawler in brawler_data.items():
+        continuous_features.append([
+            brawler['movement speed']['normal'],
+            brawler['range']['normal'],
+            brawler['level stats']['health']['11']
+        ])
+
     scaler = StandardScaler()
-    X = scaler.fit_transform(X)
+    scaler.fit(continuous_features)
+
+    X, y = create_brawler_matrix(match_data, brawler_data, scaler)
 
     dump(scaler, 'std_scaler.bin', compress=True)
 
@@ -176,14 +184,14 @@ def train_model():
     print(X.shape[1])
     print(X)
     model = NeuralNetwork(X.shape[1]).to(device)
-
+    #criterion = nn.BCELoss()
     criterion = ConfidenceLoss()
 
     optimizer = optim.Adam(model.parameters(), lr=0.0001)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=5, min_lr=0.00001)
 
     best_val_loss = float('inf')
-    patience = 10
+    patience = 30
     patience_counter = 0
 
     for epoch in range(100):
@@ -209,19 +217,21 @@ def train_model():
     test_loss, test_accuracy = evaluate(model, test_loader, criterion, device)
     print(f'Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy:.4f}')
 
-def prepare_input_data(combination, brawler_data, index_weight=5):
+def prepare_input_data(combination, brawler_data, index_weight=10):
+    unique_indices = np.array([[brawler['index']] for brawler in brawler_data.values()])
+    encoder = OneHotEncoder()
+    encoder.fit(unique_indices)
+
     match_vector = []
     for team in ['a', 'b']:
         team_vectors = []
         for i in range(1, 4):
             brawler_col = f'{team}{i}'
             brawler_name = str.lower(combination[brawler_col])
-            features = get_brawler_features(brawler_name, brawler_data)
-            features['index'] *= index_weight
-            vector = list(features.values())
-            team_vectors.append(vector)
+            features, continuous_features = get_brawler_features(brawler_name, brawler_data, encoder, index_weight)
+            team_vectors.append(features)
 
-        team_vectors.sort(key=lambda x: x[0])
+        team_vectors.sort(key=lambda x: np.argmax(x[:encoder.categories_[0].shape[0]]))
         for vector in team_vectors:
             match_vector.extend(vector)
 
@@ -238,5 +248,3 @@ def predict_win_probability(model, input_data, device):
         output = model(input_tensor)
         probability = output.cpu().numpy()[0][0]
     return probability
-
-train_model()
