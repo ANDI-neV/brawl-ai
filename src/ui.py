@@ -11,7 +11,7 @@ db = Database()
 availablemaps = db.getAllMaps()
 availablemaps = [x[0] for x in availablemaps]
 
-def setFirstSelection(selector):
+def set_first_selection(selector):
     if selector.value == 'Us':
         playersarray[0] = "a1"
         playersarray[1] = "b1"
@@ -42,9 +42,9 @@ def add_stepper(num):
             selecter = ui.select(availablebrawlers, with_input=True)
 
             def callback():
-                addBrawler(num, selecter)
+                add_brawler(num, selecter)
                 if num != 5:
-                    addStepper(num + 1)
+                    add_stepper(num + 1)
                 stepper.next()
 
             ui.button('Next', on_click=callback)
@@ -72,7 +72,7 @@ if __name__ in {"__main__", "__mp_main__"}:
         with ui.step('Which side first?'):
 
             def callback():
-                setFirstSelection(startselector)
+                set_first_selection(startselector)
                 stepper.next()
 
             startselector = ui.toggle(['Us', 'Them'])
