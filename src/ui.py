@@ -11,6 +11,7 @@ availablebrawlers = list(brawlers.keys())
 db = Database()
 availablemaps = db.getAllMaps()
 availablemaps = [x[0] for x in availablemaps]
+winrate = 0
 
 def set_first_selection(selector):
     if selector.value == 'Us':
@@ -36,6 +37,10 @@ def add_brawler(num, selector):
     availablebrawlers.remove(selector.value)
     brawlerslabel.text = str(playersarray)
 
+def print_winrate():
+    global winrate
+    winrate = aimanager.get_finished_winrate(playersarray, availablemaps[0])
+
 
 def add_stepper(num):
     with stepper:
@@ -46,6 +51,8 @@ def add_stepper(num):
                 add_brawler(num, selecter)
                 if num != 5:
                     add_stepper(num + 1)
+                else:
+                    print_winrate()
                 stepper.next()
 
             ui.button('Next', on_click=callback)
@@ -84,6 +91,7 @@ if __name__ in {"__main__", "__mp_main__"}:
 
     global brawlerslabel
     brawlerslabel = ui.label()
+    ui.label().bind_text_from(winrate)
 
     # categories should be ['poco', 'shelly', 'bull', 'colt', 'etc']
     categories = availablebrawlers
