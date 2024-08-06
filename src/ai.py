@@ -14,7 +14,7 @@ import os
 def prepare_training_data():
     engine = create_engine('sqlite:///../games.db')
 
-    match_data = pd.read_sql_query("SELECT * FROM battles WHERE map='Undermine'", con=engine)
+    match_data = pd.read_sql_query("SELECT * FROM battles WHERE map='Out in the Open'", con=engine)
     match_data = match_data.drop(["id", "battleTime", "mode", "map"], axis=1)
 
     return match_data
@@ -118,7 +118,7 @@ def create_brawler_matrix(match_data, brawler_data, scaler, encoder, limit=None,
 
     return np.array(vectors), np.array(results)
 
-def train_model(X, y, epochs=80, batch_size=64, learning_rate=0.001):
+def train_model(X, y, epochs=25, batch_size=64, learning_rate=0.0005):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     X_train_tensor = torch.FloatTensor(X_train)
@@ -183,7 +183,6 @@ def predict_best_pick(model, partial_comp, brawler_data, encoder, scaler, device
             if brawler_name not in partial_comp.values():
                 brawler_vector = get_brawler_vector(brawler_name, brawler_data, encoder, scaler)
                 match_dictionary[[player for player in next_pick_combination if player not in partial_comp.keys()][0]] = brawler_vector
-
                 dummy_vector = np.zeros(brawler_vector.shape)
                 match_vector = get_match_vector(next_pick_combination, match_dictionary, dummy_vector)
 
@@ -210,8 +209,9 @@ if __name__ == '__main__':
     scaler = StandardScaler()
     scaler.fit(continuous_features)
 
-    dump(encoder, 'encoder.joblib')
-    dump(scaler, 'scaler.joblib')
+    here = os.path.dirname(os.path.abspath(__file__))
+    dump(encoder, os.path.join(here,'out/models/encoder.joblib'))
+    dump(scaler, os.path.join(here,'out/models/scaler.joblib'))
 
     # Create feature matrix
     X, y = create_brawler_matrix(match_data, brawler_data, scaler, encoder, include_phases=True)
@@ -220,7 +220,7 @@ if __name__ == '__main__':
     model = train_model(X, y)
 
     # Save the model
-    torch.save(model.state_dict(), 'brawl_stars_model_undermine2.pth')
+    torch.save(model.state_dict(), 'out/models/brawl_stars_model_out_in_the_open.pth')
 
 
 def get_brawler_features(brawler_name, brawler_data):
