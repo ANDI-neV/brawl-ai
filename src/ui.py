@@ -11,9 +11,10 @@ availablebrawlers = list(brawlers.keys())
 db = Database()
 availablemaps = db.getAllMaps()
 availablemaps = [x[0] for x in availablemaps]
-winrate = 0
+us = True
 
 def set_first_selection(selector):
+    global us
     if selector.value == 'Us':
         playersarray[0] = "a1"
         playersarray[1] = "b1"
@@ -28,7 +29,11 @@ def set_first_selection(selector):
         playersarray[3] = "b2"
         playersarray[4] = "b3"
         playersarray[5] = "a3"
-    addStepper(0)
+    if selector.value == 'Us':
+        us = True
+    else:
+        us = False
+    add_stepper(0)
 
 
 def add_brawler(num, selector):
@@ -38,8 +43,29 @@ def add_brawler(num, selector):
     brawlerslabel.text = str(playersarray)
 
 def print_winrate():
-    global winrate
-    winrate = aimanager.get_finished_winrate(playersarray, availablemaps[0])
+    global wrlabel
+    wr = aimanager.get_finished_winrate(us, playersarray, availablemaps[0])
+    wrlabel.text = f"Final Winrate: {wr:.3f}"
+
+def obtain_next_pick():
+    best_picks = aimanager.get_next_pick(us, playersarray, availablemaps[0])
+    global dataseries
+    global categories
+    dataseries = []
+    all = []
+    for i in range(best_picks.__len__()):
+        all.append(best_picks[i][1])
+    dataseries.append({'data': all})
+    categories = []
+    for i in range(best_picks.__len__()):
+        categories.append(best_picks[i][0])
+    global chart
+    chart.options['xAxis']['categories'] = categories
+    chart.options['series'] = dataseries
+    chart.update()
+    print("Updated with" + str(categories) + " and " + str(dataseries))
+    
+
 
 
 def add_stepper(num):
@@ -51,6 +77,8 @@ def add_stepper(num):
                 add_brawler(num, selecter)
                 if num != 5:
                     add_stepper(num + 1)
+                    if(us and (num == 2 or num == 3)) or (not us and (num == 0 or num == 1 or num == 4)):
+                        obtain_next_pick()
                 else:
                     print_winrate()
                 stepper.next()
@@ -91,10 +119,12 @@ if __name__ in {"__main__", "__mp_main__"}:
 
     global brawlerslabel
     brawlerslabel = ui.label()
-    ui.label().bind_text_from(winrate)
+    global wrlabel
+    wrlabel = ui.label("Winrate")
 
-    # categories should be ['poco', 'shelly', 'bull', 'colt', 'etc']
+
     categories = availablebrawlers
+    global chart
     chart = ui.highchart({
         'title': {'text': 'Brawlers'},
         'chart': {'type': 'bar', 'height': '800px'},
