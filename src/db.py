@@ -7,7 +7,7 @@ import os
 class Database:
     def __init__(self):
         here = os.path.dirname(os.path.abspath(__file__))
-        self.conn = sqlite3.connect(os.path.join(here, 'db/games.db'))
+        self.conn = sqlite3.connect(os.path.join(here, 'out/db/games.db'))
         self.cur = self.conn.cursor()
         self.cur.execute("CREATE TABLE IF NOT EXISTS battles (id INTEGER PRIMARY KEY, battleTime INTEGER, map TEXT, mode TEXT, a1 TEXT, a2 TEXT, a3 TEXT, b1 TEXT, b2 TEXT, b3 TEXT, result INTEGER)")
         self.cur.execute("CREATE TABLE IF NOT EXISTS players (tag TEXT PRIMARY KEY, name TEXT, checked INTEGER)")
@@ -100,9 +100,9 @@ class Database:
         self.cur.execute("SELECT DISTINCT map FROM battles")
         return self.cur.fetchall()
     
-    def checkBrawlerSignificance(self, brawler, map):
+    def checkBrawlerSignificance(self, brawler, map=None):
         if map == None:
             self.cur.execute("SELECT COUNT(*) FROM battles WHERE a1=? OR a2=? OR a3=? OR b1=? OR b2=? OR b3=?", (brawler, brawler, brawler, brawler, brawler, brawler))
         else:
-            self.cur.execute("SELECT COUNT(*) FROM battles WHERE a1=? OR a2=? OR a3=? OR b1=? OR b2=? OR b3=? AND map=?", (brawler, brawler, brawler, brawler, brawler, brawler, map))
+            self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=? OR a2=? OR a3=? OR b1=? OR b2=? OR b3=?) AND map=?", (brawler, brawler, brawler, brawler, brawler, brawler, map))
         return self.cur.fetchone()[0]
