@@ -1,11 +1,13 @@
 import sqlite3
 import random
 import time
+import os
 
 
 class Database:
     def __init__(self):
-        self.conn = sqlite3.connect("games.db")
+        here = os.path.dirname(os.path.abspath(__file__))
+        self.conn = sqlite3.connect(os.path.join(here, 'db/games.db'))
         self.cur = self.conn.cursor()
         self.cur.execute("CREATE TABLE IF NOT EXISTS battles (id INTEGER PRIMARY KEY, battleTime INTEGER, map TEXT, mode TEXT, a1 TEXT, a2 TEXT, a3 TEXT, b1 TEXT, b2 TEXT, b3 TEXT, result INTEGER)")
         self.cur.execute("CREATE TABLE IF NOT EXISTS players (tag TEXT PRIMARY KEY, name TEXT, checked INTEGER)")

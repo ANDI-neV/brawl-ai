@@ -1,6 +1,7 @@
 from nicegui import ui, app
-import ai
+import aimanager
 from db import Database
+import ai
 
 
 playersarray = ["a1", "b1", "b2", "a2", "a3", "b3"]
