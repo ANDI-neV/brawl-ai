@@ -27,7 +27,10 @@ def getNewEntries():
                 battleTime = battle["battleTime"]
                 map = battle["event"]["map"]
                 mode = battle["battle"]["mode"]
-                allowedModes = ["gemGrab", "brawlBall", "heist", "bounty", "hotZone", "knockout"]
+                allowedModes = [
+                    "gemGrab", "brawlBall", "heist", "bounty", "hotZone",
+                    "knockout"
+                ]
                 modesGood = mode in allowedModes
                 isRanked = battle["battle"]["type"] == "soloRanked" or False
                 if modesGood and isRanked:
@@ -38,14 +41,16 @@ def getNewEntries():
                     b2 = battle["battle"]["teams"][1][1]["brawler"]["name"]
                     b3 = battle["battle"]["teams"][1][2]["brawler"]["name"]
                     result = battle["battle"]["result"]
-                    unixtime = time.mktime(time.strptime(battleTime, "%Y%m%dT%H%M%S.000Z"))
+                    unixtime = time.mktime(
+                        time.strptime(battleTime, "%Y%m%dT%H%M%S.000Z"))
                     unixtime = int(unixtime)
                     if result == "victory":
                         result = 1
                     else:
                         result = 0
                     id = random.randint(0, 10000000000000)
-                    db.insert_battle((id, unixtime, map, mode, a1, a2, a3, b1, b2, b3, result))
+                    db.insert_battle((id, unixtime, map, mode, a1, a2, a3, b1,
+                                      b2, b3, result))
 
                     playerstags = [
                         battle["battle"]["teams"][0][0]["tag"],
@@ -64,33 +69,37 @@ def getNewEntries():
                         battle["battle"]["teams"][1][2]["name"]
                     ]
                     for i in range(6):
-                        enemyplayer = (
-                            playerstags[i][1:],
-                            playersnames[i]
-                        )
+                        enemyplayer = (playerstags[i][1:], playersnames[i])
                         db.insert_player(enemyplayer)
-                    
+
             except Exception as e:
                 print(e)
                 print(battle)
         db.commit()
 
 
-
-if(True): 
+def feed(time):
     starttime = time.time()
 
     if db.get_players_count() == 0:
         playerapi = api.getPlayerStats(firstplayer)
-        player = (
-            playerapi["tag"][1:],
-            playerapi["name"]
-        )
+        player = (playerapi["tag"][1:], playerapi["name"])
         db.insert_player(player)
-    runtime = 23*60
+    runtime = time * 60
     while (time.time() - starttime) < 60 * runtime:
-        print("Time left: " + str((60 * runtime - (time.time() - starttime))/ 60) + " min")
+        print("Time left: " + str((60 * runtime - (time.time() - starttime)) / 60) + " min")
         getNewEntries()
 
 
-        
+if __name__ == "__main__":
+    starttime = time.time()
+
+    if db.get_players_count() == 0:
+        playerapi = api.getPlayerStats(firstplayer)
+        player = (playerapi["tag"][1:], playerapi["name"])
+        db.insert_player(player)
+    runtime = 23 * 60
+    while (time.time() - starttime) < 60 * runtime:
+        print("Time left: " + str((60 * runtime -
+                                   (time.time() - starttime)) / 60) + " min")
+        getNewEntries()

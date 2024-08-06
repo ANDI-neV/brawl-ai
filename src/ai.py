@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
 from joblib import dump
+import os
 
 def prepare_training_data():
     engine = create_engine('sqlite:///../games.db')
@@ -19,7 +20,8 @@ def prepare_training_data():
     return match_data
 
 def prepare_brawler_data():
-    with open('out/brawlers/brawlers.json', 'r') as json_file:
+    here = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(here, 'out/brawlers/brawlers.json'), 'r') as json_file:
         brawler_data = json.load(json_file)
 
     return brawler_data

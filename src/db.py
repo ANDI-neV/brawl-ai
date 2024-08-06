@@ -93,3 +93,14 @@ class Database:
         days = currentunix - 86400 * 60 # 60 days
         self.cur.execute("DELETE FROM battles WHERE battleTime < ?", (days,))
         self.conn.commit()
+
+    def getAllMaps(self):
+        self.cur.execute("SELECT DISTINCT map FROM battles")
+        return self.cur.fetchall()
+    
+    def checkBrawlerSignificance(self, brawler, map):
+        if map == None:
+            self.cur.execute("SELECT COUNT(*) FROM battles WHERE a1=? OR a2=? OR a3=? OR b1=? OR b2=? OR b3=?", (brawler, brawler, brawler, brawler, brawler, brawler))
+        else:
+            self.cur.execute("SELECT COUNT(*) FROM battles WHERE a1=? OR a2=? OR a3=? OR b1=? OR b2=? OR b3=? AND map=?", (brawler, brawler, brawler, brawler, brawler, brawler, map))
+        return self.cur.fetchone()[0]
