@@ -29,14 +29,14 @@ def setFirstSelection(selector):
     addStepper(0)
 
 
-def addBrawler(num, selector):
+def add_brawler(num, selector):
     playersarray[num] = selector.value
     print(selector.value)
     availablebrawlers.remove(selector.value)
     brawlerslabel.text = str(playersarray)
 
 
-def addStepper(num):
+def add_stepper(num):
     with stepper:
         with ui.step(playersarray[num]) as currentstep:
             selecter = ui.select(availablebrawlers, with_input=True)
