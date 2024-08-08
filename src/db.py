@@ -1,4 +1,4 @@
-import sqlite3
+import psycopg2
 import random
 import time
 import os
@@ -6,12 +6,23 @@ import os
 
 class Database:
     def __init__(self):
-        here = os.path.dirname(os.path.abspath(__file__))
+        '''here = os.path.dirname(os.path.abspath(__file__))
         self.conn = sqlite3.connect(os.path.join(here, 'out/db/games.db'))
         self.cur = self.conn.cursor()
         self.cur.execute("CREATE TABLE IF NOT EXISTS battles (id INTEGER PRIMARY KEY, battleTime INTEGER, map TEXT, mode TEXT, a1 TEXT, a2 TEXT, a3 TEXT, b1 TEXT, b2 TEXT, b3 TEXT, result INTEGER)")
         self.cur.execute("CREATE TABLE IF NOT EXISTS players (tag TEXT PRIMARY KEY, name TEXT, checked INTEGER)")
-        self.conn.commit()
+        self.conn.commit()'''
+
+        try:
+            self.conn = psycopg2.connect(
+                host="REDACTED",
+                port=5432,
+                database="REDACTED",
+                user="REDACTED",
+                password="REDACTED"
+            )
+        except (psycopg2.DatabaseError, Exception) as error:
+            print(error)
 
     def commit(self):
         self.conn.commit()

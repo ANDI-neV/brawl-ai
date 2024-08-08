@@ -95,6 +95,8 @@ if __name__ == "__main__":
 
 
     if True:
+        print("Currently there are " + str(db.get_battles_count()) + " battles in the database")
+
         starttime = time.time()
         if db.get_players_count() == 0:
             playerapi = api.getPlayerStats(firstplayer)
