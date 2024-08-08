@@ -74,7 +74,7 @@ def getNewEntries():
 
             except Exception as e:
                 print(e)
-                print(battle)
+                
         db.commit()
 
 

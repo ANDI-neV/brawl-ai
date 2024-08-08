@@ -43,7 +43,7 @@ class Database:
     
     def insert_battle(self, battle):
         # check by BattleTime
-        if self.cur.execute("SELECT * FROM battles WHERE battleTime=%s", (battle[1],)).fetchone():
+        if self.cur.execute("SELECT * FROM battles WHERE battleTime=%s", (battle[1],)) != None:
             return
         self.cur.execute("INSERT INTO battles (id, battleTime, map, mode, a1, a2, a3, b1, b2, b3, result) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", battle)
 
