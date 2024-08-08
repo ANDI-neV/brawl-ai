@@ -50,7 +50,7 @@ class Database:
     def insert_player(self, player):
         tag = player[0]
         name = player[1]
-        if self.cur.execute("SELECT * FROM players WHERE tag=%s", (tag,)).fetchone():
+        if self.cur.execute("SELECT * FROM players WHERE tag=%s", (tag,)) != None:
             return
         self.cur.execute("INSERT INTO players (tag, name, checked) VALUES (%s, %s, %s)", (tag, name, 0))
 
