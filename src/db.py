@@ -43,29 +43,29 @@ class Database:
     
     def insert_battle(self, battle):
         # check by BattleTime
-        if self.cur.execute("SELECT * FROM battles WHERE battleTime=?", (battle[1],)).fetchone():
+        if self.cur.execute("SELECT * FROM battles WHERE battleTime=%s", (battle[1],)).fetchone():
             return
-        self.cur.execute("INSERT INTO battles (id, battleTime, map, mode, a1, a2, a3, b1, b2, b3, result) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", battle)
+        self.cur.execute("INSERT INTO battles (id, battleTime, map, mode, a1, a2, a3, b1, b2, b3, result) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", battle)
 
     def insert_player(self, player):
         tag = player[0]
         name = player[1]
-        if self.cur.execute("SELECT * FROM players WHERE tag=?", (tag,)).fetchone():
+        if self.cur.execute("SELECT * FROM players WHERE tag=%s", (tag,)).fetchone():
             return
-        self.cur.execute("INSERT INTO players (tag, name, checked) VALUES (?, ?, ?)", (tag, name, 0))
+        self.cur.execute("INSERT INTO players (tag, name, checked) VALUES (%s, %s, %s)", (tag, name, 0))
 
     def set_player_checked(self, tag):
-        self.cur.execute("UPDATE players SET checked=1 WHERE tag=?", (tag,))
+        self.cur.execute("UPDATE players SET checked=1 WHERE tag=%s", (tag,))
         self.conn.commit()
 
     def getWinrate(self, brawler):
-        self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=? OR a2=? OR a3=?) AND result=1", (brawler, brawler, brawler))
+        self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=%s OR a2=%s OR a3=%s) AND result=1", (brawler, brawler, brawler))
         wins = self.cur.fetchone()[0]
-        self.cur.execute("SELECT COUNT(*) FROM battles WHERE (b1=? OR b2=? OR b3=?) AND result=0", (brawler, brawler, brawler))
+        self.cur.execute("SELECT COUNT(*) FROM battles WHERE (b1=%s OR b2=%s OR b3=%s) AND result=0", (brawler, brawler, brawler))
         wins += self.cur.fetchone()[0]
-        self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=? OR a2=? OR a3=?)", (brawler, brawler, brawler))
+        self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=%s OR a2=%s OR a3=%s)", (brawler, brawler, brawler))
         total = self.cur.fetchone()[0]
-        self.cur.execute("SELECT COUNT(*) FROM battles WHERE (b1=? OR b2=? OR b3=?)", (brawler, brawler, brawler))
+        self.cur.execute("SELECT COUNT(*) FROM battles WHERE (b1=%s OR b2=%s OR b3=%s)", (brawler, brawler, brawler))
         total += self.cur.fetchone()[0]
         return wins / total
     
@@ -95,7 +95,7 @@ class Database:
         return self.cur.fetchall()
 
     def getUniqueBattlesWithMoreThanXMatches(self, x):
-        self.cur.execute("SELECT * FROM (SELECT a1, a2, a3, b1, b2, b3 FROM battles GROUP BY a1, a2, a3, b1, b2, b3 HAVING COUNT(*) > ?)", (x,))
+        self.cur.execute("SELECT * FROM (SELECT a1, a2, a3, b1, b2, b3 FROM battles GROUP BY a1, a2, a3, b1, b2, b3 HAVING COUNT(*) > %s)", (x,))
         return self.cur.fetchall()
     
     def reset(self):
@@ -106,7 +106,7 @@ class Database:
     def deleteOldBattles(self):
         currentunix = int(time.time())
         days = currentunix - 86400 * 60 # 60 days
-        self.cur.execute("DELETE FROM battles WHERE battleTime < ?", (days,))
+        self.cur.execute("DELETE FROM battles WHERE battleTime < %s", (days,))
         self.conn.commit()
 
     def getAllMaps(self):
@@ -115,7 +115,7 @@ class Database:
     
     def checkBrawlerSignificance(self, brawler, map=None):
         if map == None:
-            self.cur.execute("SELECT COUNT(*) FROM battles WHERE a1=? OR a2=? OR a3=? OR b1=? OR b2=? OR b3=?", (brawler, brawler, brawler, brawler, brawler, brawler))
+            self.cur.execute("SELECT COUNT(*) FROM battles WHERE a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s", (brawler, brawler, brawler, brawler, brawler, brawler))
         else:
-            self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=? OR a2=? OR a3=? OR b1=? OR b2=? OR b3=?) AND map=?", (brawler, brawler, brawler, brawler, brawler, brawler, map))
+            self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s) AND map=%s", (brawler, brawler, brawler, brawler, brawler, brawler, map))
         return self.cur.fetchone()[0]
