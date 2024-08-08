@@ -5,7 +5,7 @@ class DevBrawlAPI:
     # This uses a token
     def __init__(self):
         self.url = "https://api.brawlstars.com"
-        self.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjhkZDViMmIyLTA1ZDItNDJmNC04MDdkLTg3MzgyNWI0NmYyYSIsImlhdCI6MTcyMTMzMTU0OSwic3ViIjoiZGV2ZWxvcGVyL2YxYzg1ODczLTE5YWUtZTkwZi02N2QyLTU0ZWFlYmM3YmFmMSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiMi4yMDMuMTk3LjIyNyJdLCJ0eXBlIjoiY2xpZW50In1dfQ.H8wmDltmi0vfaqrDphmvhsDC1y_XKSR23Gv-yN_oO8G5uXrORRG2-Rz8YW3b8dkUUrvHK5efr6nZwrauJxMkBg"
+        self.token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjE1OTllZDMyLTQ2NzMtNGY3ZC04Y2EwLTU5ZGI5MzBmNjVjZCIsImlhdCI6MTcyMjcyMzE3OSwic3ViIjoiZGV2ZWxvcGVyL2YxYzg1ODczLTE5YWUtZTkwZi02N2QyLTU0ZWFlYmM3YmFmMSIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiMi4yMDAuMTY1LjExNCJdLCJ0eXBlIjoiY2xpZW50In1dfQ.U65eniMqscaJYm17k6776cqifobaVCJUA1S6QRt7kfCJoyH9NiWS-xCDNEpH27seUyDLeKmgaaP2NR79ZhDMvQ"
     def getPlayerBattlelog(self, playerTag):
         headers = {
             "Authorization": f"Bearer {self.token}"
