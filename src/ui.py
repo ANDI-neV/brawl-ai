@@ -5,6 +5,7 @@ import ai
 
 
 playersarray = ["a1", "b1", "b2", "a2", "a3", "b3"]
+aidict = {}
 brawlers = ai.prepare_brawler_data()
 availablebrawlers = []
 availablebrawlers = list(brawlers.keys())
@@ -37,18 +38,20 @@ def set_first_selection(selector):
 
 
 def add_brawler(num, selector):
-    playersarray[num] = selector.value
+    #playersarray[num] = selector.value
+    aidict[playersarray[num]] = selector.value
     print(selector.value)
     availablebrawlers.remove(selector.value)
     brawlerslabel.text = str(playersarray)
+    aidictl.text = str(aidict)
 
 def print_winrate():
     global wrlabel
-    wr = aimanager.get_finished_winrate(us, playersarray, availablemaps[0])
+    wr = aimanager.get_finished_winrate(us, aidict, mapselector.value)
     wrlabel.text = f"Final Winrate: {wr:.3f}"
 
 def obtain_next_pick():
-    best_picks = aimanager.get_next_pick(us, playersarray, availablemaps[0])
+    best_picks = aimanager.get_next_pick(us, aidict, mapselector.value)
     global dataseries
     global categories
     dataseries = []
@@ -75,7 +78,7 @@ def add_stepper(num):
 
             def callback():
                 add_brawler(num, selecter)
-                if num != 5:
+                if num < 5:
                     add_stepper(num + 1)
                     if(us and (num == 2 or num == 3)) or (not us and (num == 0 or num == 1 or num == 4)):
                         obtain_next_pick()
@@ -103,7 +106,8 @@ if __name__ in {"__main__", "__mp_main__"}:
     global stepper
     with ui.stepper().props('vertical').classes('w-full') as stepper:
         with ui.step('Select map'):
-            ui.select(availablemaps, value=availablemaps[0])
+            global mapselector
+            mapselector = ui.select(availablemaps, value=availablemaps[0])
             ui.button('Next', on_click=stepper.next)
         with ui.step('Which side first?'):
 
@@ -119,6 +123,8 @@ if __name__ in {"__main__", "__mp_main__"}:
 
     global brawlerslabel
     brawlerslabel = ui.label()
+    global aidictl
+    aidictl = ui.label()
     global wrlabel
     wrlabel = ui.label("Winrate")
 

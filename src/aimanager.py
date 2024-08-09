@@ -39,7 +39,8 @@ def get_map_path(map):
 
 def get_finished_winrate(us, brawlers, map):
     brawler_data = prepare_brawler_data()
-    combination = get_brawler_lib(us, brawlers)
+    #combination = get_brawler_lib(us, brawlers)
+    combination = brawlers
     mapPath = get_map_path(map)
 
     input_data = prepare_input_data(combination, brawler_data, encoder, scaler)
@@ -52,7 +53,10 @@ def get_finished_winrate(us, brawlers, map):
 
 def get_next_pick(us, brawlers, map):
     brawler_data = prepare_brawler_data()
-    combination = get_brawler_lib(us, brawlers)
+    #combination = get_brawler_lib(us, brawlers)
+    combination = brawlers
+    print(combination) 
+    print(type(combination))
     keys = list(combination.keys())
     for key in keys: #check if key = value, then delete if true
         if key == combination[key]:
