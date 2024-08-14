@@ -42,15 +42,17 @@ class Database:
         return self.cur.fetchone()[0]
     
     def insert_battle(self, battle):
-        # check by BattleTime
-        if self.cur.execute("SELECT * FROM battles WHERE battleTime=%s", (battle[1],)) != None:
+    # check by BattleTime
+        self.cur.execute("SELECT * FROM battles WHERE battleTime=%s", (battle[1],))
+        if self.cur.fetchone():
             return
         self.cur.execute("INSERT INTO battles (id, battleTime, map, mode, a1, a2, a3, b1, b2, b3, result) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", battle)
 
     def insert_player(self, player):
         tag = player[0]
         name = player[1]
-        if self.cur.execute("SELECT * FROM players WHERE tag=%s", (tag,)) != None:
+        self.cur.execute("SELECT * FROM players WHERE tag=%s", (tag,))
+        if self.cur.fetchone():
             return
         self.cur.execute("INSERT INTO players (tag, name, checked) VALUES (%s, %s, %s)", (tag, name, 0))
 
@@ -67,7 +69,7 @@ class Database:
         total = self.cur.fetchone()[0]
         self.cur.execute("SELECT COUNT(*) FROM battles WHERE (b1=%s OR b2=%s OR b3=%s)", (brawler, brawler, brawler))
         total += self.cur.fetchone()[0]
-        return wins / total
+        return wins / total if total > 0 else 0
     
     def getAllBrawlers(self):
         self.cur.execute("SELECT DISTINCT a1 FROM battles")

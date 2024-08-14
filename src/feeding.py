@@ -78,18 +78,6 @@ def getNewEntries():
         db.commit()
 
 
-def feed(time):
-    starttime = time.time()
-
-    if db.get_players_count() == 0:
-        playerapi = api.getPlayerStats(firstplayer)
-        player = (playerapi["tag"][1:], playerapi["name"])
-        db.insert_player(player)
-    runtime = time * 60
-    while (time.time() - starttime) < 60 * runtime:
-        print("Time left: " + str((60 * runtime - (time.time() - starttime)) / 60) + " min")
-        getNewEntries()
-
 
 if __name__ == "__main__":
 
@@ -102,7 +90,7 @@ if __name__ == "__main__":
             playerapi = api.getPlayerStats(firstplayer)
             player = (playerapi["tag"][1:], playerapi["name"])
             db.insert_player(player)
-        runtime = 1
+        runtime = 0.2
         while (time.time() - starttime) < 60 * runtime:
             print("Time left: " + str((60 * runtime -
                                     (time.time() - starttime)) / 60) + " min")
