@@ -24,16 +24,12 @@ def getNewEntries():
     if battlelog:
         for battle in battlelog["items"]:
             try:
-                battleTime = battle["battleTime"]
-                map = battle["event"]["map"]
-                mode = battle["battle"]["mode"]
-                allowedModes = [
-                    "gemGrab", "brawlBall", "heist", "bounty", "hotZone",
-                    "knockout"
-                ]
-                modesGood = mode in allowedModes
-                isRanked = battle["battle"]["type"] == "soloRanked" or False
-                if modesGood and isRanked:
+                if "type" not in battle["battle"]:
+                    continue
+                if battle["battle"]["type"] == "soloRanked":
+                    battleTime = battle["battleTime"]
+                    map = battle["event"]["map"]
+                    mode = battle["battle"]["mode"]
                     a1 = battle["battle"]["teams"][0][0]["brawler"]["name"]
                     a2 = battle["battle"]["teams"][0][1]["brawler"]["name"]
                     a3 = battle["battle"]["teams"][0][2]["brawler"]["name"]
@@ -71,9 +67,11 @@ def getNewEntries():
                     for i in range(6):
                         enemyplayer = (playerstags[i][1:], playersnames[i])
                         db.insert_player(enemyplayer)
-
+                    else:
+                        continue
             except Exception as e:
-                print(e)
+                print(type(e))
+                print(battle)
                 
         db.commit()
 
@@ -90,7 +88,7 @@ if __name__ == "__main__":
             playerapi = api.getPlayerStats(firstplayer)
             player = (playerapi["tag"][1:], playerapi["name"])
             db.insert_player(player)
-        runtime = 0.2
+        runtime = 1
         while (time.time() - starttime) < 60 * runtime:
             print("Time left: " + str((60 * runtime -
                                     (time.time() - starttime)) / 60) + " min")
