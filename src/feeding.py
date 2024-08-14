@@ -12,6 +12,10 @@ random.seed(datetime.now().timestamp())
 firstplayer = "2QYUPPUG8"
 
 
+
+def pushBattle(battle):
+    db.insert_battle(battle)
+
 def getNewEntries():
     player = db.get_unchecked_player()
     playerTag = ""
@@ -47,6 +51,7 @@ def getNewEntries():
                     id = random.randint(0, 10000000000000)
                     db.insert_battle((id, unixtime, map, mode, a1, a2, a3, b1,
                                       b2, b3, result))
+                    
 
                     playerstags = [
                         battle["battle"]["teams"][0][0]["tag"],
