@@ -26,12 +26,21 @@ class Database:
         self.cur = self.conn.cursor()
         self.conn.commit()
 
+
+    def setAllPlayersCanRanked(self):
+        self.cur.execute("UPDATE players SET canRanked=-1") # -1 means not checked yet
+        self.conn.commit()
+
     def commit(self):
         self.conn.commit()
 
-    def get_unchecked_player(self):
-        self.cur.execute("SELECT * FROM players WHERE checked=0 LIMIT 1")
-        return self.cur.fetchone()
+    def get_unchecked_player(self, count=1):
+        self.cur.execute("SELECT * FROM players WHERE checked = 0 AND canRanked=-1 LIMIT %s", (count,))
+        return self.cur.fetchall()
+    
+    def get_unknown_ranked_player(self, count=1):
+        self.cur.execute("SELECT * FROM players WHERE canRanked = -1 LIMIT %s", (count,))
+        return self.cur.fetchall()
     
     def get_battles_count(self):
         self.cur.execute("SELECT COUNT(*) FROM battles")
@@ -40,6 +49,13 @@ class Database:
     def get_players_count(self):
         self.cur.execute("SELECT COUNT(*) FROM players")
         return self.cur.fetchone()[0]
+    
+    def get_checked_players_percentage(self):
+        self.cur.execute("SELECT COUNT(*) FROM players WHERE checked=1")
+        checked = self.cur.fetchone()[0]
+        self.cur.execute("SELECT COUNT(*) FROM players")
+        total = self.cur.fetchone()[0]
+        return checked / total
     
     def insert_battle(self, battle):
     # check by BattleTime
@@ -54,10 +70,35 @@ class Database:
         self.cur.execute("SELECT * FROM players WHERE tag=%s", (tag,))
         if self.cur.fetchone():
             return
-        self.cur.execute("INSERT INTO players (tag, name, checked) VALUES (%s, %s, %s)", (tag, name, 0))
+        self.cur.execute("INSERT INTO players (tag, name, checked, canRanked) VALUES (%s, %s, %s, %s)", (tag, name, 0, -1))
+
+    def get_if_many_players_exist(self, tags):
+        self.cur.execute("SELECT tag FROM players WHERE tag = ANY(%s)", [tags])
+        return self.cur.fetchall()
+
+    def insert_many_players(self, players):
+        # first filter out the players that already exist
+        tags = [player[0] for player in players]
+        existing = self.get_if_many_players_exist(tags)
+        print("Currently " + str(len(players)) + " players exist")
+        u_players = []
+        # players are (tag,name)
+        # existing is (tag,)
+        for player in players:
+            if player[0] not in [x[0] for x in existing]:
+                u_players.append(player)
+        print("After filtering out existing players, " + str(len(u_players)) + " players remain")
+        sqlplayers = [(player[0], player[1], 0, -1) for player in u_players]
+        args_str = ','.join(self.cur.mogrify("(%s,%s,%s,%s)", x).decode('utf-8') for x in sqlplayers)
+        self.cur.execute("INSERT INTO players (tag, name, checked, canRanked) VALUES " + args_str)
+        
 
     def set_player_checked(self, tag):
         self.cur.execute("UPDATE players SET checked=1 WHERE tag=%s", (tag,))
+        self.conn.commit()
+
+    def set_many_players_checked(self, tags):
+        self.cur.execute("UPDATE players SET checked=1 WHERE tag = ANY(%s)", [tags])
         self.conn.commit()
 
     def getWinrate(self, brawler):
@@ -104,6 +145,10 @@ class Database:
         self.cur.execute("DELETE FROM battles")
         self.cur.execute("UPDATE players SET checked=0")
         self.conn.commit()
+
+    def get_if_players_exist(self, tags):
+        self.cur.execute("SELECT tag FROM players WHERE tag = ANY(%s)", [tags])
+        return self.cur.fetchall()
 
     def deleteOldBattles(self):
         currentunix = int(time.time())
