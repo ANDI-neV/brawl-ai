@@ -10,7 +10,7 @@
       "plugged in": 720.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 10.0
     },
     "reload": {
       "normal": 1.5,
@@ -27,7 +27,7 @@
       "normal": 9.0
     },
     "projectile speed": {
-      "normal": 1196.0
+      "normal": 4500.0
     },
     "attack width": {
       "normal": 0.33
@@ -89,7 +89,7 @@
       "fire starters": 820.0
     },
     "range": {
-      "normal": 7.33
+      "normal": 8.33
     },
     "reload": {
       "normal": 0.22,
@@ -102,13 +102,13 @@
       "normal": 40.0
     },
     "super charge per hit": {
-      "normal": 6.36
+      "normal": 4.305
     },
     "attack spread": {
       "normal": 15.0
     },
     "projectile speed": {
-      "normal": 1750.0
+      "normal": 3500.0
     },
     "level stats": {
       "health": {
@@ -198,13 +198,15 @@
       "flow and hypercharge": 1222.0
     },
     "range": {
-      "normal": 2.0
+      "normal": 10.0
     },
     "reload": {
       "normal": 0.1
     },
     "super charge per hit": {
-      "normal": 12.5
+      "normal": 3.5,
+      "min to max damage": 35.0,
+      "poison": 0.25
     },
     "projectile speed": {
       "normal": 4000.0
@@ -300,18 +302,22 @@
       "very fast, full rage": 820.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 4.67
     },
     "reload": {
       "normal": 1.4,
       "full rage and mad as heck": 1.0
     },
     "super charge per hit": {
-      "normal": 3.75,
-      "super charge gear": 4.125
+      "normal": 16.8,
+      "super charge gear": 18.48,
+      "half rage": 25.2,
+      "half rage and super charge gear": 27.72,
+      "full rage": 33.6,
+      "full rage and super charge gear": 36.96
     },
     "projectile speed": {
-      "normal": 1196.0
+      "normal": 5000.0
     },
     "attack width": {
       "normal": 1.67
@@ -418,16 +424,16 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 9.33
+      "normal": 7.33
     },
     "reload": {
       "normal": 2.0
     },
     "super charge per hit": {
-      "normal": 14.8
+      "normal": 18.0
     },
     "projectile speed": {
-      "normal": 1504.0
+      "normal": 1750.0
     },
     "projectiles per super": {
       "normal": 5.0,
@@ -503,16 +509,16 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 9.0
+      "normal": 10.0
     },
     "reload": {
       "normal": 0.9
     },
     "super charge per hit": {
-      "normal": 2.5
+      "normal": 26.0
     },
     "projectile speed": {
-      "normal": 2500.0
+      "normal": 3255.0
     },
     "attack width": {
       "normal": 1.0
@@ -603,14 +609,15 @@
       "hypercharge": 906.0
     },
     "range": {
-      "normal": 10.67
+      "normal": 10.0
     },
     "reload": {
       "normal": 1.4,
       "reload gear": 1.19
     },
     "super charge per hit": {
-      "normal": 25.0
+      "normal": 21.84,
+      "bounce": 10.92
     },
     "projectile speed": {
       "normal": 4000.0
@@ -701,19 +708,18 @@
       "super": 3000.0
     },
     "range": {
-      "normal": 8.33
+      "normal": 6.33
     },
     "reload": {
       "normal": 2.4,
       "floor is fine; normal": 1.6
     },
     "super charge per hit": {
-      "normal": 22.8,
-      "ice cream": 19.8,
-      "heal": 7.425
+      "normal": 12.375,
+      "heal": 9.28125
     },
     "projectile speed": {
-      "normal": 2400.0
+      "normal": 2200.0
     },
     "duration": {
       "normal": 6.0
@@ -819,13 +825,13 @@
       "home run and hypercharge": 1117.0
     },
     "range": {
-      "normal": 40.0
+      "normal": 3.67
     },
     "reload": {
       "normal": 0.8
     },
     "super charge per hit": {
-      "normal": 25.2
+      "normal": 35.0
     },
     "attack spread": {
       "normal": 150.0
@@ -914,14 +920,14 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 33.48,
-      "super totem": 50.22
+      "normal": 11.84,
+      "super totem": 17.76
     },
     "attack spread": {
       "normal": 15.0
     },
     "projectile speed": {
-      "normal": 2391.0
+      "normal": 2800.0
     },
     "projectiles per super": {
       "normal": 3.0
@@ -980,8 +986,8 @@
       "bonnie; very fast": 820.0
     },
     "range": {
-      "normal": 7.33,
-      "black powder": 10.0
+      "normal": 9.0,
+      "bonnie; normal": 5.0
     },
     "reload": {
       "normal": 1.0,
@@ -1002,7 +1008,8 @@
       "normal": 20.0
     },
     "projectile speed": {
-      "normal": 2500.0
+      "normal": 3800.0,
+      "bonnie": 3261.0
     },
     "attack width": {
       "normal": 1.0
@@ -1106,17 +1113,19 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 8.33
+      "normal": 9.0
     },
     "reload": {
       "normal": 2.1,
       "reload gear": 1.785
     },
     "super charge per hit": {
-      "normal": 20.8
+      "normal": 20.01,
+      "fire": 6.003
     },
     "projectile speed": {
-      "normal": 870.0
+      "normal": 2700.0,
+      "rocket fuel": 3500.0
     },
     "attack width": {
       "normal": 0.67,
@@ -1204,11 +1213,11 @@
     "class": "Tank",
     "movement speed": {
       "normal": 770.0,
-      "hypercharge": 962.0,
+      "hypercharge": 963.0,
       "super": 1800.0
     },
     "range": {
-      "normal": 11.0
+      "normal": 5.33
     },
     "reload": {
       "normal": 1.6,
@@ -1218,8 +1227,8 @@
       "normal": 5.0
     },
     "super charge per hit": {
-      "normal": 36.0,
-      "super charge gear": 39.6
+      "normal": 11.0,
+      "super charge gear": 12.1
     },
     "attack spread": {
       "normal": 45.0
@@ -1293,7 +1302,7 @@
       "while super is active": 620.0
     },
     "range": {
-      "normal": 3.0
+      "normal": 5.33
     },
     "reload": {
       "normal": 1.8
@@ -1388,7 +1397,7 @@
       "super": 4500.0
     },
     "range": {
-      "normal": 10.0
+      "normal": 3.0
     },
     "reload": {
       "normal": 1.0
@@ -1403,7 +1412,7 @@
       "normal": 100.0
     },
     "projectile speed": {
-      "normal": 3500.0
+      "normal": 4000.0
     },
     "super width": {
       "normal": 1.0
@@ -1453,7 +1462,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 7.33
+      "normal": 10.0
     },
     "reload": {
       "normal": 1.45
@@ -1463,10 +1472,11 @@
       "booster shots": 3.0
     },
     "super charge per hit": {
-      "normal": 24.0
+      "normal": 16.625,
+      "second & third ticks": 8.8
     },
     "projectile speed": {
-      "normal": 2000.0
+      "normal": 4000.0
     },
     "attack width": {
       "normal": 1.0
@@ -1531,10 +1541,10 @@
       "super": 1440.0
     },
     "range": {
-      "normal": 2.33
+      "normal": 8.33
     },
     "super charge per hit": {
-      "normal": 7.5
+      "normal": 17.575
     },
     "projectile speed": {
       "normal": 3000.0,
@@ -1609,13 +1619,13 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 9.0
+      "normal": 8.33
     },
     "super charge per hit": {
       "normal": 15.01
     },
     "projectile speed": {
-      "normal": 3300.0
+      "normal": 4200.0
     },
     "attack width": {
       "normal": 1.0
@@ -1706,7 +1716,7 @@
       "candy beans": 1020.0
     },
     "range": {
-      "normal": 3.0
+      "normal": 8.33
     },
     "reload": {
       "normal": 1.9,
@@ -1719,7 +1729,7 @@
       "fourth sequence": 4.0
     },
     "super charge per hit": {
-      "normal": 4.0
+      "normal": 16.0
     },
     "attack spread": {
       "normal": 15.0,
@@ -1727,13 +1737,13 @@
       "fourth sequence": 45.0
     },
     "projectile speed": {
-      "normal": 2000.0
+      "normal": 3300.0
     },
     "attack width": {
       "normal": 0.67
     },
     "duration": {
-      "normal": 5.0
+      "normal": 1.0
     },
     "super spread": {
       "normal": 50.0
@@ -1840,8 +1850,7 @@
       "dash": 3700.0
     },
     "range": {
-      "normal": 10.0,
-      "dash": 6.67
+      "normal": 6.67
     },
     "reload": {
       "normal": 2.0
@@ -1850,11 +1859,11 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 10.0,
-      "dash": 43.75
+      "normal": 13.5,
+      "close to max range": 6.75
     },
     "projectile speed": {
-      "normal": 1500.0
+      "normal": 1750.0
     },
     "attack width": {
       "normal": 1.33
@@ -1934,11 +1943,11 @@
     "rarity": "Mythic",
     "class": "Damage Dealer",
     "movement speed": {
-      "normal": 720.0
+      "normal": 864.0,
+      "stage 3; very fast": 3.0
     },
     "range": {
-      "normal": 8.33,
-      "stage 2+; long": 2.0
+      "normal": 7.67
     },
     "reload": {
       "normal": 2.0
@@ -1950,14 +1959,14 @@
       "stage 3": 2.0
     },
     "super charge per hit": {
-      "normal": 10.0
+      "normal": 20.0
     },
     "attack spread": {
       "normal": 125.0,
       "stage 3": 3.0
     },
     "projectile speed": {
-      "normal": 3500.0
+      "normal": 3000.0
     },
     "attack width": {
       "normal": 1.0,
@@ -2033,7 +2042,7 @@
       "super": 4000.0
     },
     "range": {
-      "normal": 11.0
+      "normal": 8.67
     },
     "reload": {
       "normal": 1.6
@@ -2136,12 +2145,13 @@
     "class": "Damage Dealer",
     "movement speed": {
       "normal": 720.0,
-      "slick boots": 820.0,
-      "hypercharge": 936.0,
-      "slick boots and hypercharge": 1036.0
+      "slick boots": 814.0,
+      "hypercharge": 907.0,
+      "slick boots and hypercharge": 1001.0
     },
     "range": {
-      "normal": 11.0
+      "normal": 9.0,
+      "magnum special": 10.0
     },
     "reload": {
       "normal": 1.4,
@@ -2152,10 +2162,11 @@
       "silver bullet": 1.0
     },
     "super charge per hit": {
-      "normal": 6.96
+      "normal": 8.37
     },
     "projectile speed": {
-      "normal": 4891.0
+      "normal": 4000.0,
+      "magnum special": 4440.0
     },
     "attack width": {
       "normal": 0.33,
@@ -2229,7 +2240,7 @@
       "super and hypercharge": 1177.0
     },
     "range": {
-      "normal": 9.0
+      "normal": 5.33
     },
     "reload": {
       "normal": 1.2,
@@ -2311,8 +2322,8 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 6.0,
-      "poison": 1.5
+      "normal": 7.12,
+      "poison": 1.78
     },
     "attack spread": {
       "normal": 22.5
@@ -2416,7 +2427,7 @@
       "super": 2400.0
     },
     "range": {
-      "normal": 7.0
+      "normal": 6.0
     },
     "reload": {
       "normal": 1.8,
@@ -2426,7 +2437,7 @@
       "normal": 10.0
     },
     "super charge per hit": {
-      "normal": 12.0
+      "normal": 7.02
     },
     "attack spread": {
       "normal": 40.0
@@ -2494,7 +2505,7 @@
       "fast food": 870.0
     },
     "range": {
-      "normal": 9.33
+      "normal": 3.33
     },
     "reload": {
       "normal": 1.5
@@ -2565,16 +2576,17 @@
       "alternate": 864.0
     },
     "range": {
-      "normal": 5.67
+      "normal": 4.0
     },
     "reload": {
-      "normal": 0.22
+      "normal": 1.0
     },
     "super charge per hit": {
-      "normal": 1.6
+      "normal": 17.5,
+      "close to max range": 35.0
     },
     "projectile speed": {
-      "normal": 3500.0
+      "normal": 3800.0
     },
     "attack width": {
       "normal": 1.33
@@ -2665,10 +2677,10 @@
       "normal": 2.0
     },
     "super charge per hit": {
-      "normal": 50.05
+      "normal": 25.0
     },
     "projectile speed": {
-      "normal": 1600.0
+      "normal": 1900.0
     },
     "explosion range": {
       "normal": 2.67
@@ -2747,7 +2759,7 @@
       "after super  hypercharge": 1217.0
     },
     "range": {
-      "normal": 6.67
+      "normal": 2.0
     },
     "reload": {
       "normal": 0.7,
@@ -2842,7 +2854,7 @@
       "super": 1600.0
     },
     "range": {
-      "normal": 9.0
+      "normal": 3.0
     },
     "reload": {
       "normal": 0.8
@@ -2851,8 +2863,8 @@
       "normal": 4.0
     },
     "super charge per hit": {
-      "normal": 30.0,
-      "super charge gear": 33.0
+      "normal": 8.455,
+      "super charge gear": 9.3005
     },
     "projectile speed": {
       "normal": 3261.0
@@ -2931,13 +2943,13 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 5.67
+      "normal": 6.67
     },
     "reload": {
       "normal": 2.0
     },
     "super charge per hit": {
-      "normal": 4.56
+      "normal": 11.18
     },
     "attack spread": {
       "normal": 40.0
@@ -3018,7 +3030,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 9.33
     },
     "reload": {
       "normal": 1.6,
@@ -3028,7 +3040,7 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 2.5
+      "normal": 12.0
     },
     "projectile speed": {
       "normal": 3500.0
@@ -3150,13 +3162,14 @@
       "super": 4000.0
     },
     "range": {
-      "normal": 10.0
+      "normal": 2.67,
+      "shoe": 9.33
     },
     "reload": {
       "normal": 1.0
     },
     "super charge per hit": {
-      "normal": 25.2
+      "normal": 25.5
     },
     "projectile speed": {
       "normal": 3200.0,
@@ -3250,8 +3263,7 @@
       "hypercharge": 970.0
     },
     "range": {
-      "normal": 7.0,
-      "hypercharge; normal": 6.33
+      "normal": 6.0
     },
     "reload": {
       "normal": 0.8
@@ -3263,7 +3275,7 @@
       "normal": 65.0
     },
     "projectile speed": {
-      "normal": 6000.0
+      "normal": 5000.0
     },
     "super spread": {
       "normal": 65.0,
@@ -3333,7 +3345,7 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 10.0
+      "normal": 8.33
     },
     "reload": {
       "normal": 1.2
@@ -3342,10 +3354,10 @@
       "normal": 6.0
     },
     "super charge per hit": {
-      "normal": 15.25
+      "normal": 6.3
     },
     "projectile speed": {
-      "normal": 5000.0
+      "normal": 3000.0
     },
     "attack width": {
       "normal": 2.0
@@ -3416,8 +3428,8 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 7.67,
-      "talk to the hand gear": 8.67
+      "normal": 5.67,
+      "max range; very long": 11.33
     },
     "reload": {
       "normal": 2.0
@@ -3434,9 +3446,7 @@
       "normal": 100.0
     },
     "projectile speed": {
-      "normal": 3200.0,
-      "grabbed": 2000.0,
-      "grabbed;  hypercharge": 3200.0
+      "normal": 3200.0
     },
     "attack width": {
       "normal": 1.0
@@ -3529,7 +3539,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 6.67
+      "normal": 9.0
     },
     "reload": {
       "normal": 1.4
@@ -3590,7 +3600,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 9.0
+      "normal": 8.33
     },
     "reload": {
       "normal": 1.7,
@@ -3601,15 +3611,13 @@
       "coin shower": 12.0
     },
     "super charge per hit": {
-      "normal": 7.59,
-      "close to max range": 15.18
+      "normal": 7.0
     },
     "attack spread": {
       "normal": 15.0
     },
     "projectile speed": {
-      "normal": 3200.0,
-      "return": 3000.0
+      "normal": 3100.0
     },
     "projectiles per super": {
       "normal": 5.0
@@ -3690,7 +3698,7 @@
       "foot patrol; very fast": 830.0
     },
     "range": {
-      "normal": 8.33
+      "normal": 7.67
     },
     "reload": {
       "normal": 2.0
@@ -3700,10 +3708,10 @@
       "radio check": 12.0
     },
     "super charge per hit": {
-      "normal": 22.0
+      "normal": 17.225
     },
     "projectile speed": {
-      "normal": 800.0,
+      "normal": 840.0,
       "split": 3000.0
     },
     "attack width": {
@@ -3776,7 +3784,7 @@
       "normal": 25.0
     },
     "projectile speed": {
-      "normal": 3600.0
+      "normal": 4000.0
     },
     "attack width": {
       "normal": 1.0
@@ -3857,13 +3865,15 @@
       "it's gonna blow": 792.0
     },
     "range": {
-      "normal": 20.0
+      "normal": 3.33,
+      "max. range": 4.67
     },
     "reload": {
       "normal": 0.25
     },
     "super charge per hit": {
-      "normal": 28.71
+      "normal": 6.5625,
+      "min to max range": 26.25
     },
     "projectiles per super": {
       "normal": 6.0
@@ -3944,7 +3954,7 @@
       "pneumatic booster and hypercharge": 1156.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 3.33
     },
     "reload": {
       "normal": 1.8
@@ -4005,20 +4015,21 @@
       "super": 1400.0
     },
     "range": {
-      "normal": 2.67
+      "normal": 4.0,
+      "max range; long": 8.33
     },
     "reload": {
       "normal": 1.5
     },
     "super charge per hit": {
-      "normal": 16.8
+      "normal": 17.5
     },
     "attack spread": {
       "normal": 80.0,
       "max range": 15.0
     },
     "projectile speed": {
-      "normal": 1500.0
+      "normal": 3500.0
     },
     "projectiles per super": {
       "normal": 7.0
@@ -4086,17 +4097,17 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 9.0
     },
     "reload": {
       "normal": 1.8
     },
     "super charge per hit": {
-      "normal": 6.305
+      "normal": 16.695
     },
     "projectile speed": {
-      "normal": 1196.0,
-      "scrappy": 3478.0
+      "normal": 2870.0,
+      "bounce": 1522.0
     },
     "attack width": {
       "normal": 1.0
@@ -4215,7 +4226,8 @@
       "super; detaching": 2000.0
     },
     "range": {
-      "normal": 6.67
+      "normal": 3.67,
+      "attached": 7.33
     },
     "reload": {
       "normal": 0.8,
@@ -4300,21 +4312,21 @@
       "normal": 770.0
     },
     "range": {
-      "normal": 6.67,
-      "order: swap": 7.33
+      "normal": 7.33,
+      "order: swap": 6.67
     },
     "reload": {
       "normal": 2.2
     },
     "super charge per hit": {
-      "normal": 2.7
+      "normal": 12.6
     },
     "attack spread": {
       "normal": 12.5
     },
     "projectile speed": {
-      "normal": 3400.0,
-      "order: swap": 2000.0
+      "normal": 2000.0,
+      "order: swap": 3400.0
     },
     "projectiles per super": {
       "normal": 8.0
@@ -4482,17 +4494,16 @@
       "vigilance": 943.0
     },
     "range": {
-      "normal": 9.0
+      "normal": 2.0
     },
     "reload": {
       "normal": 0.8
     },
     "super charge per hit": {
-      "normal": 12.5
+      "normal": 25.0
     },
     "projectile speed": {
-      "normal": 3800.0,
-      "repot": 2000.0
+      "normal": 3500.0
     },
     "attack width": {
       "normal": 2.0
@@ -4557,7 +4568,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 9.0
     },
     "reload": {
       "normal": 1.7,
@@ -4567,7 +4578,7 @@
       "normal": 6.0
     },
     "super charge per hit": {
-      "normal": 3.38
+      "normal": 6.76
     },
     "projectile speed": {
       "normal": 4500.0
@@ -4640,7 +4651,7 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 7.67
+      "normal": 9.33
     },
     "reload": {
       "normal": 1.3
@@ -4649,11 +4660,11 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 1.0,
-      "super charge gear": 1.1
+      "normal": 13.2,
+      "super charge gear": 14.52
     },
     "projectile speed": {
-      "normal": 1739.0
+      "normal": 4000.0
     },
     "attack width": {
       "normal": 0.33
@@ -4723,13 +4734,13 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 3.33
+      "normal": 8.67
     },
     "reload": {
       "normal": 1.5
     },
     "super charge per hit": {
-      "normal": 38.75
+      "normal": 25.6
     },
     "projectile speed": {
       "normal": 3000.0
@@ -4798,16 +4809,18 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 40.0
+      "normal": 9.0,
+      "focused": 12.0
     },
     "reload": {
       "normal": 1.5
     },
     "super charge per hit": {
-      "normal": 50.0
+      "normal": 26.0
     },
     "projectile speed": {
-      "normal": 4200.0
+      "normal": 3500.0,
+      "in my sights": 4200.0
     },
     "attack width": {
       "normal": 0.67
@@ -4873,7 +4886,7 @@
       "super and hypercharge": 1317.0
     },
     "range": {
-      "normal": 4.0
+      "normal": 8.33
     },
     "reload": {
       "normal": 1.3,
@@ -4940,7 +4953,8 @@
       "mecha; normal": 720.0
     },
     "range": {
-      "normal": 4.33
+      "normal": 9.0,
+      "mecha; long": 7.33
     },
     "reload": {
       "normal": 1.3,
@@ -4953,7 +4967,8 @@
       "mecha": 16.0
     },
     "super charge per hit": {
-      "normal": 21.25
+      "normal": 13.5,
+      "mecha": 7.65
     },
     "attack spread": {
       "normal": 10.0
@@ -5063,7 +5078,9 @@
       "super": 3700.0
     },
     "range": {
-      "normal": 5.33
+      "normal": 8.0,
+      "monster notes": 2.0,
+      "monster notes;  perfect pitch": 3.33
     },
     "reload": {
       "normal": 1.5
@@ -5149,8 +5166,7 @@
       "normal": 2.6
     },
     "super charge per hit": {
-      "normal": 30.0,
-      "hypercharge": 37.5
+      "normal": 20.71
     },
     "projectile speed": {
       "normal": 5200.0
@@ -5223,18 +5239,18 @@
       "normal": 820.0
     },
     "range": {
-      "normal": 10.0
+      "normal": 2.67,
+      "dash bar charged": 4.67
     },
     "reload": {
       "normal": 2.4,
       "survival shovel": 1.2
     },
     "super charge per hit": {
-      "normal": 30.15
+      "normal": 21.25
     },
     "projectile speed": {
-      "normal": 2718.0,
-      "bat storm gear": 4077.0
+      "normal": 2700.0
     },
     "super width": {
       "normal": 2.67
@@ -5311,18 +5327,18 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 7.0,
+      "after bounce": 10.33
     },
     "reload": {
       "normal": 1.6
     },
     "super charge per hit": {
-      "normal": 5.59,
-      "porter reinforcements": 4.3
+      "normal": 17.67
     },
     "projectile speed": {
-      "normal": 1196.0,
-      "porter": 3125.0
+      "normal": 3000.0,
+      "bounce": 1000.0
     },
     "attack width": {
       "normal": 1.33
@@ -5431,7 +5447,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 3.33
+      "normal": 8.67
     },
     "reload": {
       "normal": 1.8
@@ -5440,14 +5456,14 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 22.5,
-      "super charge gear": 24.75
+      "normal": 18.5,
+      "super charge gear": 20.35
     },
     "attack spread": {
       "normal": 50.0
     },
     "projectile speed": {
-      "normal": 2500.0
+      "normal": 4000.0
     },
     "duration": {
       "normal": 10.0
@@ -5513,16 +5529,16 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 6.0
     },
     "reload": {
       "normal": 1.1
     },
     "super charge per hit": {
-      "normal": 10.0
+      "normal": 20.9
     },
     "projectile speed": {
-      "normal": 1196.0
+      "normal": 2718.0
     },
     "attack width": {
       "normal": 1.67
@@ -5625,14 +5641,14 @@
       "phat splatter": 1.0
     },
     "super charge per hit": {
-      "normal": 8.5,
-      "super charge gear": 9.35
+      "normal": 7.705,
+      "super charge gear": 8.4755
     },
     "attack spread": {
       "normal": 11.0
     },
     "projectile speed": {
-      "normal": 3200.0
+      "normal": 3600.0
     },
     "attack width": {
       "normal": 1.33
@@ -5703,7 +5719,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 9.0
     },
     "reload": {
       "normal": 1.3
@@ -5718,7 +5734,7 @@
       "normal": 30.0
     },
     "projectile speed": {
-      "normal": 1196.0
+      "normal": 4130.0
     },
     "healing turret range": {
       "normal": 3.33
@@ -5806,7 +5822,7 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 3.33
+      "normal": 9.0
     },
     "reload": {
       "normal": 1.5
@@ -5815,7 +5831,7 @@
       "normal": 6.0
     },
     "super charge per hit": {
-      "normal": 38.75
+      "normal": 6.5
     },
     "attack spread": {
       "normal": 20.0
@@ -5907,7 +5923,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 5.0
+      "normal": 8.0
     },
     "reload": {
       "normal": 2.0
@@ -5917,12 +5933,12 @@
       "heavy coffers": 6.0
     },
     "super charge per hit": {
-      "normal": 30.0,
-      "fire": 6.6
+      "normal": 21.805,
+      "coins": 16.35375
     },
     "projectile speed": {
-      "normal": 1196.0,
-      "cannonball": 750.0
+      "normal": 3400.0,
+      "coins": 2500.0
     },
     "attack width": {
       "normal": 1.0,
@@ -6040,13 +6056,14 @@
       "super and hypercharge": 2500.0
     },
     "range": {
-      "normal": 8.67
+      "normal": 10.0
     },
     "reload": {
       "normal": 2.3
     },
     "super charge per hit": {
-      "normal": 20.25
+      "normal": 8.245,
+      "close to max range": 41.225
     },
     "projectile speed": {
       "normal": 4000.0
@@ -6141,7 +6158,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 9.33
+      "normal": 7.0
     },
     "reload": {
       "normal": 1.6
@@ -6153,7 +6170,7 @@
       "normal": 65.0
     },
     "projectile speed": {
-      "normal": 5000.0
+      "normal": 2500.0
     },
     "super spread": {
       "normal": 65.0
@@ -6312,11 +6329,11 @@
     "movement speed": {
       "normal": 720.0,
       "hypercharge": 907.0,
-      "robo retreat": 970.0,
-      "robo retreat and hypercharge": 1057.0
+      "robo retreat": 965.0,
+      "robo retreat and hypercharge": 1152.0
     },
     "range": {
-      "normal": 13.33
+      "normal": 9.67
     },
     "reload": {
       "normal": 1.2,
@@ -6326,13 +6343,13 @@
       "normal": 5.0
     },
     "super charge per hit": {
-      "normal": 9.45
+      "normal": 8.4
     },
     "attack spread": {
       "normal": 7.5
     },
     "projectile speed": {
-      "normal": 4891.0
+      "normal": 3478.0
     },
     "attack width": {
       "normal": 0.67
@@ -6506,7 +6523,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 7.67
+      "normal": 9.0
     },
     "reload": {
       "normal": 1.4
@@ -6515,10 +6532,10 @@
       "normal": 2.0
     },
     "super charge per hit": {
-      "normal": 33.5
+      "normal": 15.25
     },
     "projectile speed": {
-      "normal": 1700.0
+      "normal": 3500.0
     },
     "attack width": {
       "normal": 0.47
@@ -6586,7 +6603,7 @@
       "after throwing knuckle busters; very fast": 970.0
     },
     "range": {
-      "normal": 8.67
+      "normal": 3.0
     },
     "reload": {
       "normal": 1.6,
@@ -6596,16 +6613,16 @@
       "normal": 2.0
     },
     "super charge per hit": {
-      "normal": 35.0,
-      "while retrieving knuckle busters": 17.5
+      "normal": 20.0,
+      "out knuckle busters": 10.0
     },
     "attack spread": {
       "normal": 50.0,
       "out knuckle busters": 25.0
     },
     "projectile speed": {
-      "normal": 2900.0,
-      "while retrieving knuckle busters": 3600.0
+      "normal": 5000.0,
+      "out knuckle busters": 3261.0
     },
     "super width": {
       "normal": 1.67,
@@ -6691,7 +6708,7 @@
       "hypercharge and super": 1117.0
     },
     "range": {
-      "normal": 7.33
+      "normal": 6.0
     },
     "reload": {
       "normal": 1.8
@@ -6703,7 +6720,7 @@
       "normal": 40.0
     },
     "projectile speed": {
-      "normal": 2000.0
+      "normal": 3500.0
     },
     "duration": {
       "normal": 9.0
@@ -6767,7 +6784,8 @@
       "hypercharge": 963.0
     },
     "range": {
-      "normal": 7.67
+      "normal": 7.67,
+      "clay pigeons": 10.0
     },
     "reload": {
       "normal": 1.5
@@ -6776,14 +6794,15 @@
       "normal": 5.0
     },
     "super charge per hit": {
-      "normal": 4.8
+      "normal": 10.05
     },
     "attack spread": {
       "normal": 30.0,
       "clay pigeons": 10.0
     },
     "projectile speed": {
-      "normal": 4130.0
+      "normal": 3100.0,
+      "clay pigeons": 4300.0
     },
     "projectiles per super": {
       "normal": 9.0,
@@ -6866,10 +6885,11 @@
       "normal": 7.0
     },
     "super charge per hit": {
-      "normal": 12.5
+      "normal": 14.31
     },
     "projectile speed": {
-      "normal": 1739.0
+      "normal": 2174.0,
+      "spike": 3261.0
     },
     "attack width": {
       "normal": 1.0,
@@ -6966,7 +6986,7 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 7.67
+      "normal": 5.0
     },
     "reload": {
       "normal": 1.7
@@ -6976,7 +6996,7 @@
       "super charge gear": 25.333
     },
     "projectile speed": {
-      "normal": 1739.0
+      "normal": 1700.0
     },
     "attack width": {
       "normal": 1.0
@@ -7036,17 +7056,17 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 8.33
+      "normal": 7.67,
+      "windup; very long": 15.33
     },
     "reload": {
       "normal": 2.1
     },
     "super charge per hit": {
-      "normal": 12.5
+      "normal": 25.0
     },
     "projectile speed": {
-      "normal": 1600.0,
-      "blob": 3000.0
+      "normal": 4000.0
     },
     "attack width": {
       "normal": 0.33
@@ -7111,8 +7131,7 @@
       "super": 3000.0
     },
     "range": {
-      "normal": 2.33,
-      "zero drag": 4.0
+      "normal": 7.67
     },
     "reload": {
       "normal": 1.5
@@ -7121,7 +7140,7 @@
       "normal": 2.0
     },
     "super charge per hit": {
-      "normal": 10.0
+      "normal": 135.0
     },
     "projectile speed": {
       "normal": 3300.0
@@ -7211,13 +7230,15 @@
       "stage 1+; very fast": 1.0
     },
     "range": {
-      "normal": 3.33
+      "normal": 8.67,
+      "stage 2+; long": 2.0
     },
     "reload": {
       "normal": 2.0
     },
     "super charge per hit": {
-      "normal": 17.0
+      "normal": 35.4,
+      "split": 17.7
     },
     "projectile speed": {
       "normal": 3500.0,
@@ -7291,7 +7312,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 6.67
+      "normal": 8.0
     },
     "reload": {
       "normal": 2.0
@@ -7300,13 +7321,13 @@
       "normal": 3.0
     },
     "super charge per hit": {
-      "normal": 18.0
+      "normal": 9.24
     },
     "attack spread": {
       "normal": 25.0
     },
     "projectile speed": {
-      "normal": 1522.0
+      "normal": 3152.0
     },
     "level stats": {
       "health": {
@@ -7375,7 +7396,7 @@
       "hypercharge": 907.0
     },
     "range": {
-      "normal": 3.33
+      "normal": 8.67
     },
     "reload": {
       "normal": 2.4,
@@ -7386,15 +7407,17 @@
       "mine mania": 6.0
     },
     "super charge per hit": {
-      "normal": 35.0
+      "normal": 17.6
     },
     "projectile speed": {
-      "normal": 1196.0
+      "normal": 450.0,
+      "mine": 2000.0
     },
     "head movement speed": {
       "normal": 1200.0
     },
     "hypercharge": {
+      "hypercharge multiplier": 0.25,
       "speed": 0.26,
       "damage": 0.25,
       "shield": 0.05
@@ -7471,7 +7494,7 @@
       "normal": 720.0
     },
     "range": {
-      "normal": 8.33
+      "normal": 7.33
     },
     "reload": {
       "normal": 2.0
@@ -7481,7 +7504,7 @@
       "spellbound": 25.5
     },
     "projectile speed": {
-      "normal": 4130.0
+      "normal": 1750.0
     },
     "duration": {
       "normal": 4.0

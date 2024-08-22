@@ -7,7 +7,6 @@ import ai
 playersarray = ["a1", "b1", "b2", "a2", "a3", "b3"]
 aidict = {}
 brawlers = ai.prepare_brawler_data()
-availablebrawlers = []
 availablebrawlers = list(brawlers.keys())
 db = Database()
 availablemaps = db.getAllMaps()
@@ -56,19 +55,17 @@ def obtain_next_pick():
     global categories
     dataseries = []
     all = []
-    for i in range(best_picks.__len__()):
-        all.append(best_picks[i][1])
-    dataseries.append({'data': all})
     categories = []
-    for i in range(best_picks.__len__()):
-        categories.append(best_picks[i][0])
+    dataseries.append({'data': all})
+    for brawler, win_rate in best_picks:
+        all.append(win_rate)
+        categories.append(brawler)
+    print("Updated with" + str(categories) + " and " + str(dataseries))
+
     global chart
     chart.options['xAxis']['categories'] = categories
     chart.options['series'] = dataseries
     chart.update()
-    print("Updated with" + str(categories) + " and " + str(dataseries))
-    
-
 
 
 def add_stepper(num):

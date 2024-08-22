@@ -156,6 +156,14 @@ class Database:
         self.cur.execute("DELETE FROM battles WHERE battleTime < %s", (days,))
         self.conn.commit()
 
+    def getMapWinrate(self, map):
+        self.cur.execute("SELECT COUNT(*) FROM battles WHERE map=%s AND result=1", (map,))
+        wins = self.cur.fetchone()[0]
+        self.cur.execute("SELECT COUNT(*) FROM battles WHERE map=%s", (map,))
+        total = self.cur.fetchone()[0]
+        return wins / total if total > 0 else 0
+
+
     def getAllMaps(self):
         self.cur.execute("SELECT DISTINCT map FROM battles")
         return self.cur.fetchall()
@@ -166,3 +174,28 @@ class Database:
         else:
             self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s) AND map=%s", (brawler, brawler, brawler, brawler, brawler, brawler, map))
         return self.cur.fetchone()[0]
+
+    def checkBrawlerWinrateForMap(self, brawler, map=None):
+        if map is None:
+            self.cur.execute("""
+                SELECT 
+                    SUM(CASE WHEN ((a1=%s OR a2=%s OR a3=%s) AND result=1) OR ((b1=%s OR b2=%s OR b3=%s) AND result=0) THEN 1 ELSE 0 END) as wins,
+                    COUNT(*) as total_games
+                FROM battles 
+                WHERE a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s
+            """, (brawler,) * 12)
+        else:
+            self.cur.execute("""
+                SELECT 
+                    SUM(CASE WHEN ((a1=%s OR a2=%s OR a3=%s) AND result=1) OR ((b1=%s OR b2=%s OR b3=%s) AND result=0) THEN 1 ELSE 0 END) as wins,
+                    COUNT(*) as total_games
+                FROM battles 
+                WHERE (a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s) AND map=%s
+            """, (brawler,) * 12 + (map,))
+
+        result = self.cur.fetchone()
+        wins, total_games = result[0], result[1]
+
+        if total_games == 0:
+            return 0  # Avoid division by zero
+        return wins / total_games

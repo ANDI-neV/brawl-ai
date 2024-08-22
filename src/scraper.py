@@ -51,7 +51,6 @@ def get_brawler_data(brawler_name, brawler_url, index):
             label = str.lower(row.select_one('h3').text.strip())
             value_element = row.select_one('div.pi-data-value')
             value = extract_text_with_br(value_element)
-
             excluded_labels = ["release date", "voice actor"]
             string_labels = ["rarity", "class"]
             hyper_labels = ["hypercharge multiplier", "speed", "damage", "shield"]
@@ -65,7 +64,7 @@ def get_brawler_data(brawler_name, brawler_url, index):
                 if "hypercharge" not in brawler_info:
                     brawler_info["hypercharge"] = {}
                 brawler_info["hypercharge"][label] = convert_percent_to_float(value.replace("+","").strip())
-            else:
+            elif label not in brawler_info:
                 brawler_info[label] = parse_label_info(value)
 
     level_tables = soup.find_all('table', class_='pi-horizontal-group')

@@ -43,12 +43,12 @@ def get_finished_winrate(us, brawlers, map):
     combination = brawlers
     mapPath = get_map_path(map)
 
-    input_data = prepare_input_data(combination, brawler_data, encoder, scaler)
+    shape = load(os.path.join(here, 'out/models/shape.joblib'))
 
-    model = BrawlStarsNN(input_data.shape[1]).to(device)
+    model = BrawlStarsNN(shape).to(device)
     
     model.load_state_dict(torch.load(os.path.join(here, mapPath)))
-    value = predict_win_probability(model, input_data, device)
+    value = predict_best_pick(model, combination, brawler_data, encoder, scaler, device, first_pick=us)
     return value
 
 def get_next_pick(us, brawlers, map):
@@ -61,20 +61,11 @@ def get_next_pick(us, brawlers, map):
     for key in keys: #check if key = value, then delete if true
         if key == combination[key]:
             del combination[key]
-    
-    dummy_combination = {
-        'a1': 'griff',
-        'a2': 'rico',
-        'a3': 'chester',
-        'b1': 'surge',
-        'b2': 'pam',
-        'b3': 'penny'
-    }
+    shape = load(os.path.join(here, 'out/models/shape.joblib'))
 
     mapPath = get_map_path(map)
-    input_data = prepare_input_data(dummy_combination, brawler_data, encoder, scaler)
 
-    model = BrawlStarsNN(input_data.shape[1]).to(device)
+    model = BrawlStarsNN(shape).to(device)
     model.load_state_dict(torch.load(os.path.join(here, mapPath)))
 
     best_picks = predict_best_pick(model, combination, brawler_data, encoder, scaler, device, first_pick=us)
