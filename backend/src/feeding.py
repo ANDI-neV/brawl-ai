@@ -1,4 +1,4 @@
-from backend.datasource import DevBrawlAPI
+from datasource import DevBrawlAPI
 from db import Database
 import json
 import time
@@ -243,7 +243,7 @@ if __name__ == "__main__":
             playerapi = api.getPlayerStats(firstplayer)
             player = (playerapi["tag"][1:], playerapi["name"])
             db.insert_player(player)
-        runtime = 15
+        runtime = 1
         while (time.time() - starttime) < 60 * runtime:
             print("Time left: " + str((60 * runtime -
                                        (time.time() - starttime)) / 60) +

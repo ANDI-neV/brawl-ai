@@ -1,31 +1,66 @@
 import psycopg2
+from psycopg2 import pool
 import random
 import time
 import os
 
+'''psycopg2.connect(
+    host=os.getenv("REDACTED"),
+    port=5432,
+    database="REDACTED",
+    user="REDACTED",
+    password="REDACTED"
+)'''
 
-class Database:
+class ConnectionPoolManager:
+    _instance = None
+    _pool = None
+
     def __init__(self):
-        '''here = os.path.dirname(os.path.abspath(__file__))
-        self.conn = sqlite3.connect(os.path.join(here, 'out/db/games.db'))
-        self.cur = self.conn.cursor()
-        self.cur.execute("CREATE TABLE IF NOT EXISTS battles (id INTEGER PRIMARY KEY, battleTime INTEGER, map TEXT, mode TEXT, a1 TEXT, a2 TEXT, a3 TEXT, b1 TEXT, b2 TEXT, b3 TEXT, result INTEGER)")
-        self.cur.execute("CREATE TABLE IF NOT EXISTS players (tag TEXT PRIMARY KEY, name TEXT, checked INTEGER)")
-        self.conn.commit()'''
-
+        raise RuntimeError("Call instance() instead")
+    
+    @classmethod
+    def initpool(cls):
         try:
-            self.conn = psycopg2.connect(
+            cls._pool = psycopg2.pool.ThreadedConnectionPool(
+                1, 1000,
                 host="REDACTED",
                 port=5432,
                 database="REDACTED",
                 user="REDACTED",
                 password="REDACTED"
             )
-        except (psycopg2.DatabaseError, Exception) as error:
-            print(error)
-        self.cur = self.conn.cursor()
-        self.conn.commit()
+        except Exception as e:
+            print("Error: " + str(e))
+            raise e
 
+    @classmethod
+    def instance(cls):
+        if cls._instance is None:
+            cls._instance = cls.__new__(cls)
+            cls.initpool()
+        return cls._instance
+    
+    @classmethod
+    def getconn(cls):
+        return cls._pool.getconn()
+    
+    @classmethod
+    def putconn(cls, conn):
+        cls._pool.putconn(conn)
+    
+    def __del__(cls): 
+        if cls._pool is not None:
+            cls._pool.closeall()
+
+            
+
+class Database:
+
+    def __init__(self):
+        manager = ConnectionPoolManager.instance()
+        self.conn = manager.getconn()
+        self.cur = self.conn.cursor()
 
     def setAllPlayersCanRanked(self):
         self.cur.execute("UPDATE players SET canRanked=-1") # -1 means not checked yet
@@ -199,3 +234,13 @@ class Database:
         if total_games == 0:
             return 0  # Avoid division by zero
         return wins / total_games
+    
+
+class ThreadedDBWorker:
+    def __init__(self):
+        self.conn = ConnectionPoolManager.instance().getconn()
+        self.cur = self.conn.cursor()
+
+    def __del__(self):
+        ConnectionPoolManager.instance().putconn(self.conn)
+
