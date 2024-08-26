@@ -1943,7 +1943,7 @@
     "rarity": "Mythic",
     "class": "Damage Dealer",
     "movement speed": {
-      "normal": 864.0,
+      "normal": 890.0,
       "stage 3; very fast": 3.0
     },
     "range": {
@@ -1966,7 +1966,7 @@
       "stage 3": 3.0
     },
     "projectile speed": {
-      "normal": 3000.0
+      "normal": 3500.0
     },
     "attack width": {
       "normal": 1.0,
@@ -1974,6 +1974,9 @@
     },
     "projectiles per super": {
       "normal": 16.0
+    },
+    "super spread": {
+      "normal": 110.0
     },
     "level stats": {
       "health": {
@@ -2926,9 +2929,9 @@
         "11": 3040
       },
       "starpower1": {
-        "9": 1608,
-        "10": 1697,
-        "11": 1786
+        "9": 1606,
+        "10": 1695,
+        "11": 1784
       }
     }
   },
@@ -4500,7 +4503,7 @@
       "normal": 0.8
     },
     "super charge per hit": {
-      "normal": 25.0
+      "normal": 26.5
     },
     "projectile speed": {
       "normal": 3500.0

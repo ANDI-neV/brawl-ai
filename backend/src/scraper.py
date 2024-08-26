@@ -125,5 +125,36 @@ def main():
     save_brawler_data(brawler_data)
     print("Brawler data successfully fetched and saved.")
 
+    scrape_brawler_images(brawler_data)
+
+def scrape_brawler_images(brawler_data):
+    images_dir = os.path.join(OUT_DIR, "brawler_images")
+    if not os.path.exists(images_dir):
+        os.makedirs(images_dir)
+
+    for brawler_name, brawler_info in brawler_data.items():
+        scrape_brawler_image(brawler_name, brawler_info['url'], images_dir)
+    
+def scrape_brawler_image(brawler_name, url, images_dir):
+    print(f"Scraping image for {brawler_name}")
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    image = soup.select_one('img.lazyload[alt*="Portrait"]')
+
+    if image and 'data-src' in image.attrs:
+        image_url = image['data-src']
+        img_response = requests.get(image_url)
+        if img_response.status_code == 200:
+            image_path = os.path.join(images_dir, f"{brawler_name}.png")
+            with open(image_path, 'wb') as img_file:
+                img_file.write(img_response.content)
+            print(f"Image saved for {brawler_name}")
+        else:
+            print(f"Failed to download image for {brawler_name}")
+    else:
+        print(f"No image found for {brawler_name}")
+
+
 if __name__ == "__main__":
     main()
