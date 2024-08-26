@@ -72,6 +72,13 @@ def prepare_training_data(map: str = None) -> pd.DataFrame:
     return match_data
 
 
+def get_dummy_vector(brawler_data, encoder, scaler, include_continuous_features):
+    index_encoded = np.zeros(len(brawler_data))
+    if include_continuous_features:
+        continuous_features = np.zeros(3)
+        return np.concatenate((index_encoded, continuous_features))
+    return index_encoded
+
 def prepare_brawler_data() -> Dict:
     here = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(here, BRAWLERS_JSON_PATH), 'r') as json_file:
@@ -80,6 +87,9 @@ def prepare_brawler_data() -> Dict:
 
 def get_brawler_vector(brawler_name: str, brawler_data: Dict, encoder: OneHotEncoder,
                        scaler: StandardScaler, include_continuous_features: bool) -> np.ndarray:
+    if brawler_name == 'placeholder':
+        return get_dummy_vector(brawler_data, encoder, scaler, include_continuous_features)
+
     brawler = brawler_data[brawler_name]
     index_encoded = encoder.transform([[brawler['index']]]).toarray()[0]
 

@@ -1,5 +1,5 @@
 import torch
-from src.ai import *
+from ai import *
 from torchsummary import summary
 from joblib import load
 from db import Database
