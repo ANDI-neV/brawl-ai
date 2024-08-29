@@ -1,19 +1,18 @@
-import Image from "next/image";
+"use client";
 import Header from "./components/header"
-import TeamDisplay from "./components/team-display";
+import { BrawlerProvider } from './components/brawler-context';
+import Picking from "./components/picking";
+import Selection from "./components/selection";
+
 
 export default function Home() {
   return (
-    <main className="">
-      <Header/>
-      <div className="flex h-screen">
-        <div className="w-1/6">
-          <TeamDisplay team="left" bgColor="#3b82f6"/>
-        </div>
-        <div className="w-2/6">
-          <TeamDisplay team="right" bgColor="#f43f5e"/>
-        </div>
-      </div>
-    </main>
+    <BrawlerProvider>
+      <main className="mx-auto md:px-[30px] px-[10px]">
+        <Header/>
+        <Picking/>
+        <Selection/>
+      </main>
+    </BrawlerProvider>
   );
 }
