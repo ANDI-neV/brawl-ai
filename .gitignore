@@ -18,10 +18,5 @@ build/
 instance/
 .env
 /backend/src/out/brawler_images/
-.idea/brawl-ai.iml
-.idea/dataSources.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/inspectionProfiles/profiles_settings.xml
+.idea/
 backend/src/best_transformer_model.pth
