@@ -234,7 +234,9 @@ def prepare_data_and_train_model(map_name):
     model = train_transformer_model(X, team_indicators, y, num_brawlers, embedding_dim, nhead, num_encoder_layers, dim_feedforward)
     analyze_brawler_embeddings(model, brawler_data)
     return model, brawler_data
-def make_prediction(model, brawler_data, partial_comp):
+def make_prediction(partial_comp, map_name):
+    model, brawler_data = prepare_data_and_train_model(map_name)
+    brawler_data = prepare_brawler_data()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     model.eval()
@@ -243,12 +245,8 @@ def make_prediction(model, brawler_data, partial_comp):
     print("Predictions:")
     for brawler, win_rate in predictions[:5]:  # Limiting to top 5 for clarity
         print(f"{brawler}: {win_rate:.4f}")
-
+    return predictions
 
 if __name__ == '__main__':
-    # Train the model on the desired map
-    model, brawler_data = prepare_data_and_train_model(map_name="Out in the Open")
-
-    # Make a prediction based on a partial composition
     partial_comp = {'a1': 'pearl', 'b1': 'angelo', 'b2': 'piper', 'a2': 'chester'}
-    make_prediction(model, brawler_data, partial_comp)
+    make_prediction(partial_comp, "Out in the Open")

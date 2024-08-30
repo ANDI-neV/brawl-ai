@@ -10,7 +10,7 @@ export default function TeamDisplay({ team, bgColor }: TeamDisplayProps) {
   return (
     <div className="flex flex-col items-center p-4 gap-3">
       {indices.map((index) => (
-        <BrawlerSlot team={team} index={index} bgColor={bgColor}/>
+        <BrawlerSlot index={index} bgColor={bgColor}/>
       ))}
     </div>
   );

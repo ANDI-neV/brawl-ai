@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo } from 'react';
 import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
+import { fetchMaps } from './api-handler';
 
 interface BrawlerPickerProps {
   name: string;
@@ -10,8 +11,11 @@ interface BrawlerPickerProps {
 interface BrawlerContextType {
   selectedBrawlers: (BrawlerPickerProps | null)[];
   availableBrawlers: BrawlerPickerProps[];
+  availableMaps: string[];
+  selectedMap: string;
   firstPick: boolean;
   setFirstPick: (firstPick: boolean) => void;
+  setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
   clearSlot: (slot: number) => void;
 }
@@ -30,6 +34,12 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [selectedBrawlers, setSelectedBrawlers] = useState<(BrawlerPickerProps | null)[]>(Array(6).fill(null));
   const [firstPick, setFirstPick] = useState(true);
   const allBrawlers = useMemo(() => get_brawlers(), []);
+  const [availableMaps, setAvailableMaps] = useState<string[]>([]);
+  const [selectedMap, setSelectedMap] = useState<string>('');
+
+  useEffect(() => {
+    fetchMaps().then(setAvailableMaps);
+  }, []);
 
   const availableBrawlers = useMemo(() => {
     const selectedBrawlerNames = selectedBrawlers.filter(Boolean).map(b => b!.name);
@@ -56,8 +66,11 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     <BrawlerContext.Provider value={{ 
       selectedBrawlers, 
       availableBrawlers, 
+      availableMaps,
+      selectedMap,
       firstPick, 
       setFirstPick, 
+      setSelectedMap,
       selectBrawler, 
       clearSlot 
     }}>

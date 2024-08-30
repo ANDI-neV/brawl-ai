@@ -267,6 +267,10 @@ def train_with_dummies(match_data: pd.DataFrame, brawler_data: dict, scaler: Sta
 
     torch.save(model.state_dict(), f'out/models/{map.replace(" ", "_").lower()}.pth')
 
+def get_all_brawlers():
+    brawler_data = prepare_brawler_data()
+    return list(brawler_data.keys())
+
 def train_map(map: str, include_continuous_features: bool, include_dummies: bool):
     match_data = prepare_training_data(map=map)
     brawler_data = prepare_brawler_data()
@@ -301,4 +305,4 @@ def training_cycle(include_continuous_features: bool, include_dummies: bool):
 
 
 if __name__ == '__main__':
-    train_map("Out in the Open", include_continuous_features=False, include_dummies=False)
+    print(get_all_brawlers())
