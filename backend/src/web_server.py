@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 from db import Database
-import ai_transformer as ai
+import new_transformer_approach as ai
 
 app = FastAPI()
 db = Database()
@@ -30,7 +30,9 @@ async def get_brawlers():
 
 @app.post("/predict")
 async def predict_brawlers(request: PredictionRequest):
-    probabilities = ai.make_prediction(request.map, request.brawlers)
+    print(request.map, request.brawlers, request.first_pick)
+    brawler_dict = ai.get_brawler_dict(request.brawlers, request.first_pick)
+    probabilities = ai.predict(brawler_dict, request.map)
     return {"probabilities": probabilities}
 
 if __name__ == "__main__":

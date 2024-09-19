@@ -1,6 +1,6 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, use } from 'react';
 import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
-import { fetchMaps } from './api-handler';
+import { fetchMaps, fetchBrawlers, predictBrawlers } from './api-handler';
 
 interface BrawlerPickerProps {
   name: string;
@@ -40,6 +40,19 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     fetchMaps().then(setAvailableMaps);
   }, []);
+
+  useEffect(() => {
+    if (selectedMap) {
+      const brawlerNames = selectedBrawlers.filter(Boolean).map(b => b!.name);
+      predictBrawlers(selectedMap, brawlerNames, firstPick).then(probabilities => {
+        const brawlers = allBrawlers.map(brawler => {
+          const score = probabilities[brawler.name] ?? -1;
+          return { ...brawler, score };
+        });
+        setSelectedBrawlers(brawlers);
+      });
+    }
+  }, [selectedMap]);
 
   const availableBrawlers = useMemo(() => {
     const selectedBrawlerNames = selectedBrawlers.filter(Boolean).map(b => b!.name);

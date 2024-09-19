@@ -12,7 +12,7 @@ export const fetchBrawlers = async () => {
   return response.data.brawlers as string[];
 };
 
-export const predictBrawlers = async (map: string, brawlers: string[]) => {
-  const response = await axios.post(`${API_URL}/predict`, { map, brawlers });
+export const predictBrawlers = async (map: string, brawlers: string[], first_pick: boolean) => {
+  const response = await axios.post(`${API_URL}/predict`, { map, brawlers, first_pick });
   return response.data.probabilities;
 };

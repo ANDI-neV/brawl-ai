@@ -54,7 +54,9 @@ const TableRow: React.FC<TableRowProps> = ({ brawler, onClick }) => (
 
 export default function BrawlerPicker() {
   const [filter, setFilter] = useState("");
-  const { selectBrawler, availableBrawlers, selectedBrawlers } = useBrawler();
+  const { selectBrawler, availableBrawlers, selectedBrawlers, selectedMap } = useBrawler();
+
+  const isMapSelected = selectedMap !== "";
 
   const handleClick = (brawler: BrawlerPickerProps) => {
     const emptySlot = selectedBrawlers.findIndex(slot => slot === null);
@@ -76,13 +78,13 @@ export default function BrawlerPicker() {
   }, [availableBrawlers, filter]);
 
   return (
-    <>
+    <div className="relative">
       <input
-          type="text"
-          placeholder="Filter brawlers..."
-          onChange={filterBrawlers}
-          className="w-full p-2 mb-4 border rounded-xl"
-        />
+        type="text"
+        placeholder="Filter brawlers..."
+        onChange={filterBrawlers}
+        className="w-full p-2 mb-4 border rounded-xl"
+      />
       <div className="relative overflow-x-auto h-[500px] shadow-md rounded-xl bg-gray-800 custom-scrollbar">
         <div className="min-w-[250px]">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -105,6 +107,12 @@ export default function BrawlerPicker() {
           </table>
         </div>
       </div>
-    </>
+      {!isMapSelected && (
+        <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center rounded-xl">
+          <span className="text-white font-bold text-2xl">Select Map</span>
+        </div>
+      )}
+    </div>
   );
 }
+
