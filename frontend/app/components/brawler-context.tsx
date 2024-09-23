@@ -1,11 +1,9 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, use } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, useCallback, useRef } from 'react';
 import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
 import { fetchMaps, fetchBrawlers, predictBrawlers } from './api-handler';
 
 interface BrawlerPickerProps {
   name: string;
-  score: number;
-  pickrate: number;
 }
 
 interface BrawlerContextType {
@@ -14,20 +12,20 @@ interface BrawlerContextType {
   availableMaps: string[];
   selectedMap: string;
   firstPick: boolean;
+  isPredicting: boolean;
+  error: string | null;
+  brawlerScores: { [key: string]: number };
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
   clearSlot: (slot: number) => void;
+  updatePredictions: () => void;
 }
 
 const BrawlerContext = createContext<BrawlerContextType | undefined>(undefined);
 
 function get_brawlers(): BrawlerPickerProps[] {
-  return Object.keys(brawlerJson).map(name => ({
-    name,
-    score: -1,
-    pickrate: -1
-  }));
+  return Object.keys(brawlerJson).map(name => ({ name }));
 }
 
 export function BrawlerProvider({ children }: { children: ReactNode }) {
@@ -36,56 +34,76 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const allBrawlers = useMemo(() => get_brawlers(), []);
   const [availableMaps, setAvailableMaps] = useState<string[]>([]);
   const [selectedMap, setSelectedMap] = useState<string>('');
+  const [isPredicting, setIsPredicting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [brawlerScores, setBrawlerScores] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
-    fetchMaps().then(setAvailableMaps);
+    fetchMaps().then(setAvailableMaps).catch(err => {
+      console.error("Error fetching maps:", err);
+      setError("Failed to fetch maps");
+    });
   }, []);
 
-  useEffect(() => {
-    if (selectedMap) {
-      const brawlerNames = selectedBrawlers.filter(Boolean).map(b => b!.name);
-      predictBrawlers(selectedMap, brawlerNames, firstPick).then(probabilities => {
-        const brawlers = allBrawlers.map(brawler => {
-          const score = probabilities[brawler.name] ?? -1;
-          return { ...brawler, score };
+  const selectedBrawlerNames = useMemo(
+    () => selectedBrawlers.filter(Boolean).map(b => b!.name),
+    [selectedBrawlers]
+  );
+
+  const updatePredictions = useCallback(() => {
+    console.info("try predicting")
+    if (selectedMap && selectedBrawlerNames.length > 0) {
+      setIsPredicting(true);
+      setError(null);
+      predictBrawlers(selectedMap, selectedBrawlerNames, firstPick)
+        .then(probabilities => {
+          setBrawlerScores(probabilities);
+          setIsPredicting(false);
+        })
+        .catch(error => {
+          console.error("Error predicting brawlers:", error);
+          setError("Failed to predict brawlers");
+          setIsPredicting(false);
         });
-        setSelectedBrawlers(brawlers);
-      });
     }
-  }, [selectedMap]);
+  }, [selectedMap, selectedBrawlerNames, firstPick, isPredicting]);
 
-  const availableBrawlers = useMemo(() => {
-    const selectedBrawlerNames = selectedBrawlers.filter(Boolean).map(b => b!.name);
-    return allBrawlers.filter(brawler => !selectedBrawlerNames.includes(brawler.name));
-  }, [selectedBrawlers, allBrawlers]);
-
-  const selectBrawler = (brawler: BrawlerPickerProps, slot: number) => {
+  const selectBrawler = useCallback((brawler: BrawlerPickerProps, slot: number) => {
     setSelectedBrawlers(prev => {
       const newSelection = [...prev];
       newSelection[slot] = brawler;
       return newSelection;
     });
-  };
+  }, []);
 
-  const clearSlot = (slot: number) => {
+  const clearSlot = useCallback((slot: number) => {
     setSelectedBrawlers(prev => {
       const newSelection = [...prev];
       newSelection[slot] = null;
       return newSelection;
     });
-  };
+  }, []);
+
+  const availableBrawlers = useMemo(() => {
+    const selectedBrawlerNamesSet = new Set(selectedBrawlerNames);
+    return allBrawlers.filter(brawler => !selectedBrawlerNamesSet.has(brawler.name));
+  }, [selectedBrawlerNames, allBrawlers]);
 
   return (
-    <BrawlerContext.Provider value={{ 
-      selectedBrawlers, 
-      availableBrawlers, 
+    <BrawlerContext.Provider value={{
+      selectedBrawlers,
+      availableBrawlers,
       availableMaps,
       selectedMap,
-      firstPick, 
-      setFirstPick, 
+      firstPick,
+      isPredicting,
+      error,
+      brawlerScores,
+      setFirstPick,
       setSelectedMap,
-      selectBrawler, 
-      clearSlot 
+      selectBrawler,
+      clearSlot,
+      updatePredictions
     }}>
       {children}
     </BrawlerContext.Provider>

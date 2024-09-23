@@ -1,37 +1,29 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import BrawlerIcon from "./brawler-icon";
-import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
 import { useBrawler } from './brawler-context';
-
-function get_brawlers(): BrawlerPickerProps[] {
-  return Object.keys(brawlerJson).map(name => ({
-    name,
-    score: -1,
-    pickrate: -1
-  }));
-}
 
 interface BrawlerPickerProps {
   name: string;
-  score: number;
-  pickrate: number;
 }
 
 interface TableHeaderProps {
   title: string;
   sortable?: boolean;
+  sortKey?: string;
+  currentSort: { key: string; direction: 'asc' | 'desc' };
+  onSort: (key: string) => void;
 }
 
-const TableHeader: React.FC<TableHeaderProps> = ({ title, sortable = false }) => (
+const TableHeader: React.FC<TableHeaderProps> = ({ title, sortable = false, sortKey, currentSort, onSort }) => (
   <th scope="col" className="px-6 py-3">
     <div className="flex items-center">
       {title}
-      {sortable && (
-        <a href="#">
-          <svg className="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
-          </svg>
-        </a>
+      {sortable && sortKey && (
+        <button onClick={() => onSort(sortKey)} className="ml-1.5">
+          {currentSort.key === sortKey && (
+            <span className="ml-1">{currentSort.direction === 'asc' ? '↑' : '↓'}</span>
+          )}
+        </button>
       )}
     </div>
   </th>
@@ -39,22 +31,29 @@ const TableHeader: React.FC<TableHeaderProps> = ({ title, sortable = false }) =>
 
 interface TableRowProps {
   brawler: BrawlerPickerProps;
+  score: number | null;
   onClick: (brawler: BrawlerPickerProps) => void;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ brawler, onClick }) => (
+const TableRow: React.FC<TableRowProps> = ({ brawler, score, onClick }) => (
   <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" onClick={() => onClick(brawler)}>
     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
       <BrawlerIcon brawler={brawler.name}/>
     </th>
-    <td className="px-6 mx-auto items-center py-4">{brawler.score}</td>
-    <td className="px-6 py-4">{brawler.pickrate}</td>
+    <td className="px-6 mx-auto items-center py-4">{score !== null ? score.toFixed(4) : 'N/A'}</td>
+    <td className="px-6 py-4">{/* Handle pickrate if needed */}</td>
   </tr>
 );
 
 export default function BrawlerPicker() {
   const [filter, setFilter] = useState("");
-  const { selectBrawler, availableBrawlers, selectedBrawlers, selectedMap } = useBrawler();
+  const [sort, setSort] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'score', direction: 'desc' });
+  const { selectBrawler, updatePredictions, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores } = useBrawler();
+  const [localAvailableBrawlers, setLocalAvailableBrawlers] = useState<BrawlerPickerProps[]>(availableBrawlers);
+
+  useEffect(() => {
+    setLocalAvailableBrawlers(availableBrawlers);
+  }, [availableBrawlers]);
 
   const isMapSelected = selectedMap !== "";
 
@@ -62,6 +61,7 @@ export default function BrawlerPicker() {
     const emptySlot = selectedBrawlers.findIndex(slot => slot === null);
     if (emptySlot !== -1) {
       selectBrawler(brawler, emptySlot);
+      updatePredictions();
     } else {
       alert("All slots are filled. Clear a slot before selecting a new brawler.");
     }
@@ -71,11 +71,26 @@ export default function BrawlerPicker() {
     setFilter(e.target.value);
   };
 
-  const filteredBrawlers = useMemo(() => {
-    return availableBrawlers.filter(brawler =>
-      brawler.name.toLowerCase().includes(filter.toLowerCase())
-    );
-  }, [availableBrawlers, filter]);
+  const handleSort = (key: string) => {
+    setSort(prevSort => ({
+      key,
+      direction: prevSort.key === key && prevSort.direction === 'desc' ? 'asc' : 'desc'
+    }));
+  };
+
+  const filteredAndSortedBrawlers = useMemo(() => {
+    return localAvailableBrawlers
+      .filter(brawler => brawler.name.toLowerCase().includes(filter.toLowerCase()))
+      .sort((a, b) => {
+        const scoreA = brawlerScores[a.name.toLowerCase()] ?? -Infinity;
+        const scoreB = brawlerScores[b.name.toLowerCase()] ?? -Infinity;
+        if (sort.key === 'score') {
+          return sort.direction === 'desc' ? scoreB - scoreA : scoreA - scoreB;
+        }
+        // Add more sorting logic for other columns if needed
+        return 0;
+      });
+  }, [localAvailableBrawlers, filter, sort, brawlerScores]);
 
   return (
     <div className="relative">
@@ -90,16 +105,17 @@ export default function BrawlerPicker() {
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <TableHeader title="Brawler" />
-                <TableHeader title="Score" sortable />
-                <TableHeader title="Pick Rate" sortable />
+                <TableHeader title="Brawler" sortable={false} currentSort={sort} onSort={handleSort} />
+                <TableHeader title="Score" sortable sortKey="score" currentSort={sort} onSort={handleSort} />
+                <TableHeader title="Pick Rate" sortable sortKey="pickRate" currentSort={sort} onSort={handleSort} />
               </tr>
             </thead>
             <tbody>
-              {filteredBrawlers.map((brawler) => (
+              {filteredAndSortedBrawlers.map((brawler) => (
                 <TableRow 
                   key={brawler.name} 
-                  brawler={brawler} 
+                  brawler={brawler}
+                  score={brawlerScores[brawler.name.toLowerCase()] ?? null}
                   onClick={handleClick}
                 />
               ))}
@@ -115,4 +131,3 @@ export default function BrawlerPicker() {
     </div>
   );
 }
-

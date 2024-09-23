@@ -157,11 +157,11 @@ def get_brawler_vectors(match_data: pd.DataFrame, map_id_mapping: Dict[str, int]
 def get_brawler_dict(picks: List[str], first_pick: bool) -> Dict[str, str]:
     brawler_dict = {}
     if first_pick:
-        for i, player in enumerate(first_pick_sequence):
-            brawler_dict[player] = picks[i]
+        for i, brawler in enumerate(picks):
+            brawler_dict[first_pick_sequence[i]] = picks[i]
     else:
-        for i, player in enumerate(second_pick_sequence):
-            brawler_dict[player] = picks[i]
+        for i, brawler in enumerate(picks):
+            brawler_dict[second_pick_sequence[i]] = picks[i]
 
     return brawler_dict
 
@@ -287,6 +287,7 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping, max_seq_len=7):
     # Possible picking combinations used during training
     possible_combinations = picking_combinations1 + picking_combinations2
     # Find a matching combination
+    print(f"Current picks: {current_picks_dict}")
     for combination in possible_combinations:
         if all(pos in current_picks_dict for pos in combination[:-1]):
             selected_combination = combination
@@ -360,15 +361,25 @@ def test_team_composition(model, current_picks_dict, map_name, map_id_mapping, m
     predicted_brawler_name = index_to_brawler_name.get(predicted_brawler_index, 'Unknown Brawler')
     print(f"Predicted next pick: {predicted_brawler_name}")
 
-    topk = 15
     probabilities[0, already_picked_brawlers] = 0
-    topk_indices = torch.topk(probabilities, topk).indices.squeeze().tolist()
-    print("\nTop predictions (excluding already picked brawlers):")
-    for idx in topk_indices:
+
+    probability_dict = {}
+
+    print("\nProbabilities for all brawlers:")
+    for idx in range(probabilities.size(1)):
         brawler_name = index_to_brawler_name.get(idx, 'Unknown Brawler')
         prob = probabilities[0, idx].item()
         print(f"{brawler_name}: {prob:.4f}")
+        probability_dict[brawler_name] = prob
 
+    return probability_dict
+
+def get_all_maps():
+    map_json = 'out/models/map_id_mapping.json'
+    with open(map_json, 'r') as f:
+        map_id_mapping = json.load(f)
+
+    return list(map_id_mapping.keys())
 
 def train_model():
     match_data = prepare_training_data()
@@ -399,11 +410,11 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/transformer.pth')
+    torch.save(model.state_dict(), 'out/models/transformer_2.pth')
 
 def load_model(n_brawlers, n_maps, model_path='out/models/transformer.pth', d_model=64, nhead=4, num_layers=2):
     model = BrawlStarsTransformer(n_brawlers, n_maps, d_model, nhead, num_layers)
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path, map_location='cpu'))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
     model.eval()
@@ -415,7 +426,9 @@ def predict(picks_dict, map_name):
     n_maps = len(map_id_mapping)
     model = load_model(n_brawlers, n_maps)
 
-    test_team_composition(model, picks_dict, map_name, map_id_mapping)
+    probability_dict = test_team_composition(model, picks_dict, map_name, map_id_mapping)
+
+    return probability_dict
 
 def test():
     current_picks_dict = {
