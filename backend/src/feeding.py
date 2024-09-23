@@ -10,6 +10,7 @@ api = DevBrawlAPI()
 db = Database()
 random.seed(datetime.now().timestamp())
 firstplayer = "2QYUPPUG8"
+bestplayers = ["PR9U2JL", "VL0GPPJV", "2PLVJ0GLV", "8VJ8GJR2", "JGCCGY80", "PYPQUG80", "2ULUP8VG9", "22C0GV9CR", "R0GP8PQ98", "QLCJGQUP", "2PGGR8Y9P", "JQVQYVY", "9GJPJUQGJ", "8V92UYCJ", "9VJP20UYU", "LRLQPU09", "P2G8CUUPU", "LR08G9C8"]
 
 # 1. Get an unchecked player
 # 2. Get the battlelog of that player
@@ -50,6 +51,12 @@ def check_ranked_eligibility(playerstats):
         return True
     else:
         return False
+
+'''def check_ranked_eligibility(brawler):
+    trophies = brawler["trophies"]
+    if trophies < 18:
+        return False
+    return True'''
 
 
 class BattleLogsThread(threading.Thread):
@@ -232,7 +239,13 @@ def cycle():
 
 if __name__ == "__main__":
 
-    if True:
+    db.reset()
+    for player in bestplayers:
+        playerapi = api.getPlayerStats(player)
+        player = (playerapi["tag"][1:], playerapi["name"])
+        db.insert_player(player)
+
+    if False:
         print("Currently there are " + str(db.get_battles_count()) +
               " battles in the database")
         print("Currently there are " + str(db.get_players_count()) +

@@ -178,7 +178,7 @@ class Database:
     
     def reset(self):
         self.cur.execute("DELETE FROM battles")
-        self.cur.execute("UPDATE players SET checked=0")
+        self.cur.execute("DELETE FROM players")
         self.conn.commit()
 
     def get_if_players_exist(self, tags):
