@@ -32,23 +32,24 @@ const TableHeader: React.FC<TableHeaderProps> = ({ title, sortable = false, sort
 interface TableRowProps {
   brawler: BrawlerPickerProps;
   score: number | null;
+  pickrate: number | null;
   onClick: (brawler: BrawlerPickerProps) => void;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ brawler, score, onClick }) => (
-  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" onClick={() => onClick(brawler)}>
-    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick }) => (
+  <tr className="border-b bg-gray-800 border-gray-700 cursor-pointer hover:bg-gray-600" onClick={() => onClick(brawler)}>
+    <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
       <BrawlerIcon brawler={brawler.name}/>
     </th>
-    <td className="px-6 mx-auto items-center py-4">{score !== null ? score.toFixed(4) : 'N/A'}</td>
-    <td className="px-6 py-4">{/* Handle pickrate if needed */}</td>
+    <td className="px-6 py-4 mx-auto items-center">{score !== null ? score.toFixed(3): 'N/A'}</td>
+    <td className="px-6 py-4 mx-auto items-center">{pickrate !== null ? score?.toFixed(3): 'N/A' }</td>
   </tr>
 );
 
 export default function BrawlerPicker() {
   const [filter, setFilter] = useState("");
   const [sort, setSort] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'score', direction: 'desc' });
-  const { selectBrawler, updatePredictions, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores } = useBrawler();
+  const { selectBrawler, updatePredictions, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores, brawlerPickrates } = useBrawler();
   const [localAvailableBrawlers, setLocalAvailableBrawlers] = useState<BrawlerPickerProps[]>(availableBrawlers);
 
   useEffect(() => {
@@ -102,8 +103,8 @@ export default function BrawlerPicker() {
       />
       <div className="relative overflow-x-auto h-[500px] shadow-md rounded-xl bg-gray-800 custom-scrollbar">
         <div className="min-w-[250px]">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-400">
+            <thead className="text-xs uppercase  bg-gray-700 text-gray-400">
               <tr>
                 <TableHeader title="Brawler" sortable={false} currentSort={sort} onSort={handleSort} />
                 <TableHeader title="Score" sortable sortKey="score" currentSort={sort} onSort={handleSort} />
@@ -116,6 +117,7 @@ export default function BrawlerPicker() {
                   key={brawler.name} 
                   brawler={brawler}
                   score={brawlerScores[brawler.name.toLowerCase()] ?? null}
+                  pickrate={brawlerPickrates[brawler.name.toLowerCase()] ?? null}
                   onClick={handleClick}
                 />
               ))}

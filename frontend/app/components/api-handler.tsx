@@ -14,12 +14,14 @@ export const fetchBrawlers = async (): Promise<string[]> => {
   return response.data.brawlers;
 };
 
+
 interface PredictionResponse {
   probabilities: { [key: string]: number };
 }
 
 export const predictBrawlers = async (map: string, brawlers: string[], firstPick: boolean, retries = 3): Promise<{ [key: string]: number }> => {
   try {
+    console.log("try prediction!")
     const response = await axios.post<PredictionResponse>(`${API_URL}/predict`, { map, brawlers, first_pick: firstPick });
     return response.data.probabilities;
   } catch (error) {
@@ -31,3 +33,21 @@ export const predictBrawlers = async (map: string, brawlers: string[], firstPick
     throw error;
   }
 };
+
+interface PickrateResponse {
+  pickrate: {[key: string]: number}
+}
+
+export const getPickrate = async (map: string, retries = 3): Promise<{ [key: string]: number}> => {
+  try {
+    const response = await axios.post<PickrateResponse>(`${API_URL}/pickrate`, {map});
+    return response.data.pickrate;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 429 && retries > 0 ) {
+      console.log(`Rate limited, retrying in 0.5 seconds... (${retries} retries left)`);
+      await delay(500);
+      return getPickrate(map, retries - 1);
+    }
+    throw error;
+  }
+}

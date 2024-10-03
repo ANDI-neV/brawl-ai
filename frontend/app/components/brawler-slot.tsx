@@ -30,7 +30,7 @@ function lightenColor(color: string, amount: number) {
 }
 
 export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
-  const { selectedBrawlers, firstPick, clearSlot } = useBrawler();
+  const { selectedBrawlers, firstPick, clearSlot, updatePredictions} = useBrawler();
   const sequence = firstPick ? first_pick_sequence : not_first_pick_sequence;
   const slotIndex = sequence.indexOf(index);
   const selectedBrawler = selectedBrawlers[slotIndex];
@@ -41,6 +41,7 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
   const handleClearSlot = () => {
     if (selectedBrawler) {
       clearSlot(slotIndex);
+      updatePredictions();
     }
   };
 

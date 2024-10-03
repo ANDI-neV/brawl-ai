@@ -17,6 +17,7 @@ from sklearn.utils import class_weight
 
 
 BRAWLERS_JSON_PATH = 'out/brawlers/brawlers.json'
+BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
 picking_combinations1 = [['a1', 'b1', 'b2', 'a2'],
                          ['a1', 'b1', 'b2', 'a2', 'a3']]
 picking_combinations2 = [['b1', 'a1'],
@@ -42,6 +43,11 @@ def load_map_id_mapping():
         map_id_mapping = json.load(f)
         map_id_mapping = {str(k): v for k, v in map_id_mapping.items()}
     return map_id_mapping
+
+def get_map_winrate(map):
+    here = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(here, BRAWLERS_JSON_PATH), 'r') as json_file:
+        return json.load(json_file)[map]
 
 brawler_data = prepare_brawler_data()
 n_brawlers = len(brawler_data)
@@ -442,4 +448,4 @@ def test():
     predict(current_picks_dict, map_name)
 
 if __name__ == '__main__':
-    test()
+    train_model()

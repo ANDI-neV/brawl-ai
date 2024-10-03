@@ -3,20 +3,25 @@ from bs4 import BeautifulSoup
 import json
 import os
 import re
+from typing import List
+from db import Database
 
 BASE_URL = "https://brawlstars.fandom.com"
 BRAWLERS_CATEGORY_URL = f"{BASE_URL}/wiki/Category:Brawlers"
 OUT_DIR = "./out"
 BRAWLERS_DIR = os.path.join(OUT_DIR, "brawlers")
 
-def get_brawler_list():
+
+def get_brawler_list() -> List[str, str]:
     response = requests.get(BRAWLERS_CATEGORY_URL)
     soup = BeautifulSoup(response.text, 'html.parser')
     brawler_links = soup.select("div.category-page__members a.category-page__member-link")
     brawler_links = list(filter(lambda link: 'Category' not in link['href'], brawler_links))
-    brawler_names = list(filter(lambda k: 'Category' not in k, [str.lower(link.text.strip()) for link in brawler_links]))
+    brawler_names = list(
+        filter(lambda k: 'Category' not in k, [str.lower(link.text.strip()) for link in brawler_links]))
     brawler_urls = [BASE_URL + link['href'] for link in brawler_links]
     return list(zip(brawler_names, brawler_urls))
+
 
 def parse_label_info(value):
     values = re.findall(r'\d+\.?\d*', value)
@@ -33,11 +38,14 @@ def parse_label_info(value):
         label_dict[condition] = float(value)
     return label_dict
 
+
 def convert_percent_to_float(value):
     return float(value.strip('%')) / 100
 
+
 def extract_text_with_br(element):
     return ' BREAK '.join(element.stripped_strings)
+
 
 def get_brawler_data(brawler_name, brawler_url, index):
     response = requests.get(brawler_url)
@@ -63,7 +71,7 @@ def get_brawler_data(brawler_name, brawler_url, index):
             elif label in hyper_labels:
                 if "hypercharge" not in brawler_info:
                     brawler_info["hypercharge"] = {}
-                brawler_info["hypercharge"][label] = convert_percent_to_float(value.replace("+","").strip())
+                brawler_info["hypercharge"][label] = convert_percent_to_float(value.replace("+", "").strip())
             elif label not in brawler_info:
                 brawler_info[label] = parse_label_info(value)
 
@@ -75,12 +83,12 @@ def get_brawler_data(brawler_name, brawler_url, index):
             columns = row.find_all('td')
 
             for i in range(len(columns[1:])):
-                data_source = str.lower(columns[i+1].get('data-source'))
-                if data_source not in brawler_info["level stats"] and columns[i+1].text.strip().isdigit():
+                data_source = str.lower(columns[i + 1].get('data-source'))
+                if data_source not in brawler_info["level stats"] and columns[i + 1].text.strip().isdigit():
                     brawler_info["level stats"][data_source] = {}
                 try:
                     level = int(columns[0].text.strip())
-                    value = int(columns[i+1].text.strip())
+                    value = int(columns[i + 1].text.strip())
 
                     brawler_info["level stats"][data_source][level] = value
                 except ValueError:
@@ -89,12 +97,15 @@ def get_brawler_data(brawler_name, brawler_url, index):
 
     return brawler_info
 
+
 def save_brawler_data(brawler_data):
     with open(os.path.join(BRAWLERS_DIR, 'brawlers.json'), 'w') as f:
         json.dump(brawler_data, f, indent=2)
 
+
 def get_highest_brawler_index(brawler_data):
     return max([brawler.get('index', 0) for brawler in brawler_data.values()], default=0)
+
 
 def main():
     brawler_list = get_brawler_list()
@@ -122,10 +133,13 @@ def main():
 
         brawler_data[str.lower(brawler_name)] = brawler_details
 
+    cache_brawler_winrates(brawler_list)
+
     save_brawler_data(brawler_data)
     print("Brawler data successfully fetched and saved.")
 
     scrape_brawler_images(brawler_data)
+
 
 def scrape_brawler_images(brawler_data):
     images_dir = os.path.join(OUT_DIR, "brawler_images")
@@ -134,7 +148,8 @@ def scrape_brawler_images(brawler_data):
 
     for brawler_name, brawler_info in brawler_data.items():
         scrape_brawler_image(brawler_name, brawler_info['url'], images_dir)
-    
+
+
 def scrape_brawler_image(brawler_name, url, images_dir):
     print(f"Scraping image for {brawler_name}")
     response = requests.get(url)
@@ -154,6 +169,22 @@ def scrape_brawler_image(brawler_name, url, images_dir):
             print(f"Failed to download image for {brawler_name}")
     else:
         print(f"No image found for {brawler_name}")
+
+
+def cache_brawler_winrates(brawler_list: List[str, str]):
+    print("Retrieving winrates for all brawlers for each map.")
+    db = Database()
+
+    map_winrates = {}
+    maps = db.getAllMaps()
+    for map in maps:
+        brawler_significance = {}
+        for brawler_name, brawler_url in brawler_list:
+            brawler_significance[brawler_name] = db.checkBrawlerWinrateForMap(brawler=brawler_name.upper(), map=map)
+        map_winrates[map] = brawler_significance
+
+    with open(os.path.join(BRAWLERS_DIR, 'brawler_winrates.json'), 'w') as f:
+        json.dump(map_winrates, f, indent=2)
 
 
 if __name__ == "__main__":

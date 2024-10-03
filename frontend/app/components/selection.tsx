@@ -6,13 +6,13 @@ import type { Selection } from "@nextui-org/react";
 import { ChevronDown } from "lucide-react";
 
 function Menu() {
-  const { selectedMap, availableMaps, setSelectedMap } = useBrawler();
+  const { selectedMap, availableMaps, mapSelectionSetup } = useBrawler();
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set(selectedMap ? [selectedMap] : []));
 
   const handleSelectionChange = (keys: Selection) => {
     setSelectedKeys(keys);
     const selected = Array.from(keys)[0] as string;
-    setSelectedMap(selected);
+    mapSelectionSetup(selected);
   };
 
   return (
@@ -51,7 +51,7 @@ function Menu() {
 }
 
 const Selection = () => {
-  const { firstPick, setFirstPick } = useBrawler();
+  const { firstPick, setFirstPick, resetEverything } = useBrawler();
 
   return (
     <div className='w-full flex flex-col md:flex-row gap-x-12 py-3 items-center gap-y-3 justify-center mb-16 md:mb-0'>
@@ -62,6 +62,13 @@ const Selection = () => {
         style={{backgroundColor: firstPick ? '#3b82f6' : '#f43f5e'}}
       >
         {firstPick ? 'First Pick' : 'Second Pick'}
+      </button>
+      <button
+        className='flex w-[150px] h-[50px] rounded-xl justify-center p-2 font-bold text-xl'
+        onClick={() => resetEverything()}
+        style={{backgroundColor: '#f43f5e'}}
+      >
+        Reset
       </button>
     </div>
   );
