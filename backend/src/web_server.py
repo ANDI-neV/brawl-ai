@@ -55,25 +55,6 @@ async def retrieve_map_pickrates(request: PickrateRequest):
         print(f"Error during pickrate retrieval: {e}")
         raise HTTPException(status_code=500, detail="Pickrate retrieval failed")
 
-@app.post("/winrate")
-async def retrieve_map_winrates(request: PickrateRequest):
-    global last_prediction_time
-    current_time = time.time()
-
-    if current_time - last_prediction_time < PREDICTION_COOLDOWN:
-        raise HTTPException(status_code=429, detail="Too many requests. Please wait before retrieving winrate again.")
-
-    last_prediction_time = current_time
-
-    try:
-        print(f"Winrate request: Map: {request.map}")
-        probabilities = ai.get_map_winrate(request.map)
-        print(f"Winrate results: {probabilities}")
-        return {"probabilities": probabilities}
-    except Exception as e:
-        print(f"Error during winrate retrieval: {e}")
-        raise HTTPException(status_code=500, detail="Winrate retrieval failed")
-
 @app.post("/predict")
 async def predict_brawlers(request: PredictionRequest):
     global last_prediction_time
