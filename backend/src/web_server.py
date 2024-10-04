@@ -48,12 +48,31 @@ async def retrieve_map_pickrates(request: PickrateRequest):
 
     try:
         print(f"Pickrate request: Map: {request.map}")
-        probabilities = ai.get_map_winrate(request.map)
+        probabilities = ai.get_map_pickrate(request.map)
         print(f"Pickrate results: {probabilities}")
-        return {"probabilities": probabilities}
+        return {"pickrate": probabilities}
     except Exception as e:
         print(f"Error during pickrate retrieval: {e}")
         raise HTTPException(status_code=500, detail="Pickrate retrieval failed")
+
+@app.post("/winrate")
+async def retrieve_map_winrates(request: PickrateRequest):
+    global last_prediction_time
+    current_time = time.time()
+
+    if current_time - last_prediction_time < PREDICTION_COOLDOWN:
+        raise HTTPException(status_code=429, detail="Too many requests. Please wait before retrieving winrate again.")
+
+    last_prediction_time = current_time
+
+    try:
+        print(f"Winrate request: Map: {request.map}")
+        probabilities = ai.get_map_winrate(request.map)
+        print(f"Winrate results: {probabilities}")
+        return {"probabilities": probabilities}
+    except Exception as e:
+        print(f"Error during winrate retrieval: {e}")
+        raise HTTPException(status_code=500, detail="Winrate retrieval failed")
 
 @app.post("/predict")
 async def predict_brawlers(request: PredictionRequest):
@@ -66,9 +85,13 @@ async def predict_brawlers(request: PredictionRequest):
     last_prediction_time = current_time
 
     try:
+        probabilities = {}
         print(f"Prediction request: Map: {request.map}, Brawlers: {request.brawlers}, First Pick: {request.first_pick}")
-        brawler_dict = ai.get_brawler_dict(request.brawlers, request.first_pick)
-        probabilities = ai.predict(brawler_dict, request.map)
+        if (request.brawlers == []):
+             probabilities = ai.get_map_winrate(request.map)
+        else:
+            brawler_dict = ai.get_brawler_dict(request.brawlers, request.first_pick)
+            probabilities = ai.predict(brawler_dict, request.map)
         print(f"Prediction results: {probabilities}")
         return {"probabilities": probabilities}
     except Exception as e:

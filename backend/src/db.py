@@ -202,13 +202,30 @@ class Database:
     def getAllMaps(self):
         self.cur.execute("SELECT DISTINCT map FROM battles")
         return self.cur.fetchall()
-    
-    def checkBrawlerSignificance(self, brawler, map=None):
-        if map == None:
-            self.cur.execute("SELECT COUNT(*) FROM battles WHERE a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s", (brawler, brawler, brawler, brawler, brawler, brawler))
+
+    def checkBrawlerSignificanceForMap(self, brawler, map=None):
+        if map is None:
+            self.cur.execute("""
+                SELECT 
+                    SUM(CASE WHEN ((a1=%s OR a2=%s OR a3=%s) AND result=1) OR ((b1=%s OR b2=%s OR b3=%s)) THEN 1 ELSE 0 END) as matches,
+                    COUNT(*) as total_games
+                FROM battles 
+            """, (brawler,) * 6)
         else:
-            self.cur.execute("SELECT COUNT(*) FROM battles WHERE (a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s) AND map=%s", (brawler, brawler, brawler, brawler, brawler, brawler, map))
-        return self.cur.fetchone()[0]
+            self.cur.execute("""
+                SELECT 
+                    SUM(CASE WHEN ((a1=%s OR a2=%s OR a3=%s) AND result=1) OR ((b1=%s OR b2=%s OR b3=%s)) THEN 1 ELSE 0 END) as matches,
+                    COUNT(*) as total_games
+                FROM battles 
+                WHERE map=%s
+            """, (brawler,) * 6 + (map,))
+
+        result = self.cur.fetchone()
+        matches, total_games = result[0], result[1]
+
+        if total_games == 0:
+            return 0
+        return matches / total_games
 
     def checkBrawlerWinrateForMap(self, brawler, map=None):
         if map is None:
@@ -232,7 +249,7 @@ class Database:
         wins, total_games = result[0], result[1]
 
         if total_games == 0:
-            return 0  # Avoid division by zero
+            return 0
         return wins / total_games
     
 

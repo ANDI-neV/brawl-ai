@@ -42,7 +42,7 @@ const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick }
       <BrawlerIcon brawler={brawler.name}/>
     </th>
     <td className="px-6 py-4 mx-auto items-center">{score !== null ? score.toFixed(3): 'N/A'}</td>
-    <td className="px-6 py-4 mx-auto items-center">{pickrate !== null ? score?.toFixed(3): 'N/A' }</td>
+    <td className="px-6 py-4 mx-auto items-center">{pickrate !== null ? pickrate?.toFixed(3): 'N/A' }</td>
   </tr>
 );
 
@@ -62,7 +62,7 @@ export default function BrawlerPicker() {
     const emptySlot = selectedBrawlers.findIndex(slot => slot === null);
     if (emptySlot !== -1) {
       selectBrawler(brawler, emptySlot);
-      updatePredictions();
+      updatePredictions(selectedMap, selectedBrawlers.filter(Boolean).map(b => b!.name), true);
     } else {
       alert("All slots are filled. Clear a slot before selecting a new brawler.");
     }
@@ -88,7 +88,6 @@ export default function BrawlerPicker() {
         if (sort.key === 'score') {
           return sort.direction === 'desc' ? scoreB - scoreA : scoreA - scoreB;
         }
-        // Add more sorting logic for other columns if needed
         return 0;
       });
   }, [localAvailableBrawlers, filter, sort, brawlerScores]);

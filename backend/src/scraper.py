@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import os
 import re
-from typing import List
+from typing import List, Tuple, Any
 from db import Database
 
 BASE_URL = "https://brawlstars.fandom.com"
@@ -12,7 +12,7 @@ OUT_DIR = "./out"
 BRAWLERS_DIR = os.path.join(OUT_DIR, "brawlers")
 
 
-def get_brawler_list() -> List[str, str]:
+def get_brawler_list() -> list[Any]:
     response = requests.get(BRAWLERS_CATEGORY_URL)
     soup = BeautifulSoup(response.text, 'html.parser')
     brawler_links = soup.select("div.category-page__members a.category-page__member-link")
@@ -134,6 +134,7 @@ def main():
         brawler_data[str.lower(brawler_name)] = brawler_details
 
     cache_brawler_winrates(brawler_list)
+    cache_brawler_pickrates(brawler_list)
 
     save_brawler_data(brawler_data)
     print("Brawler data successfully fetched and saved.")
@@ -171,21 +172,42 @@ def scrape_brawler_image(brawler_name, url, images_dir):
         print(f"No image found for {brawler_name}")
 
 
-def cache_brawler_winrates(brawler_list: List[str, str]):
+def cache_brawler_winrates(brawler_list: list[Any]):
     print("Retrieving winrates for all brawlers for each map.")
     db = Database()
 
     map_winrates = {}
     maps = db.getAllMaps()
     for map in maps:
-        brawler_significance = {}
+        brawler_winrates = {}
+        map = map[0]
         for brawler_name, brawler_url in brawler_list:
-            brawler_significance[brawler_name] = db.checkBrawlerWinrateForMap(brawler=brawler_name.upper(), map=map)
-        map_winrates[map] = brawler_significance
+            winrate = db.checkBrawlerWinrateForMap(brawler=brawler_name.upper(), map=map)
+            print(f"Winrate for {brawler_name} on {map}: {winrate}")
+            brawler_winrates[brawler_name] = winrate
+        map_winrates[map] = brawler_winrates
 
     with open(os.path.join(BRAWLERS_DIR, 'brawler_winrates.json'), 'w') as f:
         json.dump(map_winrates, f, indent=2)
 
+def cache_brawler_pickrates(brawler_list: list[Any]):
+    print("Retrieving pickrates for all brawlers for each map.")
+    db = Database()
+
+    map_pickrates = {}
+    maps = db.getAllMaps()
+    for map in maps:
+        brawler_significance = {}
+        map = map[0]
+        for brawler_name, brawler_url in brawler_list:
+            pickrate = db.checkBrawlerSignificanceForMap(brawler=brawler_name.upper(), map=map)
+            print(f"Pickrate for {brawler_name} on {map}: {pickrate}")
+            brawler_significance[brawler_name] = pickrate
+        map_pickrates[map] = brawler_significance
+
+    with open(os.path.join(BRAWLERS_DIR, 'brawler_pickrates.json'), 'w') as f:
+        json.dump(map_pickrates, f, indent=2)
 
 if __name__ == "__main__":
-    main()
+    brawler_list = get_brawler_list()
+    cache_brawler_pickrates(brawler_list)

@@ -20,8 +20,8 @@ interface BrawlerContextType {
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
   clearSlot: (slot: number) => void;
-  updatePredictions: () => void;
-  retrieveBrawlerPickrates: () => void;
+  updatePredictions: (map: string, brawlers: string[], firstPick: boolean) => void;
+  retrieveBrawlerPickrates: (map: string) => void;
   mapSelectionSetup: (map: string) => void;
   resetEverything: () => void;
 }
@@ -50,6 +50,9 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+    
+  const pickratesFetchedRef = useRef(false);
+
   const selectedBrawlerNames = useMemo(
     () => selectedBrawlers.filter(Boolean).map(b => b!.name),
     [selectedBrawlers]
@@ -61,41 +64,46 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     setSelectedMap('')
     setIsPredicting(false)
     setError(null)
-    //TODO: set scores and pichrates to null
+    pickratesFetchedRef.current = false
+    setBrawlerScores({})
+    setBrawlerPickrates({})
   }, [])
 
-  const mapSelectionSetup = useCallback((map: string) => {
-    setSelectedMap(map)
-    // wait here on change of selectedMap, else race conditions
-    retrieveBrawlerPickrates();
-    updatePredictions();
-  },[]
-)
-
-  const retrieveBrawlerPickrates = useCallback(() => {
-    console.info("try retrieving pickrate")
-    if (selectedMap) {
-      setError(null);
-      getPickrate(selectedMap).then(probabilities => {
-        setBrawlerPickrates(probabilities);
-      })
-      .catch(error => {
-        console.error("Error predicting brawlers:", error);
-        setError("Failed to predict brawlers");
-      })
-    } else {
-      console.warn("no map was selected.")
+  const retrieveBrawlerPickrates = useCallback((map: string) => {
+    if (pickratesFetchedRef.current) {
+      console.info("Pickrates already fetched, skipping retrieval");
+      return;
     }
-  }, []
 
-  )
-
-  const updatePredictions = useCallback(() => {
-    console.info("try predicting")
-    if (selectedMap) {
+    console.info("Retrieving pickrate for map:", map);
+    if (map) {
+      setError(null);
+      getPickrate(map)
+        .then(probabilities => {
+          console.log("Received probabilities:", probabilities);
+          if (probabilities && Object.keys(probabilities).length > 0) {
+            setBrawlerPickrates(probabilities);
+            pickratesFetchedRef.current = true;
+          } else {
+            console.warn("Received empty probabilities");
+            setError("Received empty data from server");
+          }
+        })
+        .catch(error => {
+          console.error("Error retrieving pickrates:", error);
+          setError("Failed to retrieve pickrates: " + error.message);
+        });
+    } else {
+      console.warn("No map selected for pickrate retrieval");
+    }
+  }, []);
+  
+  const updatePredictions = useCallback((map: string, brawlers: string[], firstPick: boolean) => {
+    console.info("try predicting");
+    if (map) {
       setIsPredicting(true);
       setError(null);
-      predictBrawlers(selectedMap, selectedBrawlerNames, firstPick)
+      predictBrawlers(map, brawlers, firstPick)
         .then(probabilities => {
           setBrawlerScores(probabilities);
           setIsPredicting(false);
@@ -106,9 +114,23 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
           setIsPredicting(false);
         });
     } else {
-      console.warn("no map was selected.")
+      console.warn("no map was selected.");
     }
-  }, [selectedMap, selectedBrawlerNames, firstPick, isPredicting]);
+  }, []);
+
+  useEffect(() => {
+    if (selectedMap) {
+      retrieveBrawlerPickrates(selectedMap);
+    }
+  }, [selectedMap, retrieveBrawlerPickrates]);
+
+  const mapSelectionSetup = useCallback((map: string) => {
+    setSelectedMap(map);
+    if (!pickratesFetchedRef.current) {
+      retrieveBrawlerPickrates(map);
+    }
+    updatePredictions(map, selectedBrawlerNames, firstPick);
+  }, [retrieveBrawlerPickrates, updatePredictions, selectedBrawlerNames, firstPick]);
 
   const selectBrawler = useCallback((brawler: BrawlerPickerProps, slot: number) => {
     setSelectedBrawlers(prev => {
