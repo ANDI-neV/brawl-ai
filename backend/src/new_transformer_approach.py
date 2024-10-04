@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from sqlalchemy import create_engine, URL
-
+import configparser
 
 BRAWLERS_JSON_PATH = 'out/brawlers/brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
@@ -70,12 +70,15 @@ def prepare_training_data() -> pd.DataFrame:
     -------
     pd.Dataframe
     """
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
     url_object = URL.create(
         "postgresql+psycopg2",
-        username="REDACTED",
-        password="REDACTED",
-        host="REDACTED",
-        database="REDACTED",
+        username=config['Credentials']['username'],
+        password=config['Credentials']['password'],
+        host=config['Credentials']['host'],
+        database=config['Credentials']['database'],
     )
     engine = create_engine(url_object)
     query = "SELECT * FROM battles"
@@ -100,7 +103,7 @@ class BrawlStarsTransformer(nn.Module):
         map_embedding (nn.Embedding): Embedding layer for map identifiers.
         team_projection (nn.Linear): Linear projection for team indicators.
         position_embedding (nn.Embedding): Embedding layer for position
-        information.
+            information.
         transformer_encoder (nn.TransformerEncoder): Main Transformer encoder.
         output_layer (nn.Linear): Final linear layer for brawler prediction.
 
@@ -108,11 +111,11 @@ class BrawlStarsTransformer(nn.Module):
         n_brawlers (int): Number of unique brawlers in the game.
         n_maps (int): Number of unique maps in the game.
         d_model (int, optional): Dimension of the model.
-        Defaults to 64.
+            Defaults to 64.
         nhead (int, optional): Number of heads in multi-head attention.
-        Defaults to 4.
+            Defaults to 4.
         num_layers (int, optional): Number of sub-encoder-layers in the
-        encoder. Defaults to 2.
+            encoder. Defaults to 2.
         dropout (float, optional): Dropout rate. Defaults to 0.1.
         max_seq_len (int, optional): Maximum sequence length. Defaults to 7.
 
@@ -153,7 +156,7 @@ class BrawlStarsTransformer(nn.Module):
             positions (Tensor): Tensor of position indices.
             map_id (Tensor): Tensor of map identifiers.
             src_key_padding_mask (Tensor, optional): Mask for padding tokens.
-            Defaults to None.
+                Defaults to None.
 
         Returns:
             Tensor: Logits for brawler prediction.
@@ -184,6 +187,18 @@ def get_opposite_team(team: str) -> str:
 
 
 def get_match_dictionary(match: pd.Series, result: bool) -> Dict:
+    """
+    Creates a dictionary for a given match. Each match 6 players,
+    with 3 on each team, with 'a' representing team 1 and 'b' team 2.
+    The brawlers picked by the players are converted into their unique
+    indices.
+
+    Args:
+        match (pd.Series): Match that was played.
+        result (bool): Result of the match played.
+    Returns:
+        Dict: Converted Match.
+    """
     if result:
         return {f'{team}{i}': get_brawler_index(match[f'{team}{i}'])
                 for team in ['a', 'b'] for i in range(1, 4)}
@@ -195,6 +210,23 @@ def get_match_dictionary(match: pd.Series, result: bool) -> Dict:
 
 def get_match_vector(combination: List[str], match_dictionary: Dict) \
         -> np.ndarray:
+    """
+    Converts a combination of players into a vector representation using
+    a match dictionary.
+
+    Args:
+        combination (List[str]): A list of player identifiers.
+        match_dictionary (Dict): A dictionary mapping player identifiers
+            to their vector representations.
+
+    Returns:
+        np.ndarray: A numpy array containing the vector representations
+            of the players in the combination.
+
+    Note:
+        This function assumes that all players in the combination exist
+        in the match_dictionary.
+    """
     match_list = []
     for player in combination:
         match_list.append(match_dictionary[player])
@@ -205,6 +237,27 @@ def get_match_vector(combination: List[str], match_dictionary: Dict) \
 def get_brawler_vectors(match_data: pd.DataFrame,
                         map_id_mapping: Dict[str, int],
                         limit: int = None) -> List[Dict]:
+    """
+    Generates training samples from match data for brawler prediction.
+
+    Args:
+        match_data (pd.DataFrame): DataFrame containing match data.
+        map_id_mapping (Dict[str, int]): Dictionary mapping map names
+            to their integer IDs.
+        limit (int, optional): Limit on the number of rows to process
+            from match_data. Defaults to None.
+
+    Returns:
+        List[Dict]: A list of dictionaries, each representing a
+            training sample with keys:
+            - 'current_picks': List of current brawler picks.
+            - 'team_indicators': List indicating team affiliation for
+                    each pick.
+            - 'positions': List of position indices for each pick.
+            - 'next_pick': The next brawler pick.
+            - 'map_id': Integer ID of the map.
+    """
+
     training_samples = []
 
     if limit is not None:
@@ -238,6 +291,20 @@ def get_brawler_vectors(match_data: pd.DataFrame,
 
 
 def get_brawler_dict(picks: List[str], first_pick: bool) -> Dict[str, str]:
+    """
+        Creates a dictionary mapping pick positions to brawlers based
+        on the pick order.
+
+        Args:
+            picks (List[str]): List of brawler picks in order.
+            first_pick (bool): Boolean indicating if this is the first
+                pick team.
+
+        Returns:
+            Dict[str, str]: A dictionary mapping pick positions
+                (e.g., 'a1', 'b2') to brawler names.
+
+        """
     brawler_dict = {}
     if first_pick:
         for i, brawler in enumerate(picks):
@@ -250,6 +317,27 @@ def get_brawler_dict(picks: List[str], first_pick: bool) -> Dict[str, str]:
 
 
 def predict_next_pick(model, current_picks, team_indicators, map_id):
+    """
+   Predicts the next brawler pick using the trained model.
+
+   Args:
+       model: The trained BrawlStarsTransformer model.
+       current_picks (List[int]): List of current brawler picks
+        (as integer indices).
+       team_indicators (List[int]): List indicating team affiliation
+        for each pick.
+       map_id (int): Integer ID of the map.
+
+   Returns:
+       Tuple[int, torch.Tensor]: A tuple containing:
+           - The predicted next pick (as an integer index).
+           - A tensor of probabilities for all possible next picks.
+
+   Note:
+       This function handles the conversion of inputs to tensors and
+       moves them to the appropriate device. It uses torch.no_grad()
+       for inference to disable gradient computation.
+   """
     brawlers = torch.tensor([current_picks])
     team_indicators = torch.tensor([team_indicators])
     positions = torch.tensor([[i for i in range(len(current_picks))]])
@@ -276,6 +364,33 @@ def get_brawler_index(brawler):
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
                             nhead=4, num_layers=2, batch_size=64, epochs=100,
                             learning_rate=0.001):
+    """
+    Trains the BrawlStarsTransformer model on the provided training samples.
+
+    Args:
+        training_samples (List[Dict]): List of training samples, each a
+            dictionary with pick data.
+        n_brawlers (int): Number of unique brawlers in the game.
+        n_maps (int): Number of unique maps in the game.
+        d_model (int, optional): Dimension of the model. Defaults to 64.
+        nhead (int, optional): Number of heads in multi-head attention.
+            Defaults to 4.
+        num_layers (int, optional): Number of sub-encoder-layers in the
+            encoder. Defaults to 2.
+        batch_size (int, optional): Size of each training batch.
+            Defaults to 64.
+        epochs (int, optional): Number of training epochs. Defaults to 100.
+        learning_rate (float, optional): Learning rate for the optimizer.
+            Defaults to 0.001.
+
+    Returns:
+        BrawlStarsTransformer: The trained model.
+
+    Note:
+        This function initializes the model, moves it to the available device
+        (CPU or CUDA), and trains it using CrossEntropyLoss and Adam optimizer.
+        It prints the loss for each epoch.
+    """
     model = BrawlStarsTransformer(n_brawlers, n_maps, d_model,
                                   nhead, num_layers)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -318,6 +433,30 @@ def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
 
 
 def prepare_batch(samples, max_seq_len=7):
+    """
+    Prepares a batch of samples for input into the BrawlStarsTransformer model.
+
+    Args:
+        samples (List[Dict]): List of sample dictionaries, each containing
+            pick data.
+        max_seq_len (int, optional): Maximum sequence length. Defaults to 7.
+
+    Returns:
+        Dict[str, torch.Tensor]: A dictionary containing:
+            - 'brawlers': Tensor of brawler indices, including CLS token
+                    and padding.
+            - 'team_indicators': Tensor of team indicators, including for CLS
+                    token and padding.
+            - 'positions': Tensor of position indices, adjusted for CLS token
+                    and padding.
+            - 'map_id': Tensor of map IDs.
+            - 'target': Tensor of target (next pick) indices.
+            - 'padding_mask': Boolean tensor indicating padded positions.
+
+    Note:
+        This function prepends a CLS token to each sequence, pads sequences to
+        max_seq_len and prepares all required inputs for the transformer model.
+    """
     brawlers_list = []
     team_indicators_list = []
     positions_list = []
@@ -368,6 +507,17 @@ def prepare_batch(samples, max_seq_len=7):
 
 
 def create_map_id_mapping(match_data: pd.DataFrame) -> Dict[str, int]:
+    """
+    Creates a mapping from map names to unique integer IDs.
+
+    Args:
+        match_data (pd.DataFrame): DataFrame containing match data with a
+        'map' column.
+
+    Returns:
+        Dict[str, int]: A dictionary mapping each unique map name to a
+        unique integer ID.
+    """
     unique_maps = match_data['map'].unique()
     return {map_name: idx for idx, map_name in enumerate(unique_maps)}
 
@@ -377,6 +527,31 @@ index_to_brawler_name = {data['index']: name for name, data
 
 
 def prepare_input(current_picks_dict, map_name, map_id_mapping, max_seq_len=7):
+    """
+    Prepares input data for the BrawlStarsTransformer model based on current
+    picks and map.
+
+    Args:
+        current_picks_dict (Dict[str, str]): Dictionary of current picks,
+            mapping positions to brawler names.
+        map_name (str): Name of the current map.
+        map_id_mapping (Dict[str, int]): Mapping of map names to their
+            corresponding IDs.
+        max_seq_len (int, optional): Maximum sequence length. Defaults to 7.
+
+    Returns:
+        Dict[str, torch.Tensor]: A dictionary containing model input tensors:
+            - 'brawlers': Tensor of brawler indices, including CLS token
+                    and padding.
+            - 'team_indicators': Tensor of team indicators.
+            - 'positions': Tensor of position indices.
+            - 'map_id': Tensor of the map ID.
+            - 'padding_mask': Boolean tensor for padding positions.
+
+    Raises:
+        ValueError: If no matching combination is found for the provided
+        positions or if the map is not found.
+    """
     # Possible picking combinations used during training
     possible_combinations = picking_combinations1 + picking_combinations2
     # Find a matching combination
@@ -430,6 +605,25 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping, max_seq_len=7):
 
 
 def predict_next_brawler(model, input_data, already_picked_indices):
+    """
+    Predicts the next brawler pick using the trained model.
+
+    Args:
+       model (BrawlStarsTransformer): The trained transformer model.
+       input_data (Dict[str, torch.Tensor]): Input data as prepare
+            by prepare_input function.
+       already_picked_indices (List[int]): Indices of brawlers that
+            have already been picked.
+
+   Returns:
+       Tuple[int, torch.Tensor]: A tuple containing:
+           - The index of the predicted next brawler pick.
+           - A tensor of probabilities for all possible next picks.
+
+   Note:
+       This function sets the probabilities of already picked brawlers
+       to negative infinity before making the prediction.
+   """
     device = next(model.parameters()).device
     brawlers = input_data['brawlers'].to(device)
     team_indicators = input_data['team_indicators'].to(device)
@@ -452,7 +646,28 @@ def predict_next_brawler(model, input_data, already_picked_indices):
 
 def test_team_composition(model, current_picks_dict, map_name,
                           map_id_mapping, max_seq_len=7):
+    """
+    Tests a team composition by predicting the next brawler pick and
+    calculating probabilities for all brawlers.
 
+    Args:
+        model (BrawlStarsTransformer): The trained transformer model.
+        current_picks_dict (Dict[str, str]): Dictionary of current picks,
+            mapping positions to brawler names.
+        map_name (str): Name of the current map.
+        map_id_mapping (Dict[str, int]): Mapping of map names to their
+            corresponding IDs.
+        max_seq_len (int, optional): Maximum sequence length. Defaults to 7.
+
+    Returns:
+        Dict[str, float]: A dictionary mapping brawler names to their
+        predicted probabilities.
+
+    Note:
+        This function prints the predicted next pick and probabilities
+        for all brawlers. It uses global variables get_brawler_index and
+        index_to_brawler_name.
+    """
     input_data = prepare_input(current_picks_dict, map_name,
                                map_id_mapping, max_seq_len)
 
@@ -488,6 +703,17 @@ def get_all_maps():
 
 
 def train_model():
+    """
+    Trains the BrawlStarsTransformer model using prepared match data.
+
+    This function performs the following steps:
+    1. Prepares training data from match data.
+    2. Prints information about the brawlers and special tokens.
+    3. Creates a map ID mapping and saves it to a JSON file.
+    4. Generates training samples from the match data.
+    5. Trains the transformer model.
+    6. Saves the trained model to a file.
+    """
     match_data = prepare_training_data()
 
     n_brawlers = len(brawler_data)
@@ -523,6 +749,29 @@ def train_model():
 
 def load_model(n_brawlers, n_maps, model_path='out/models/transformer.pth',
                d_model=64, nhead=4, num_layers=2):
+    """
+    Loads a trained BrawlStarsTransformer model from a file.
+
+    Args:
+        n_brawlers (int): Number of unique brawlers in the game.
+        n_maps (int): Number of unique maps in the game.
+        model_path (str, optional): Path to the saved model file.
+            Defaults to 'out/models/transformer.pth'.
+        d_model (int, optional): Dimension of the model. Defaults to 64.
+        nhead (int, optional): Number of heads in multi-head attention.
+            Defaults to 4.
+        num_layers (int, optional): Number of sub-encoder-layers in the encoder.
+            Defaults to 2.
+
+    Returns:
+        BrawlStarsTransformer: The loaded model, moved to the appropriate
+        device (CPU or CUDA).
+
+    Note:
+        This function initializes a new BrawlStarsTransformer model with the
+        given parameters, loads the state dict from the specified file, and
+        moves the model to the available device.
+    """
     model = BrawlStarsTransformer(n_brawlers, n_maps, d_model, nhead,
                                   num_layers)
     model.load_state_dict(torch.load(model_path, map_location='cpu'))
@@ -533,6 +782,22 @@ def load_model(n_brawlers, n_maps, model_path='out/models/transformer.pth',
 
 
 def predict(picks_dict, map_name):
+    """
+    Predicts the next brawler pick based on the current picks and map.
+
+    Args:
+        picks_dict (Dict[str, str]): A dictionary of current picks, mapping
+            positions to brawler names.
+        map_name (str): The name of the current map.
+
+    Returns:
+        Dict[str, float]: A dictionary mapping brawler names to their
+            predicted probabilities.
+
+    Note:
+        This function prepares the necessary data, loads the trained model,
+        and uses the test_team_composition function to make predictions.
+    """
     brawler_data = prepare_brawler_data()
     n_brawlers = len(brawler_data)
     map_id_mapping = load_map_id_mapping()
@@ -546,6 +811,16 @@ def predict(picks_dict, map_name):
 
 
 def test():
+    """
+    Runs a test prediction with a predefined set of picks and map.
+
+    This function demonstrates how to use the predict function with
+    a sample scenario. It sets up a dictionary of current picks and
+    a map name, then calls the predict function.
+
+    Note:
+        This is primarily for testing and demonstration purposes.
+    """
     current_picks_dict = {
         'b1': 'hank',
         'b2': 'edgar',
@@ -558,4 +833,4 @@ def test():
 
 
 if __name__ == '__main__':
-    train_model()
+    train_transformer_model()

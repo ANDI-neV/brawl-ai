@@ -3,6 +3,7 @@ from psycopg2 import pool
 import random
 import time
 import os
+import configparser
 
 '''psycopg2.connect(
     host=os.getenv("REDACTED"),
@@ -22,13 +23,15 @@ class ConnectionPoolManager:
     @classmethod
     def initpool(cls):
         try:
+            config = configparser.ConfigParser()
+            config.read('config.ini')
             cls._pool = psycopg2.pool.ThreadedConnectionPool(
                 1, 1000,
-                host="REDACTED",
+                host=config['Credentials']['host'],
                 port=5432,
-                database="REDACTED",
-                user="REDACTED",
-                password="REDACTED"
+                database=config['Credentials']['database'],
+                user=config['Credentials']['username'],
+                password=config['Credentials']['password'],
             )
         except Exception as e:
             print("Error: " + str(e))

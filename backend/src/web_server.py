@@ -16,17 +16,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class PredictionRequest(BaseModel):
     map: str
     brawlers: List[str]
     first_pick: bool
 
+
 class PickrateRequest(BaseModel):
     map: str
+
 
 @app.get("/maps")
 async def get_maps():
     return {"maps": ai.get_all_maps()}
+
 
 @app.get("/brawlers")
 async def get_brawlers():
@@ -36,13 +40,16 @@ async def get_brawlers():
 last_prediction_time = 0
 PREDICTION_COOLDOWN = 1  # 1 second cooldown between predictions
 
+
 @app.post("/pickrate")
 async def retrieve_map_pickrates(request: PickrateRequest):
     global last_prediction_time
     current_time = time.time()
 
     if current_time - last_prediction_time < PREDICTION_COOLDOWN:
-        raise HTTPException(status_code=429, detail="Too many requests. Please wait before retrieving pickrate again.")
+        raise HTTPException(status_code=429,
+                            detail="Too many requests. Please wait "
+                                   "before retrieving pickrate again.")
 
     last_prediction_time = current_time
 
@@ -53,7 +60,9 @@ async def retrieve_map_pickrates(request: PickrateRequest):
         return {"pickrate": probabilities}
     except Exception as e:
         print(f"Error during pickrate retrieval: {e}")
-        raise HTTPException(status_code=500, detail="Pickrate retrieval failed")
+        raise HTTPException(status_code=500, detail="Pickrate retrieval "
+                                                    "failed")
+
 
 @app.post("/predict")
 async def predict_brawlers(request: PredictionRequest):
@@ -61,24 +70,27 @@ async def predict_brawlers(request: PredictionRequest):
     current_time = time.time()
 
     if current_time - last_prediction_time < PREDICTION_COOLDOWN:
-        raise HTTPException(status_code=429, detail="Too many requests. Please wait before predicting again.")
+        raise HTTPException(status_code=429,
+                            detail="Too many requests. Please "
+                                   "wait before predicting again.")
 
     last_prediction_time = current_time
 
     try:
-        probabilities = {}
-        print(f"Prediction request: Map: {request.map}, Brawlers: {request.brawlers}, First Pick: {request.first_pick}")
+        print(f"Prediction request: Map: {request.map}, "
+              f"Brawlers: {request.brawlers}, "
+              f"First Pick: {request.first_pick}")
         if (request.brawlers == []):
-             probabilities = ai.get_map_winrate(request.map)
+            probabilities = ai.get_map_winrate(request.map)
         else:
-            brawler_dict = ai.get_brawler_dict(request.brawlers, request.first_pick)
+            brawler_dict = ai.get_brawler_dict(request.brawlers,
+                                               request.first_pick)
             probabilities = ai.predict(brawler_dict, request.map)
         print(f"Prediction results: {probabilities}")
         return {"probabilities": probabilities}
     except Exception as e:
         print(f"Error during prediction: {e}")
         raise HTTPException(status_code=500, detail="Prediction failed")
-
 
 
 if __name__ == "__main__":

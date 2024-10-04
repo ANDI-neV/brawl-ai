@@ -14,6 +14,7 @@ from sqlalchemy import create_engine, URL
 from torch.utils.data import TensorDataset, DataLoader
 from db import Database
 from sklearn.utils import class_weight
+import configparser
 
 
 # Constants
@@ -53,12 +54,15 @@ class BrawlStarsNN(nn.Module):
 
 
 def prepare_training_data(map: str = None) -> pd.DataFrame:
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
     url_object = URL.create(
         "postgresql+psycopg2",
-        username="REDACTED",
-        password="REDACTED",
-        host="REDACTED",
-        database="REDACTED",
+        username=config['Credentials']['username'],
+        password=config['Credentials']['password'],
+        host=config['Credentials']['host'],
+        database=config['Credentials']['database'],
     )
     engine = create_engine(url_object)
 
