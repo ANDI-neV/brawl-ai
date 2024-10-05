@@ -4,6 +4,7 @@ import React from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import type { Selection } from "@nextui-org/react";
 import { ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 
 function Menu() {
   const { selectedMap, availableMaps, mapSelectionSetup } = useBrawler();
@@ -56,20 +57,24 @@ const Selection = () => {
   return (
     <div className='w-full flex flex-col md:flex-row gap-x-12 py-3 items-center gap-y-3 justify-center mb-16 md:mb-0'>
       <Menu />
-      <button 
-        className='flex w-[150px] h-[50px] rounded-xl justify-center p-2 font-bold text-xl'
+      <motion.button
+        className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl'
         onClick={() => setFirstPick(!firstPick)}
-        style={{backgroundColor: firstPick ? '#3b82f6' : '#f43f5e'}}
+        style={{backgroundColor: firstPick ? '#76a8f9' : '#f7798e'}}
+        whileHover={{ scale: 1.1, zIndex: 10 }}
+        whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
       >
         {firstPick ? 'First Pick' : 'Second Pick'}
-      </button>
-      <button
-        className='flex w-[150px] h-[50px] rounded-xl justify-center p-2 font-bold text-xl'
+      </motion.button>
+      <motion.button
+        className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl'
         onClick={() => resetEverything()}
-        style={{backgroundColor: '#f43f5e'}}
+        style={{backgroundColor: '#9e9191'}}
+        whileHover={{ scale: 1.1, zIndex: 10 }}
+        whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
       >
         Reset
-      </button>
+      </motion.button>
     </div>
   );
 };

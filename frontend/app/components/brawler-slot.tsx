@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import Image from "next/image";
 import { useBrawler } from './brawler-context';
 
 interface BrawlerSlotProps {
@@ -45,12 +45,12 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
     }
   };
 
-  const lighterBgColor = lightenColor(bgColor, 0.5); // 30% lighter
+  const lighterBgColor = lightenColor(bgColor, 0.3); // 30% lighter
 
   if (!selectedBrawler) {
     return (
       <div 
-        className={`h-[125px] w-[125px] border-4 p-3 rounded-xl shadow-md ${
+        className={`h-[125px] w-[125px] border-8 p-3 rounded-xl shadow-md ${
           isFirstClearSlot ? '' : 'border-transparent'
         }`}
         style={{
@@ -71,20 +71,25 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
 
   return (
     <motion.button 
-      className="relative h-[125px] w-[125px] border p-3 rounded-xl overflow-hidden shadow-md"
-      style={{ backgroundColor: bgColor }}
+      className="relative h-[125px] w-[125px] border-8 rounded-xl overflow-hidden shadow-md"
+      style={{ backgroundColor: bgColor, borderColor: lighterBgColor }}
       onClick={handleClearSlot}
       whileHover={{ scale: 1.1, zIndex: 10 }}
       whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
     >
-      <Image 
-        className="rounded-xl"
-        src={brawler_image_url} 
-        alt={selectedBrawler.name} 
-        width={200} 
-        height={200}
-        layout="responsive"
-      />
+      <div className="relative w-full h-full">
+        <Image 
+          className="rounded-xl object-cover object-left"
+          src={brawler_image_url} 
+          alt={selectedBrawler.name} 
+          fill
+          sizes="125px"
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'left center'
+          }}
+        />
+      </div>
       <motion.div
         className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white font-bold"
         initial={{ opacity: 0 }}
@@ -94,5 +99,6 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
       </motion.div>
     </motion.button>
   );
+
 }
 
