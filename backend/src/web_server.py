@@ -85,7 +85,7 @@ async def predict_brawlers(request: PredictionRequest):
         else:
             brawler_dict = ai.get_brawler_dict(request.brawlers,
                                                request.first_pick)
-            probabilities = ai.predict(brawler_dict, request.map)
+            probabilities = ai.predict(brawler_dict, request.map, request.first_pick)
         print(f"Prediction results: {probabilities}")
         return {"probabilities": probabilities}
     except Exception as e:

@@ -12,10 +12,15 @@ import configparser
 BRAWLERS_JSON_PATH = 'out/brawlers/brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
 BRAWLER_PICKRATES_JSON_PATH = 'out/brawlers/brawler_pickrates.json'
-picking_combinations1 = [['a1', 'b1', 'b2', 'a2'],
-                         ['a1', 'b1', 'b2', 'a2', 'a3']]
+picking_combinations1 = [['a1', 'b1'],
+                         ['a1', 'b1', 'b2'],
+                         ['a1', 'b1', 'b2', 'a2'],
+                         ['a1', 'b1', 'b2', 'a2', 'a3'],
+                         ['a1', 'b1', 'b2', 'a2', 'a3', 'b3']]
 picking_combinations2 = [['b1', 'a1'],
                          ['b1', 'a1', 'a2'],
+                         ['b1', 'a1', 'a2', 'b2'],
+                         ['b1', 'a1', 'a2', 'b2', 'b3'],
                          ['b1', 'a1', 'a2', 'b2', 'b3', 'a3']]
 all_players = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3']
 
@@ -362,7 +367,7 @@ def get_brawler_index(brawler):
 
 
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
-                            nhead=4, num_layers=2, batch_size=64, epochs=100,
+                            nhead=4, num_layers=2, batch_size=64, epochs=50,
                             learning_rate=0.001):
     """
     Trains the BrawlStarsTransformer model on the provided training samples.
@@ -526,7 +531,8 @@ index_to_brawler_name = {data['index']: name for name, data
                          in brawler_data.items()}
 
 
-def prepare_input(current_picks_dict, map_name, map_id_mapping, max_seq_len=7):
+def prepare_input(current_picks_dict, map_name, map_id_mapping,
+                  first_pick, max_seq_len=7):
     """
     Prepares input data for the BrawlStarsTransformer model based on current
     picks and map.
@@ -538,6 +544,7 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping, max_seq_len=7):
         map_id_mapping (Dict[str, int]): Mapping of map names to their
             corresponding IDs.
         max_seq_len (int, optional): Maximum sequence length. Defaults to 7.
+        first_pick (bool): Team that has pick priority.
 
     Returns:
         Dict[str, torch.Tensor]: A dictionary containing model input tensors:
@@ -553,7 +560,10 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping, max_seq_len=7):
         positions or if the map is not found.
     """
     # Possible picking combinations used during training
-    possible_combinations = picking_combinations1 + picking_combinations2
+    if (first_pick):
+        possible_combinations = picking_combinations1
+    else:
+        possible_combinations = picking_combinations2
     # Find a matching combination
     print(f"Current picks: {current_picks_dict}")
     for combination in possible_combinations:
@@ -645,7 +655,7 @@ def predict_next_brawler(model, input_data, already_picked_indices):
 
 
 def test_team_composition(model, current_picks_dict, map_name,
-                          map_id_mapping, max_seq_len=7):
+                          map_id_mapping, first_pick, max_seq_len=7):
     """
     Tests a team composition by predicting the next brawler pick and
     calculating probabilities for all brawlers.
@@ -658,6 +668,7 @@ def test_team_composition(model, current_picks_dict, map_name,
         map_id_mapping (Dict[str, int]): Mapping of map names to their
             corresponding IDs.
         max_seq_len (int, optional): Maximum sequence length. Defaults to 7.
+        first_pick (bool): Team that has pick priority.
 
     Returns:
         Dict[str, float]: A dictionary mapping brawler names to their
@@ -669,7 +680,8 @@ def test_team_composition(model, current_picks_dict, map_name,
         index_to_brawler_name.
     """
     input_data = prepare_input(current_picks_dict, map_name,
-                               map_id_mapping, max_seq_len)
+                               map_id_mapping, max_seq_len,
+                               first_pick)
 
     already_picked_brawlers = [get_brawler_index(brawler_name)
                                for brawler_name in current_picks_dict.values()]
@@ -744,10 +756,10 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/transformer_2.pth')
+    torch.save(model.state_dict(), 'out/models/transformer_3.pth')
 
 
-def load_model(n_brawlers, n_maps, model_path='out/models/transformer.pth',
+def load_model(n_brawlers, n_maps, model_path='out/models/transformer_2.pth',
                d_model=64, nhead=4, num_layers=2):
     """
     Loads a trained BrawlStarsTransformer model from a file.
@@ -781,7 +793,7 @@ def load_model(n_brawlers, n_maps, model_path='out/models/transformer.pth',
     return model
 
 
-def predict(picks_dict, map_name):
+def predict(picks_dict, map_name, first_pick):
     """
     Predicts the next brawler pick based on the current picks and map.
 
@@ -805,7 +817,8 @@ def predict(picks_dict, map_name):
     model = load_model(n_brawlers, n_maps)
 
     probability_dict = test_team_composition(model, picks_dict,
-                                             map_name, map_id_mapping)
+                                             map_name, map_id_mapping,
+                                             first_pick)
 
     return probability_dict
 
@@ -829,8 +842,8 @@ def test():
         'a2': 'piper'
     }
     map_name = 'Out in the Open'
-    predict(current_picks_dict, map_name)
+    predict(current_picks_dict, map_name, first_pick=False)
 
 
 if __name__ == '__main__':
-    train_transformer_model()
+    train_model()

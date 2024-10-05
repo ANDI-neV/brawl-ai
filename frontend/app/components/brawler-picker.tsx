@@ -62,7 +62,6 @@ export default function BrawlerPicker() {
     const emptySlot = selectedBrawlers.findIndex(slot => slot === null);
     if (emptySlot !== -1) {
       selectBrawler(brawler, emptySlot);
-      updatePredictions(selectedMap, selectedBrawlers.filter(Boolean).map(b => b!.name), true);
     } else {
       alert("All slots are filled. Clear a slot before selecting a new brawler.");
     }

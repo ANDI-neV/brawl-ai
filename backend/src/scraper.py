@@ -133,8 +133,8 @@ def main():
 
         brawler_data[str.lower(brawler_name)] = brawler_details
 
-    cache_brawler_winrates(brawler_list)
-    cache_brawler_pickrates(brawler_list)
+    #cache_brawler_winrates(brawler_list)
+    #cache_brawler_pickrates(brawler_list)
 
     save_brawler_data(brawler_data)
     print("Brawler data successfully fetched and saved.")
@@ -209,5 +209,4 @@ def cache_brawler_pickrates(brawler_list: list[Any]):
         json.dump(map_pickrates, f, indent=2)
 
 if __name__ == "__main__":
-    brawler_list = get_brawler_list()
-    cache_brawler_pickrates(brawler_list)
+    main()

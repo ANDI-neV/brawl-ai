@@ -17,6 +17,8 @@ build/
 # Flask
 instance/
 .env
-/backend/src/out/brawler_images/
+/frontend/public/brawler_images/
 .idea/
 backend/src/best_transformer_model.pth
+/backend/src/config.ini
+/backend/src/filter.py

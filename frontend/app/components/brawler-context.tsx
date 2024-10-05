@@ -99,7 +99,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   }, []);
   
   const updatePredictions = useCallback((map: string, brawlers: string[], firstPick: boolean) => {
-    console.info("try predicting");
+    console.log("Updating predictions:", { map, brawlers, firstPick });
     if (map) {
       setIsPredicting(true);
       setError(null);
@@ -114,23 +114,19 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
           setIsPredicting(false);
         });
     } else {
-      console.warn("no map was selected.");
+      console.warn("No map selected for prediction.");
     }
   }, []);
 
-  useEffect(() => {
-    if (selectedMap) {
-      retrieveBrawlerPickrates(selectedMap);
-    }
-  }, [selectedMap, retrieveBrawlerPickrates]);
 
   const mapSelectionSetup = useCallback((map: string) => {
+    console.log('Map selected:', map);
     setSelectedMap(map);
     if (!pickratesFetchedRef.current) {
       retrieveBrawlerPickrates(map);
     }
-    updatePredictions(map, selectedBrawlerNames, firstPick);
-  }, [retrieveBrawlerPickrates, updatePredictions, selectedBrawlerNames, firstPick]);
+    updatePredictions(map, selectedBrawlers.filter(Boolean).map(b => b!.name), firstPick);
+  }, [selectedBrawlers, firstPick, updatePredictions]);
 
   const selectBrawler = useCallback((brawler: BrawlerPickerProps, slot: number) => {
     setSelectedBrawlers(prev => {
@@ -147,6 +143,13 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       return newSelection;
     });
   }, []);
+
+  useEffect(() => {
+    if (selectedMap) {
+      updatePredictions(selectedMap, selectedBrawlers.filter(Boolean).map(b => b!.name), firstPick);
+    }
+  }, [selectedBrawlers, selectedMap, firstPick, updatePredictions]);
+
 
   const availableBrawlers = useMemo(() => {
     const selectedBrawlerNamesSet = new Set(selectedBrawlerNames);
