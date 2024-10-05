@@ -34,10 +34,14 @@ interface TableRowProps {
   score: number | null;
   pickrate: number | null;
   onClick: (brawler: BrawlerPickerProps) => void;
+  disabled: boolean;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick }) => (
-  <tr className="border-b bg-gray-800 border-gray-700 cursor-pointer hover:bg-gray-600" onClick={() => onClick(brawler)}>
+const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick, disabled }) => (
+  <tr 
+    className={`border-b bg-gray-800 border-gray-700 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-600'}`} 
+    onClick={() => !disabled && onClick(brawler)}
+  >
     <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
       <BrawlerIcon brawler={brawler.name}/>
     </th>
@@ -59,6 +63,7 @@ export default function BrawlerPicker() {
   const isMapSelected = selectedMap !== "";
 
   const handleClick = (brawler: BrawlerPickerProps) => {
+    if (!isMapSelected) return;
     const emptySlot = selectedBrawlers.findIndex(slot => slot === null);
     if (emptySlot !== -1) {
       selectBrawler(brawler, emptySlot);
@@ -68,10 +73,12 @@ export default function BrawlerPicker() {
   };
 
   const filterBrawlers = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isMapSelected) return;
     setFilter(e.target.value);
   };
 
   const handleSort = (key: string) => {
+    if (!isMapSelected) return;
     setSort(prevSort => ({
       key,
       direction: prevSort.key === key && prevSort.direction === 'desc' ? 'asc' : 'desc'
@@ -97,12 +104,13 @@ export default function BrawlerPicker() {
         type="text"
         placeholder="Filter brawlers..."
         onChange={filterBrawlers}
-        className="w-full p-2 mb-4 border rounded-xl"
+        className={`w-full p-2 mb-4 border rounded-xl ${!isMapSelected ? 'cursor-not-allowed opacity-50' : ''}`}
+        disabled={!isMapSelected}
       />
-      <div className="relative overflow-x-auto h-[500px] shadow-md rounded-xl bg-gray-800 custom-scrollbar">
+      <div className={`relative overflow-x-auto h-[500px] shadow-md rounded-xl bg-gray-800 custom-scrollbar ${!isMapSelected ? 'pointer-events-none' : ''}`}>
         <div className="min-w-[250px]">
           <table className="w-full text-sm text-left rtl:text-right text-gray-400">
-            <thead className="text-xs uppercase  bg-gray-700 text-gray-400">
+            <thead className="text-xs uppercase bg-gray-700 text-gray-400">
               <tr>
                 <TableHeader title="Brawler" sortable={false} currentSort={sort} onSort={handleSort} />
                 <TableHeader title="Score" sortable sortKey="score" currentSort={sort} onSort={handleSort} />
@@ -117,17 +125,19 @@ export default function BrawlerPicker() {
                   score={brawlerScores[brawler.name.toLowerCase()] ?? null}
                   pickrate={brawlerPickrates[brawler.name.toLowerCase()] ?? null}
                   onClick={handleClick}
+                  disabled={!isMapSelected}
                 />
               ))}
             </tbody>
           </table>
         </div>
-      </div>
-      {!isMapSelected && (
+        {!isMapSelected && (
         <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center rounded-xl">
           <span className="text-white font-bold text-2xl">Select Map</span>
         </div>
       )}
+      </div>
+      
     </div>
   );
 }
