@@ -1,6 +1,4 @@
-import torch
-from ai import *
-from torchsummary import summary
+from old_ai import *
 from joblib import load
 from db import Database
 
@@ -33,7 +31,7 @@ def check_brawler_significance(map = None):
     db = Database()
     brawler_data = prepare_brawler_data()
     for brawler in brawler_data.keys():
-        brawler_significance[brawler] = db.checkBrawlerWinrateForMap(brawler = brawler.upper(), map=map)
+        brawler_significance[brawler] = db.check_brawler_winrate_for_map(brawler = brawler.upper(), map_name=map)
 
     print("Brawler significance:")
     keys = list(brawler_significance.keys())

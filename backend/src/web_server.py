@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 import time
-import new_transformer_approach as ai
+import ai as ai
 
 app = FastAPI()
 

@@ -6,7 +6,7 @@ class DevBrawlAPI:
     def __init__(self):
         self.url = "https://api.brawlstars.com"
         self.token = "REDACTED"
-    def getPlayerBattlelog(self, playerTag):
+    def get_player_battlelog(self, playerTag):
         headers = {
             "Authorization": f"Bearer {self.token}"
         }

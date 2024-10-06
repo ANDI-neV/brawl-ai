@@ -22,3 +22,4 @@ instance/
 backend/src/best_transformer_model.pth
 /backend/src/config.ini
 /backend/src/filter.py
+/backend/src/out/models/

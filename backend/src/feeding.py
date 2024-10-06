@@ -63,9 +63,8 @@ class DevBrawlManager():
             return False
         return True'''
 
-    def get_player_stats(self, players):
+    def get_player_stats(self, player_tags):
         stats = []
-        player_tags = players
         batch_size = 40
         batches = []
         player_count = len(player_tags)
@@ -83,6 +82,28 @@ class DevBrawlManager():
         for thread in threads:
             stats += thread.result
         return stats
+
+    def get_battlelogs(self, player_tags):
+        logs = []
+        '''for playerTag in playerTags:
+            logs.append(api.getPlayerBattlelog(playerTag))'''
+        batch_size = 40
+        batches = []
+        player_count = len(player_tags)
+        for i in range(batch_size):
+            start = i * player_count // batch_size
+            end = (i + 1) * player_count // batch_size
+            batches.append(player_tags[start:end])
+
+        threads = [BattleLogsThread(batch, self.api) for batch in batches]
+        for thread in threads:
+            thread.start()
+            time.sleep(1 / batch_size)
+        for thread in threads:
+            thread.join()
+        for thread in threads:
+            logs += thread.result
+        return logs
 
     def check_battle_with_only_eligible_players(self, battle,
                                                 eligible_players):
@@ -196,6 +217,23 @@ class PlayerStatsThread(threading.Thread):
                 stats_value = self.api.get_player_stats(player)
                 if stats_value is not None:
                     self.result.append(stats_value)
+                    break
+                time.sleep(0.2)
+
+
+class BattleLogsThread(threading.Thread):
+    def __init__(self, batch: List[str], api: DevBrawlAPI):
+        super().__init__()
+        self.batch = batch
+        self.api = api
+        self.result = []
+
+    def run(self):
+        for player_tag in self.batch:
+            for _ in range(3):
+                logs_value = self.api.get_player_battlelog(player_tag)
+                if logs_value is not None:
+                    self.result.append(logs_value)
                     break
                 time.sleep(0.2)
 
