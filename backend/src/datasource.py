@@ -21,7 +21,7 @@ class DevBrawlAPI:
                 print(response.status_code)
             return None
         
-    def getPlayerStats(self, playerTag):
+    def get_player_stats(self, playerTag):
         headers = {
             "Authorization": f"Bearer {self.token}"
         }

@@ -71,9 +71,8 @@ def prepare_training_data() -> pd.DataFrame:
     """
     Loads training data from database in form of a pandas Dataframe.
 
-    Returns
-    -------
-    pd.Dataframe
+    Returns:
+        pd.Dataframe: Dataframe that contains training data.
     """
     config = configparser.ConfigParser()
     config.read('config.ini')
@@ -367,7 +366,7 @@ def get_brawler_index(brawler):
 
 
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
-                            nhead=4, num_layers=2, batch_size=64, epochs=50,
+                            nhead=4, num_layers=2, batch_size=64, epochs=250,
                             learning_rate=0.001):
     """
     Trains the BrawlStarsTransformer model on the provided training samples.
@@ -746,7 +745,7 @@ def train_model():
     here = os.path.dirname(os.path.abspath(__file__))
     training_samples = get_brawler_vectors(match_data,
                                            map_id_mapping=map_id_mapping,
-                                           limit=50000)
+                                           limit=30000)
 
     print("Map ID Mapping:")
     for map_name, map_id in map_id_mapping.items():

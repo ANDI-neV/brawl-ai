@@ -5,13 +5,6 @@ import time
 import os
 import configparser
 
-'''psycopg2.connect(
-    host=os.getenv("REDACTED"),
-    port=5432,
-    database="REDACTED",
-    user="REDACTED",
-    password="REDACTED"
-)'''
 
 class ConnectionPoolManager:
     _instance = None
