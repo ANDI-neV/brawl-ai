@@ -33,6 +33,7 @@ class DevBrawlManager():
             "R0GP8PQ98", "QLCJGQUP", "2PGGR8Y9P", "JQVQYVY",
             "9GJPJUQGJ", "8V92UYCJ", "9VJP20UYU", "LRLQPU09",
             "P2G8CUUPU", "LR08G9C8"]
+        self.min_timestamp = 1728043200  # 04.10.24, 12:00 GMT, Last Update
 
     def push_battle(self, battle: Tuple):
         self.db.insert_battle(battle)
@@ -44,8 +45,9 @@ class DevBrawlManager():
     def get_players_from_battlelog(battle: Dict[str, Any]):
         players = []
         for team in battle["battle"]["teams"]:
-            players.extend((player["tag"][1:], player["name"])
-                           for player in team)
+            for player in team:
+                if 17 <= player["brawler"]["trophies"] <= 18:
+                    players.append((player["tag"][1:], player["name"]))
         return players
 
     @staticmethod
@@ -56,12 +58,6 @@ class DevBrawlManager():
             if brawler["power"] >= 9:
                 count += 1
         return count >= 12
-
-    '''def check_ranked_eligibility(brawler):
-        trophies = brawler["trophies"]
-        if trophies < 18:
-            return False
-        return True'''
 
     def get_player_stats(self, player_tags):
         stats = []
@@ -105,7 +101,8 @@ class DevBrawlManager():
             logs += thread.result
         return logs
 
-    def check_battle_with_only_eligible_players(self, battle,
+    @staticmethod
+    def check_battle_with_only_eligible_players(battle,
                                                 eligible_players):
         try:
             for team in battle["battle"]["teams"]:
@@ -119,6 +116,11 @@ class DevBrawlManager():
             print(e)
             print(json.dumps(battle))
             return False
+
+    @staticmethod
+    def check_rank_requirement(battle):
+        return sum(brawler["trophies"] >= 16 for team
+                   in battle["battle"] for brawler in team) >= 5
 
     def cycle(self):
         batch_size = 1000
@@ -134,7 +136,8 @@ class DevBrawlManager():
         filtered_battles = []
 
         for battle in battles:  # Get all players from the battles
-            if battle["battle"].get("type") == "soloRanked":
+            if (battle["battle"].get("type") == "soloRanked"
+                    and battle["battleTime"] >= self.min_timestamp):
                 filtered_battles.append(battle)
                 new_players.extend(self.get_players_from_battlelog(battle))
 
@@ -153,9 +156,8 @@ class DevBrawlManager():
         print(f"Battles: {len(filtered_battles)}")
 
         real_battles = []
-        for battle in battles:
-            if self.check_battle_with_only_eligible_players(battle,
-                                                            eligible_players):
+        for battle in filtered_battles:
+            if self.check_rank_requirement(battle):
                 real_battles.append(battle)
 
         print(f"Real Battles: {len(real_battles)}")
@@ -242,8 +244,8 @@ if __name__ == "__main__":
     manager = DevBrawlManager()
     manager.db.reset()
     for player in manager.best_players:
-        player_api = manager.api.get_player_stats(player)
-        player = (player_api["tag"][1:], player_api["name"])
+        player_stats = manager.api.get_player_stats(player)
+        player = (player_stats["tag"][1:], player_stats["name"])
         manager.db.insert_player(player)
 
     manager.feed_db()

@@ -12,15 +12,10 @@ import configparser
 BRAWLERS_JSON_PATH = 'out/brawlers/brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
 BRAWLER_PICKRATES_JSON_PATH = 'out/brawlers/brawler_pickrates.json'
-picking_combinations1 = [['a1', 'b1'],
-                         ['a1', 'b1', 'b2'],
-                         ['a1', 'b1', 'b2', 'a2'],
-                         ['a1', 'b1', 'b2', 'a2', 'a3'],
-                         ['a1', 'b1', 'b2', 'a2', 'a3', 'b3']]
+picking_combinations1 = [['a1', 'b1', 'b2', 'a2'],
+                         ['a1', 'b1', 'b2', 'a2', 'a3']]
 picking_combinations2 = [['b1', 'a1'],
                          ['b1', 'a1', 'a2'],
-                         ['b1', 'a1', 'a2', 'b2'],
-                         ['b1', 'a1', 'a2', 'b2', 'b3'],
                          ['b1', 'a1', 'a2', 'b2', 'b3', 'a3']]
 all_players = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3']
 
@@ -745,7 +740,7 @@ def train_model():
     here = os.path.dirname(os.path.abspath(__file__))
     training_samples = get_brawler_vectors(match_data,
                                            map_id_mapping=map_id_mapping,
-                                           limit=30000)
+                                           limit=50000)
 
     print("Map ID Mapping:")
     for map_name, map_id in map_id_mapping.items():
@@ -755,7 +750,7 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/transformer_3.pth')
+    torch.save(model.state_dict(), 'out/models/transformer_4.pth')
 
 
 def load_model(n_brawlers, n_maps, model_path='out/models/transformer_2.pth',
@@ -845,4 +840,4 @@ def test():
 
 
 if __name__ == '__main__':
-    test()
+    train_model()
