@@ -259,6 +259,7 @@ def get_brawler_vectors(match_data: pd.DataFrame,
     """
 
     training_samples = []
+    invalid_samples = 0
 
     if limit is not None:
         match_data = match_data.head(limit)
@@ -275,13 +276,14 @@ def get_brawler_vectors(match_data: pd.DataFrame,
             full_sequence = get_match_vector(combination, match_dictionary)
             current_picks = full_sequence[:-1]
             next_pick = full_sequence[-1]
-            team_indicators = [1 if player[0] == 'a' else 2 for player
-                               in combination[:-1]]
-            positions = [i for i in range(len(current_picks))]
 
-            if not (0 <= next_pick < n_brawlers):
-                print(f"Invalid next_pick value: {next_pick}")
+            if any(pick < 1 or pick > PAD_TOKEN_INDEX for pick in
+                   current_picks) or next_pick < 1 or next_pick > PAD_TOKEN_INDEX:
+                invalid_samples += 1
                 continue
+
+            team_indicators = [1 if player[0] == 'a' else 2 for player in combination[:-1]]
+            positions = [i for i in range(len(current_picks))]
 
             training_samples.append({
                 'current_picks': current_picks,
@@ -291,8 +293,9 @@ def get_brawler_vectors(match_data: pd.DataFrame,
                 'map_id': map_id,
             })
 
+    print(f"Total training samples: {len(training_samples)}")
+    print(f"Invalid samples skipped: {invalid_samples}")
     return training_samples
-
 
 def get_brawler_dict(picks: List[str], first_pick: bool) -> Dict[str, str]:
     """
@@ -362,11 +365,15 @@ def predict_next_pick(model, current_picks, team_indicators, map_id):
 
 
 def get_brawler_index(brawler):
-    return brawler_data.get(str.lower(brawler))["index"]
+    index = brawler_data.get(str.lower(brawler), {}).get("index")
+    if index is None:
+        print(f"Warning: Brawler '{brawler}' not found in brawler_data")
+        return None
+    return index
 
 
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
-                            nhead=4, num_layers=2, batch_size=64, epochs=30,
+                            nhead=4, num_layers=2, batch_size=64, epochs=75,
                             learning_rate=0.001):
     """
     Trains the BrawlStarsTransformer model on the provided training samples.
@@ -395,7 +402,7 @@ def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
         (CPU or CUDA), and trains it using CrossEntropyLoss and Adam optimizer.
         It prints the loss for each epoch.
     """
-    model = BrawlStarsTransformer(n_brawlers, n_maps, d_model,
+    model = BrawlStarsTransformer(PAD_TOKEN_INDEX + 1, n_maps, d_model,
                                   nhead, num_layers)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
@@ -409,7 +416,8 @@ def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
         for i in range(0, len(training_samples), batch_size):
             batch = prepare_batch(training_samples[i:i + batch_size])
 
-            if torch.max(batch['target']) >= n_brawlers or torch.min(batch['target']) < 0:
+            # Adjust validation
+            if torch.max(batch['target']) > PAD_TOKEN_INDEX or torch.min(batch['target']) < 1:
                 print(
                     f"Invalid target values found. Min: {torch.min(batch['target'])}, Max: {torch.max(batch['target'])}")
                 continue
@@ -491,9 +499,7 @@ def prepare_batch(samples, max_seq_len=7):
         padding_length = max_seq_len - seq_len
         brawlers_padded = current_picks + [PAD_TOKEN_INDEX] * padding_length
         team_indicators_padded = team_indicators + [0] * padding_length
-        # 0 for padding
         positions_padded = positions + [0] * padding_length
-        # 0 for padding positions
 
         padding_mask = [False] * seq_len + [True] * padding_length
 
@@ -513,7 +519,6 @@ def prepare_batch(samples, max_seq_len=7):
         'target': torch.tensor(target_list, dtype=torch.long),
         'padding_mask': torch.tensor(padding_masks, dtype=torch.bool)
     }
-
 
 def create_map_id_mapping(match_data: pd.DataFrame) -> Dict[str, int]:
     """
@@ -760,10 +765,10 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/transformer_5.pth')
+    torch.save(model.state_dict(), 'out/models/transformer_6.pth')
 
 
-def load_model(n_brawlers, n_maps, model_path='out/models/transformer_5.pth',
+def load_model(n_brawlers, n_maps, model_path='out/models/transformer_6.pth',
                d_model=64, nhead=4, num_layers=2):
     """
     Loads a trained BrawlStarsTransformer model from a file.
@@ -788,7 +793,7 @@ def load_model(n_brawlers, n_maps, model_path='out/models/transformer_5.pth',
         given parameters, loads the state dict from the specified file, and
         moves the model to the available device.
     """
-    model = BrawlStarsTransformer(n_brawlers, n_maps, d_model, nhead,
+    model = BrawlStarsTransformer(n_brawlers_with_special_tokens, n_maps, d_model, nhead,
                                   num_layers)
     model.load_state_dict(torch.load(model_path, map_location='cpu'))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

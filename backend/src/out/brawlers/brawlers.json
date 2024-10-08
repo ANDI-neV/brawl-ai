@@ -986,9 +986,9 @@
     "movement speed": {
       "normal": 620.0,
       "sugar rush": 806.0,
+      "super": 2500.0,
       "bonnie; very fast": 820.0,
-      "crash test": 2000.0,
-      "super": 2500.0
+      "crash test": 2000.0
     },
     "range": {
       "normal": 9.0,
@@ -2448,7 +2448,7 @@
       "normal": 10.0
     },
     "super charge per hit": {
-      "normal": 5.12
+      "normal": 5.1
     },
     "attack spread": {
       "normal": 40.0
@@ -4136,7 +4136,7 @@
       "normal": 1.0
     },
     "super spread": {
-      "normal": 30.0
+      "normal": 15.0
     },
     "scrappy range": {
       "normal": 9.0
@@ -4333,14 +4333,16 @@
     "rarity": "Epic",
     "class": "Artillery",
     "movement speed": {
-      "normal": 770.0
+      "normal": 770.0,
+      "order: fall back": 3000.0
     },
     "range": {
       "normal": 7.33,
       "order: swap": 6.67
     },
     "reload": {
-      "normal": 2.2
+      "normal": 2.2,
+      "order: swap": 1.8
     },
     "super charge per hit": {
       "normal": 12.6
@@ -4359,10 +4361,15 @@
       "normal": 12.5
     },
     "lawrie movement speed": {
-      "normal": 770.0
+      "normal": 770.0,
+      "order: fall back": 3000.0
     },
     "lawrie range": {
       "normal": 5.0
+    },
+    "lawrie reload": {
+      "normal": 1.8,
+      "order: swap": 2.2
     },
     "level stats": {
       "health": {
@@ -4755,7 +4762,8 @@
     "class": "Marksman",
     "movement speed": {
       "normal": 720.0,
-      "hypercharge": 907.0
+      "hypercharge": 907.0,
+      "disengage!": 3000.0
     },
     "range": {
       "normal": 8.67
@@ -6385,8 +6393,8 @@
     "movement speed": {
       "normal": 720.0,
       "hypercharge": 907.0,
-      "robo retreat": 965.0,
-      "robo retreat and hypercharge": 1152.0
+      "robo retreat": 970.0,
+      "robo retreat and hypercharge": 1157.0
     },
     "range": {
       "normal": 9.67
@@ -7726,7 +7734,8 @@
       "very fast; driller": 900.0,
       "while drilling": 1100.0,
       "driller;  speeding ticket": 1100.0,
-      "while drilling;  speeding ticket": 1300.0
+      "while drilling;  speeding ticket": 1300.0,
+      "rat race": 2000.0
     },
     "range": {
       "normal": 5.0,
@@ -7743,9 +7752,9 @@
       "skipping stones": 12.0
     },
     "super charge per hit": {
-      "normal": 12.0,
+      "normal": 10.8,
       "driller": 7.0,
-      "dodgy digging": 18.0,
+      "dodgy digging": 16.2,
       "driller;  dodgy digging": 10.5
     },
     "projectile speed": {
