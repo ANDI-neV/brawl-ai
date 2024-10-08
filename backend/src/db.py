@@ -101,7 +101,6 @@ class Database:
         self.cur.execute(
             """
             SELECT * FROM players 
-            WHERE checked = 0 OR (checked = 1 AND canRanked = 1)
             ORDER BY RANDOM()
             LIMIT %s
             """,
@@ -161,13 +160,15 @@ class Database:
         return self.cur.fetchall()
 
     def insert_many_players(self, players: List[Tuple]):
-        # first filter out the players that already exist
+        # First, filter out the players that already exist
         tags = [player[0] for player in players]
         existing = self.get_if_many_players_exist(tags)
-        print(f"Currently {len(players)} players exist")
+        existing_tags = set(player[0] for player in existing)
+
+        print(f"Attempting to insert {len(players)} players")
         u_players = [
             player for player in players
-            if player[0] not in [x[0] for x in existing]
+            if player[0] not in existing_tags
         ]
         print(f"After filtering out existing players, {len(u_players)} players remain")
 
@@ -175,18 +176,33 @@ class Database:
             print("No new players to insert.")
             return
 
-        sql_players = [(player[0], player[1], 0, -1) for player in u_players]
-        args_str = ','.join(
-            self.cur.mogrify("(%s,%s,%s,%s)", x).decode('utf-8')
-            for x in sql_players
-        )
-        self.cur.execute(
-            "INSERT INTO players (tag, name, checked, canRanked) VALUES " + args_str
-        )
+        # Prepare the SQL query
+        insert_query = """
+        INSERT INTO players (tag, name, checked, canRanked)
+        VALUES (%s, %s, 0, -1)
+        ON CONFLICT (tag) DO UPDATE
+        SET name = EXCLUDED.name,
+            checked = 0,
+            canRanked = -1
+        """
+
+        # Execute the query for each player
+        for player in u_players:
+            try:
+                self.cur.execute(insert_query, (player[0], player[1]))
+            except Exception as e:
+                print(f"Error inserting player {player[0]}: {str(e)}")
+                continue
+
+        self.conn.commit()
+        print(f"Successfully inserted/updated {len(u_players)} players")
 
     def set_player_checked(self, tag: str):
         self.cur.execute("UPDATE players SET checked=1 WHERE tag=%s", (tag,))
         self.conn.commit()
+
+    def rollback(self):
+        self.conn.rollback()
 
     def set_many_players_checked(self, tags):
         self.cur.execute("UPDATE players SET checked=1 WHERE tag = ANY(%s)", [tags])
@@ -322,4 +338,4 @@ class ThreadedDBWorker:
 
 if __name__ == "__main__":
     db = Database()
-    db.print_all_battles()
+    print(db.get_battles_count())

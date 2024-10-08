@@ -255,6 +255,4 @@ def scrape_map_data():
 
 
 if __name__ == "__main__":
-    maps = scrape_map_data()
-    for map_title in maps:
-        print(map_title)
+    main()
