@@ -235,6 +235,26 @@ def cache_brawler_pickrates(brawler_list: list[Any]):
     with open(os.path.join(BRAWLERS_DIR, 'brawler_pickrates.json'), 'w') as f:
         json.dump(map_pickrates, f, indent=2)
 
+#/html/body/div[2]/div[2]/div[2]/div/div[2]/div[2]/a
+
+
+def scrape_map_data():
+    response = requests.get("https://brawlify.com/maps/")
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    map_elements = soup.select("div.grid-container")
+    print(map_elements)
+
+    map_data = []
+    for map_element in map_elements:
+        title = map_element.get('title')
+        if title:
+            map_data.append(title)
+
+    return map_data
+
 
 if __name__ == "__main__":
-    main()
+    maps = scrape_map_data()
+    for map_title in maps:
+        print(map_title)

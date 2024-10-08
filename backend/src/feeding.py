@@ -3,7 +3,7 @@ from db import Database
 import json
 import time
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 import threading
 from typing import Tuple, List, Dict, Any
 
@@ -26,27 +26,43 @@ class DevBrawlManager():
         self.api = DevBrawlAPI()
         self.db = Database()
         random.seed(datetime.now().timestamp())
-        self.first_player = "2QYUPPUG8"
+        self.first_player = "GGCOLO2R"
         self.best_players = [
-            "PR9U2JL", "VL0GPPJV", "2PLVJ0GLV", "8VJ8GJR2",
-            "JGCCGY80", "PYPQUG80", "2ULUP8VG9", "22C0GV9CR",
-            "R0GP8PQ98", "QLCJGQUP", "2PGGR8Y9P", "JQVQYVY",
-            "9GJPJUQGJ", "8V92UYCJ", "9VJP20UYU", "LRLQPU09",
-            "P2G8CUUPU", "LR08G9C8"]
-        self.min_timestamp = 1728043200  # 04.10.24, 12:00 GMT, Last Update
+            "P2G8CUUPU", "LR08G9C8", "GGCOLO2R", "GJPVYUQG",
+            "GY80VJP", "PORORCPPQ", "9YPOCYOV", "P2C2J2PGU",
+            "202GJJR28", "2OP2GP99", "2UP82YLQ", "PGPUROYG",
+            "2OLCGGQVQ", "J99YU9QY", "2RUYYLYVC", "89UGG92L2",
+            "PLLRJC2V", "RO29LYYQ", "9GUVOPJ8Y", "9QJGLJJ8",
+            "80VJGCLOP", "2CQJG29JL", "Y9C88V9PC", "PGPUROYG",
+            "2R9U2C2JP", "9CR2GJGJR", "JYCCCUQC", "9P2CUYJ8P",
+            "LLQ8GY8", "J8YPGR", "99YLOPV9V", "LRPUV8J92",
+            "8YUVLQQLG", "92VCJYRRC", "8GLUVYQPC",
+            "8U92UJGLL", "YOCOPGOPR", "808VYPP", "9C98P9UG2",
+            "JUYYJGO", "288LL2VY9",
+            "9OVQGVL9G", "82YCOCYC", "QGOGOYPO", "ZULVL8YR9",
+            "V998RULC", "YYJQUVR2", "PUG2V98UP", "GJJQPYC9",
+            "8YVCLOPPY", "98VOQCOQJ", "GRQLGPU", "P9928Y8U2"
+        ]
+        self.new_best_players = [
+
+            ]
+        self.min_timestamp = datetime.fromtimestamp(1728043200,
+                                                    tz=timezone.utc)
+        # 04.10.24, 12:00 GMT, Last Update
 
     def push_battle(self, battle: Tuple):
         self.db.insert_battle(battle)
 
     def get_unchecked_player(self, count: int = 1):
-        return self.db.get_unchecked_player(count)
+        # Modify this to include more players, not just unchecked ones
+        return self.db.get_players_for_expansion(count)
 
     @staticmethod
     def get_players_from_battlelog(battle: Dict[str, Any]):
         players = []
         for team in battle["battle"]["teams"]:
             for player in team:
-                if 17 <= player["brawler"]["trophies"] <= 18:
+                if 14 <= player["brawler"]["trophies"] <= 19:
                     players.append((player["tag"][1:], player["name"]))
         return players
 
@@ -79,6 +95,12 @@ class DevBrawlManager():
             stats += thread.result
         return stats
 
+    @staticmethod
+    def parse_iso_timestamp(timestamp_str):
+        return (datetime.strptime(timestamp_str,
+                                 "%Y%m%dT%H%M%S.%fZ")
+                .replace(tzinfo=timezone.utc))
+
     def get_battlelogs(self, player_tags):
         logs = []
         '''for playerTag in playerTags:
@@ -101,6 +123,14 @@ class DevBrawlManager():
             logs += thread.result
         return logs
 
+    def get_full_battlelogs(self, player_tags):
+        logs = []
+        for player_tag in player_tags:
+            player_logs = self.api.get_player_battlelog(player_tag)
+            if player_logs:
+                logs.append((player_tag, player_logs))
+        return logs
+
     @staticmethod
     def check_battle_with_only_eligible_players(battle,
                                                 eligible_players):
@@ -119,8 +149,8 @@ class DevBrawlManager():
 
     @staticmethod
     def check_rank_requirement(battle):
-        return sum(brawler["trophies"] >= 16 for team
-                   in battle["battle"] for brawler in team) >= 5
+        return sum(int(player["brawler"]["trophies"]) >= 15 for team
+                   in battle["battle"]["teams"] for player in team) >= 2
 
     def cycle(self):
         batch_size = 1000
@@ -128,16 +158,15 @@ class DevBrawlManager():
         player_tags = [player[0] for player in players_list]
 
         start_time = time.time()
-        battle_logs = self.get_player_stats(player_tags)
+        battle_logs = self.get_battlelogs(player_tags)
         print(f"Battlelogs took: {time.time() - start_time:.2f} seconds")
-
         battles = [battle for log in battle_logs for battle in log["items"]]
         new_players = []
         filtered_battles = []
 
         for battle in battles:  # Get all players from the battles
-            if (battle["battle"].get("type") == "soloRanked"
-                    and battle["battleTime"] >= self.min_timestamp):
+            if (battle["battle"].get("type") == "soloRanked" and
+                    self.parse_iso_timestamp(battle["battleTime"]) >= self.min_timestamp):
                 filtered_battles.append(battle)
                 new_players.extend(self.get_players_from_battlelog(battle))
 
@@ -242,10 +271,10 @@ class BattleLogsThread(threading.Thread):
 
 if __name__ == "__main__":
     manager = DevBrawlManager()
-    manager.db.reset()
-    for player in manager.best_players:
+    for player in manager.new_best_players:
         player_stats = manager.api.get_player_stats(player)
-        player = (player_stats["tag"][1:], player_stats["name"])
-        manager.db.insert_player(player)
+        if player_stats:
+            player = (player_stats["tag"][1:], player_stats["name"])
+            manager.db.insert_player(player)
 
     manager.feed_db()

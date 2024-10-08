@@ -143,6 +143,7 @@ class BrawlStarsTransformer(nn.Module):
                                                          num_layers=num_layers)
 
         self.output_layer = nn.Linear(d_model, n_brawlers)
+        print(f"Output layer size: {n_brawlers}")
 
     def forward(self, brawlers, team_indicators, positions, map_id,
                 src_key_padding_mask=None):
@@ -278,6 +279,10 @@ def get_brawler_vectors(match_data: pd.DataFrame,
                                in combination[:-1]]
             positions = [i for i in range(len(current_picks))]
 
+            if not (0 <= next_pick < n_brawlers):
+                print(f"Invalid next_pick value: {next_pick}")
+                continue
+
             training_samples.append({
                 'current_picks': current_picks,
                 'team_indicators': team_indicators,
@@ -361,7 +366,7 @@ def get_brawler_index(brawler):
 
 
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
-                            nhead=4, num_layers=2, batch_size=64, epochs=250,
+                            nhead=4, num_layers=2, batch_size=64, epochs=30,
                             learning_rate=0.001):
     """
     Trains the BrawlStarsTransformer model on the provided training samples.
@@ -403,6 +408,11 @@ def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
         total_loss = 0
         for i in range(0, len(training_samples), batch_size):
             batch = prepare_batch(training_samples[i:i + batch_size])
+
+            if torch.max(batch['target']) >= n_brawlers or torch.min(batch['target']) < 0:
+                print(
+                    f"Invalid target values found. Min: {torch.min(batch['target'])}, Max: {torch.max(batch['target'])}")
+                continue
 
             brawlers = batch['brawlers'].to(device)
             team_indicators = batch['team_indicators'].to(device)
@@ -740,7 +750,7 @@ def train_model():
     here = os.path.dirname(os.path.abspath(__file__))
     training_samples = get_brawler_vectors(match_data,
                                            map_id_mapping=map_id_mapping,
-                                           limit=50000)
+                                           limit=None)
 
     print("Map ID Mapping:")
     for map_name, map_id in map_id_mapping.items():
@@ -750,10 +760,10 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/transformer_4.pth')
+    torch.save(model.state_dict(), 'out/models/transformer_5.pth')
 
 
-def load_model(n_brawlers, n_maps, model_path='out/models/transformer_2.pth',
+def load_model(n_brawlers, n_maps, model_path='out/models/transformer_5.pth',
                d_model=64, nhead=4, num_layers=2):
     """
     Loads a trained BrawlStarsTransformer model from a file.

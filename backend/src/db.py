@@ -63,6 +63,18 @@ class Database:
     def commit(self):
         self.conn.commit()
 
+    def delete_all_battles(self):
+        self.cur.execute(
+            "TRUNCATE TABLE battles"
+        )
+        db.commit()
+
+    def delete_all_players(self):
+        self.cur.execute(
+            "TRUNCATE TABLE players"
+        )
+        db.commit()
+
     def get_unchecked_player(self, count: int = 1) -> List[Tuple]:
         self.cur.execute(
             "SELECT * FROM players WHERE checked = 0 AND canRanked=-1 LIMIT %s",
@@ -85,6 +97,30 @@ class Database:
         self.cur.execute("SELECT COUNT(*) FROM players")
         return self.cur.fetchone()[0]
 
+    def get_players_for_expansion(self, count: int = 1000) -> List[Tuple]:
+        self.cur.execute(
+            """
+            SELECT * FROM players 
+            WHERE checked = 0 OR (checked = 1 AND canRanked = 1)
+            ORDER BY RANDOM()
+            LIMIT %s
+            """,
+            (count,)
+        )
+        return self.cur.fetchall()
+
+    def update_player_checked_status(self, tag: str):
+        self.cur.execute(
+            """
+            UPDATE players 
+            SET checked = 1, 
+                last_checked = CURRENT_TIMESTAMP
+            WHERE tag = %s
+            """,
+            (tag,)
+        )
+        self.conn.commit()
+
     def get_checked_players_percentage(self) -> float:
         self.cur.execute("SELECT COUNT(*) FROM players WHERE checked=1")
         checked = self.cur.fetchone()[0]
@@ -103,6 +139,7 @@ class Database:
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
             battle
         )
+        self.commit()
 
     def insert_player(self, player: Tuple):
         tag, name = player
@@ -113,6 +150,11 @@ class Database:
             "INSERT INTO players (tag, name, checked, canRanked) VALUES (%s, %s, %s, %s)",
             (tag, name, 0, -1)
         )
+        self.commit()
+
+    def print_all_battles(self):
+        self.cur.execute("SELECT * FROM battles")
+        print(self.cur.fetchall())
 
     def get_if_many_players_exist(self, tags: List[str]) -> List[Tuple]:
         self.cur.execute("SELECT tag FROM players WHERE tag = ANY(%s)", [tags])
@@ -128,6 +170,11 @@ class Database:
             if player[0] not in [x[0] for x in existing]
         ]
         print(f"After filtering out existing players, {len(u_players)} players remain")
+
+        if not u_players:
+            print("No new players to insert.")
+            return
+
         sql_players = [(player[0], player[1], 0, -1) for player in u_players]
         args_str = ','.join(
             self.cur.mogrify("(%s,%s,%s,%s)", x).decode('utf-8')
@@ -272,3 +319,7 @@ class ThreadedDBWorker:
 
     def __del__(self):
         ConnectionPoolManager.instance().putconn(self.conn)
+
+if __name__ == "__main__":
+    db = Database()
+    db.print_all_battles()
