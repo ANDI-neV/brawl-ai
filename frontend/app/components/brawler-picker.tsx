@@ -67,6 +67,7 @@ export default function BrawlerPicker() {
     const emptySlot = selectedBrawlers.findIndex(slot => slot === null);
     if (emptySlot !== -1) {
       selectBrawler(brawler, emptySlot);
+      setFilter("");
     } else {
       alert("All slots are filled. Clear a slot before selecting a new brawler.");
     }
@@ -103,6 +104,7 @@ export default function BrawlerPicker() {
       <input
         type="text"
         placeholder="Filter brawlers..."
+        value={filter}
         onChange={filterBrawlers}
         className={`w-full p-2 mb-4 border rounded-xl ${!isMapSelected ? 'cursor-not-allowed opacity-50' : ''}`}
         disabled={!isMapSelected}
