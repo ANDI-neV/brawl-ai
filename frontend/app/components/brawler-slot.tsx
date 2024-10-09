@@ -46,10 +46,11 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
   };
 
   const lighterBgColor = lightenColor(bgColor, 0.3); // 30% lighter
+  const lighterBgColor2 = lightenColor(bgColor, 0.15); // 15% lighter
 
   if (!selectedBrawler) {
     return (
-      <div 
+      <motion.div 
         className={`h-[125px] w-[125px] border-8 p-3 rounded-xl shadow-md ${
           isFirstClearSlot ? '' : 'border-transparent'
         }`}
@@ -57,13 +58,21 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
           backgroundColor: bgColor,
           borderColor: isFirstClearSlot ? lighterBgColor : 'transparent',
         }}
+        animate={ isFirstClearSlot ? { scale: [1, 1.05, 1], backgroundColor: [lighterBgColor2, bgColor, lighterBgColor2] } : {}}
+        transition={isFirstClearSlot ? {
+          duration: 2,
+          times: [0, 0.5, 1],
+          repeat: Infinity,
+          ease: "easeInOut",
+        } : {}}
+
       >
         {isFirstClearSlot && (
           <div className="h-full flex items-center justify-center text-white font-bold">
             Next Pick
           </div>
         )}
-      </div>
+      </motion.div>
     );
   }
 
@@ -71,7 +80,7 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
 
   return (
     <motion.button 
-      className="relative h-[125px] w-[125px] border-8 rounded-xl overflow-hidden shadow-md"
+      className="relative h-[125px] w-[125px] border-8 rounded-2xl overflow-hidden shadow-md"
       style={{ backgroundColor: bgColor, borderColor: lighterBgColor }}
       onClick={handleClearSlot}
       whileHover={{ scale: 1.1, zIndex: 10 }}

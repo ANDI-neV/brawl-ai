@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import BrawlerIcon from "./brawler-icon";
 import { useBrawler } from './brawler-context';
+import { motion } from 'framer-motion';
 
 interface BrawlerPickerProps {
   name: string;
@@ -16,16 +17,22 @@ interface TableHeaderProps {
 
 const TableHeader: React.FC<TableHeaderProps> = ({ title, sortable = false, sortKey, currentSort, onSort }) => (
   <th scope="col" className="px-6 py-3">
-    <div className="flex items-center">
+    <motion.button  onClick={() => sortable && onSort(sortKey)} className="flex items-center"
+      whileHover={{ scale: 1.1, zIndex: 10 }}
+      whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}>
       {title}
       {sortable && sortKey && (
-        <button onClick={() => onSort(sortKey)} className="ml-1.5">
-          {currentSort.key === sortKey && (
+        <div className="ml-1.5">
+          {currentSort.key != sortKey && (
             <span className="ml-1">{currentSort.direction === 'asc' ? '↑' : '↓'}</span>
           )}
-        </button>
+          {currentSort.key === sortKey && (
+            <span className="ml-1 text-white">{currentSort.direction === 'asc' ? '↑' : '↓'}</span>
+          )}
+          
+        </div>
       )}
-    </div>
+    </motion.button>
   </th>
 );
 
@@ -90,10 +97,15 @@ export default function BrawlerPicker() {
     return localAvailableBrawlers
       .filter(brawler => brawler.name.toLowerCase().includes(filter.toLowerCase()))
       .sort((a, b) => {
-        const scoreA = brawlerScores[a.name.toLowerCase()] ?? -Infinity;
-        const scoreB = brawlerScores[b.name.toLowerCase()] ?? -Infinity;
         if (sort.key === 'score') {
+          const scoreA = brawlerScores[a.name.toLowerCase()] ?? -Infinity;
+          const scoreB = brawlerScores[b.name.toLowerCase()] ?? -Infinity;
           return sort.direction === 'desc' ? scoreB - scoreA : scoreA - scoreB;
+        }
+        if (sort.key === 'pickRate') {
+          const pickRateA = brawlerPickrates[a.name.toLowerCase()] ?? -Infinity;
+          const pickRateB = brawlerPickrates[b.name.toLowerCase()] ?? -Infinity;
+          return sort.direction === 'desc' ? pickRateB - pickRateA : pickRateA - pickRateB;
         }
         return 0;
       });

@@ -105,6 +105,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       setError(null);
       predictBrawlers(map, brawlers, firstPick)
         .then(probabilities => {
+          console.log("Received probabilities: ", probabilities);
           setBrawlerScores(probabilities);
           setIsPredicting(false);
         })

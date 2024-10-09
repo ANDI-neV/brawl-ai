@@ -30,6 +30,9 @@ export const predictBrawlers = async (map: string, brawlers: string[], firstPick
       await delay(500);
       return predictBrawlers(map, brawlers, firstPick, retries - 1);
     }
+    if (axios.isAxiosError(error) && error.response?.status === 500) {
+      return {};
+    }
     throw error;
   }
 };
