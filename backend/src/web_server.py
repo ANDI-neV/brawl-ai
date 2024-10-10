@@ -1,9 +1,14 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import List
+import json
 import time
 import ai as ai
+from pathlib import Path
+import scraper
+
 
 app = FastAPI()
 
@@ -92,6 +97,29 @@ async def predict_brawlers(request: PredictionRequest):
         print(f"Error during prediction: {e}")
         raise HTTPException(status_code=500, detail="Prediction failed")
 
+
+BRAWLER_MAPPING_FILE = Path("./out/brawlers/brawler_supercell_id_mapping.json")
+
+def load_brawler_mapping():
+    try:
+        with open(BRAWLER_MAPPING_FILE, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+
+@app.get("/brawler-mapping")
+async def get_brawler_mapping():
+    mapping = load_brawler_mapping()
+    if not mapping:
+        raise HTTPException(status_code=404, detail="Brawler mapping not found")
+    return JSONResponse(content=mapping)
+
+
+@app.post("/update-brawler-mapping")
+async def update_brawler_mapping():
+    scraper.brawler_to_supercell_id_mapping()
+    return {"message": "Brawler mapping updated successfully"}
 
 if __name__ == "__main__":
     import uvicorn

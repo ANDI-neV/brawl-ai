@@ -36,3 +36,17 @@ class DevBrawlAPI:
             if response.status_code != 429 or response.status_code != 404:
                 print(response.status_code)
             return None
+
+    def get_brawler_information(self):
+        headers = {
+            "Authorization": f"Bearer {self.token}"
+        }
+        response = requests.get(f"{self.url}/v1/brawlers", headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            return data
+        else:
+            # parse the ClientError Model
+            if response.status_code != 429 or response.status_code != 404:
+                print(response.status_code)
+            return None

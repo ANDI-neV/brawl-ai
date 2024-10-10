@@ -5,6 +5,7 @@ import os
 import re
 from typing import Any
 from db import Database
+from datasource import DevBrawlAPI
 
 BASE_URL = "https://brawlstars.fandom.com"
 BRAWLERS_CATEGORY_URL = f"{BASE_URL}/wiki/Category:Brawlers"
@@ -54,6 +55,25 @@ def convert_percent_to_float(value):
 
 def extract_text_with_br(element):
     return ' BREAK '.join(element.stripped_strings)
+
+
+def add_supercell_brawler_indices(brawler_dict):
+    api = DevBrawlAPI()
+    data = api.get_brawler_information()
+    for brawler in data:
+        brawler_dict[brawler["name"]]["supercell_id"] = brawler["id"]
+
+
+def brawler_to_supercell_id_mapping():
+    api = DevBrawlAPI()
+    data = api.get_brawler_information()
+    print(data)
+    brawler_id_dict = {}
+    for brawler in data['items']:
+        brawler_id_dict[str.lower(brawler['name'])] = int(brawler['id'])
+
+    with open(os.path.join(BRAWLERS_DIR, 'brawler_supercell_id_mapping.json'), 'w') as f:
+        json.dump(brawler_id_dict, f, indent=2)
 
 
 def get_brawler_data(brawler_name, brawler_url, index):
@@ -242,17 +262,53 @@ def scrape_map_data():
     response = requests.get("https://brawlify.com/maps/")
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    map_elements = soup.select("div.grid-container")
-    print(map_elements)
-
     map_data = []
-    for map_element in map_elements:
-        title = map_element.get('title')
-        if title:
-            map_data.append(title)
+
+    # Find all game mode sections
+    game_mode_sections = soup.find_all('div', class_='row mb-4 align-items-center justify-content-center')
+
+    for section in game_mode_sections:
+        # Extract game mode
+        game_mode_element = section.find('h2', class_='h3 recomm-mode-text pt-2')
+        if game_mode_element:
+            game_mode = game_mode_element.text.split('(')[0].strip()
+
+            # Find all maps for this game mode
+            map_elements = section.find_all('div', class_='map-def')
+
+            for map_element in map_elements:
+                map_name = map_element.find('span', class_='badge map-name').text
+                map_image = map_element.find('img')['src']
+
+                map_data.append({
+                    'game_mode': game_mode,
+                    'map_name': map_name,
+                    'map_image': map_image
+                })
 
     return map_data
 
 
+def save_map_data():
+    scraped_data = scrape_map_data()
+    map_data = {}
+    for item in scraped_data:
+        map_data[item['map_name']] = {}
+        map_data[item['map_name']]['img_url'] = item['map_image']
+        map_data[item['map_name']]['game_mode'] = item['game_mode']
+
+    with open(os.path.join(BRAWLERS_DIR, 'map_data.json'), 'w') as f:
+        json.dump(map_data, f, indent=2)
+
+
+def test_map_data():
+    scraped_data = scrape_map_data()
+    for item in scraped_data:
+        print(f"Game Mode: {item['game_mode']}")
+        print(f"Map Name: {item['map_name']}")
+        print(f"Map Image URL: {item['map_image']}")
+        print("---")
+
+
 if __name__ == "__main__":
-    main()
+    brawler_to_supercell_id_mapping()
