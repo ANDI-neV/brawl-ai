@@ -1,3 +1,4 @@
+import React from 'react';
 import BrawlerSlot from "./brawler-slot";
 
 interface TeamDisplayProps {
@@ -8,9 +9,9 @@ interface TeamDisplayProps {
 export default function TeamDisplay({ team, bgColor }: TeamDisplayProps) {
   const indices = team === 'left' ? [0, 1, 2] : [3, 4, 5];
   return (
-    <div className="flex flex-col items-center p-4 gap-3">
+    <div className="flex flex-row items-center justify-center gap-3">
       {indices.map((index) => (
-        <BrawlerSlot index={index} bgColor={bgColor}/>
+        <BrawlerSlot key={index} index={index} team={team} bgColor={bgColor}/>
       ))}
     </div>
   );

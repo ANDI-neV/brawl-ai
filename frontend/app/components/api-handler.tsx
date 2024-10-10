@@ -6,8 +6,8 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export interface MapInterface {
   maps: { [key: string]: {
-    mode: string;
-    image_url: string;
+    game_mode: string;
+    img_url: string;
   } };
 }
 

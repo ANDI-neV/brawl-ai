@@ -6,6 +6,11 @@ interface BrawlerPickerProps {
   name: string;
 }
 
+interface MapData {
+  game_mode: string;
+  img_url: string;
+}
+
 interface BrawlerContextType {
   selectedBrawlers: (BrawlerPickerProps | null)[];
   availableBrawlers: BrawlerPickerProps[];
@@ -19,6 +24,7 @@ interface BrawlerContextType {
   maps: MapInterface | null;
   brawlerMapping: Mapping;
   loadingMapping: boolean;
+  selectedMapData: MapData;
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -45,7 +51,8 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [brawlerScores, setBrawlerScores] = useState<{ [key: string]: number }>({});
   const [brawlerPickrates, setBrawlerPickrates] = useState<{ [key: string]: number}>({});
-  const [maps, setMaps] = useState<MapInterface | null>(null);
+  const [maps, setMaps] = useState<MapInterface>({ maps: {} });
+  const [selectedMapData, setSelectedMapData] = useState<MapData>({game_mode: '', img_url: ''});
   const [brawlerMapping, setBrawlerMapping] = useState<Mapping>({});
   const [loadingMapping, setLoadingMapping] = useState(true);
 
@@ -151,6 +158,8 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const mapSelectionSetup = useCallback((map: string) => {
     console.log('Map selected:', map);
     setSelectedMap(map);
+
+    setSelectedMapData(maps?.maps[map]);
     if (!pickratesFetchedRef.current) {
       retrieveBrawlerPickrates(map);
     }
@@ -199,6 +208,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       maps,
       brawlerMapping,
       loadingMapping,
+      selectedMapData,
       setFirstPick,
       setSelectedMap,
       selectBrawler,

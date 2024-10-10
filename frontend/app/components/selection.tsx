@@ -5,9 +5,10 @@ import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@ne
 import type { Selection } from "@nextui-org/react";
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 function Menu() {
-  const { selectedMap, availableMaps, mapSelectionSetup } = useBrawler();
+  const { selectedMap, availableMaps, maps, mapSelectionSetup } = useBrawler();
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set(selectedMap ? [selectedMap] : []));
 
   const handleSelectionChange = (keys: Selection) => {
@@ -15,6 +16,10 @@ function Menu() {
     const selected = Array.from(keys)[0] as string;
     mapSelectionSetup(selected);
   };
+  if (!maps) {
+    return <div>Loading...</div>;
+  };
+  console.log("maps: ", maps);
 
   return (
     <div className="w-64 relative">
@@ -42,7 +47,22 @@ function Menu() {
         >
           {availableMaps.map((map) => (
             <DropdownItem key={map} className="text-white hover:bg-gray-700 px-2 py-2 rounded-xl gap-x-2">
-              {map}
+              <div className="flex items-center gap-2">
+                {maps.maps[map]?.game_mode ? (
+                  <Image
+                    src={`/game_modes/${maps.maps[map].game_mode}.png`}
+                    alt={map}
+                    width={30}
+                    height={30}
+                    onError={(e) => {
+                      e.currentTarget.src = '/brawlstar.png'; 
+                    }}
+                  />
+                ) : (
+                  <div className="w-[30px] h-[30px] bg-gray-600 rounded-full"></div>
+                )}
+                <span>{map}</span>
+              </div>
             </DropdownItem>
           ))}
         </DropdownMenu>

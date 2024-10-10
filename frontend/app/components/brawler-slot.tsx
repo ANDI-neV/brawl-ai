@@ -7,6 +7,7 @@ import { getMapping, Mapping } from './api-handler';
 interface BrawlerSlotProps {
   index: number;
   bgColor: string;
+  team: string;
 }
 
 const first_pick_sequence = [0, 3, 4, 1, 2, 5];
@@ -30,7 +31,7 @@ function lightenColor(color: string, amount: number) {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
 
-export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
+export default function BrawlerSlot({ index, bgColor, team }: BrawlerSlotProps) {
   const { selectedBrawlers, firstPick, selectedMap, loadingMapping, error, brawlerMapping, clearSlot, updatePredictions} = useBrawler();
   const sequence = firstPick ? first_pick_sequence : not_first_pick_sequence;
   const slotIndex = sequence.indexOf(index);
@@ -54,9 +55,9 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
   if (!selectedBrawler) {
     return (
       <motion.div 
-        className={`h-[125px] w-[125px] border-8 p-3 rounded-xl shadow-md ${
+        className={`h-[100px] w-[100px] border-8 p-3 rounded-xl ${
           isFirstClearSlot ? '' : 'border-transparent'
-        }`}
+        } ${team === 'left' ? 'shadow-up-xl' : 'shadow-xl'}`}
         style={{
           backgroundColor: bgColor,
           borderColor: isFirstClearSlot ? lighterBgColor : 'transparent',
@@ -71,7 +72,7 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
 
       >
         {isFirstClearSlot && (
-          <div className="h-full flex items-center justify-center text-white font-bold">
+          <div className="h-full flex items-center justify-center text-white text-center font-bold">
             Next Pick
           </div>
         )}
@@ -86,7 +87,7 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
 
   return (
     <motion.button 
-      className="relative h-[125px] w-[125px] border-8 rounded-2xl overflow-hidden shadow-md"
+      className={`relative h-[100px] w-[100px] border-8 rounded-2xl overflow-hidden ${team === 'left' ? 'shadow-up-xl' : 'shadow-xl'}`}
       style={{ backgroundColor: bgColor, borderColor: lighterBgColor }}
       onClick={handleClearSlot}
       whileHover={{ scale: 1.1, zIndex: 10 }}
