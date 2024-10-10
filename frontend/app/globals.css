@@ -7,15 +7,17 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 16px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #2D3748; /* Matches bg-gray-800 */
+  background: #2D3748;
+  border-radius: 0 8px 8px 0;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #4A5568; /* Slightly lighter than the background */
-  border-radius: 4px;
+  background-color: #fde047;
+  border-radius: 8px;
+  border: 2px solid #2D3748;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #718096; /* Even lighter on hover */
+  background-color: #fef08a;
 }

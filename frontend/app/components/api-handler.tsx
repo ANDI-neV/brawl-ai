@@ -4,9 +4,21 @@ const API_URL = 'http://localhost:7001';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const fetchMaps = async (): Promise<string[]> => {
-  const response = await axios.get(`${API_URL}/maps`);
-  return response.data.maps;
+export interface MapInterface {
+  maps: { [key: string]: {
+    mode: string;
+    image_url: string;
+  } };
+}
+
+export const fetchMaps = async (): Promise<MapInterface> => {
+  try {
+    const response = await axios.get(`${API_URL}/maps`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching maps:", error);
+    throw error;
+  }
 };
 
 export const fetchBrawlers = async (): Promise<string[]> => {
@@ -50,6 +62,25 @@ export const getPickrate = async (map: string, retries = 3): Promise<{ [key: str
       console.log(`Rate limited, retrying in 0.5 seconds... (${retries} retries left)`);
       await delay(500);
       return getPickrate(map, retries - 1);
+    }
+    throw error;
+  }
+}
+
+export interface Mapping {
+  [key: string]: number;
+}
+
+
+export const getMapping = async (retries = 3): Promise<Mapping> => {
+  try {
+    const response = await axios.get(`${API_URL}/brawler-mapping`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 429 && retries > 0 ) {
+      console.log(`Rate limited, retrying in 0.5 seconds... (${retries} retries left)`);
+      await delay(500);
+      return getMapping(retries - 1);
     }
     throw error;
   }

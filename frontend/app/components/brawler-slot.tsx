@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from "next/image";
 import { useBrawler } from './brawler-context';
+import { getMapping, Mapping } from './api-handler';
 
 interface BrawlerSlotProps {
   index: number;
@@ -30,13 +31,15 @@ function lightenColor(color: string, amount: number) {
 }
 
 export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
-  const { selectedBrawlers, firstPick, selectedMap, clearSlot, updatePredictions} = useBrawler();
+  const { selectedBrawlers, firstPick, selectedMap, loadingMapping, error, brawlerMapping, clearSlot, updatePredictions} = useBrawler();
   const sequence = firstPick ? first_pick_sequence : not_first_pick_sequence;
   const slotIndex = sequence.indexOf(index);
   const selectedBrawler = selectedBrawlers[slotIndex];
   
   const firstClearSlotIndex = getFirstClearSlot(selectedBrawlers);
   const isFirstClearSlot = slotIndex === firstClearSlotIndex;
+
+  if (loadingMapping) return <div>Loading...</div>;
 
   const handleClearSlot = () => {
     if (selectedBrawler) {
@@ -76,7 +79,10 @@ export default function BrawlerSlot({ index, bgColor }: BrawlerSlotProps) {
     );
   }
 
-  const brawler_image_url = `/brawler_images/${selectedBrawler.name}.png`;
+  const brawlerId = Object.entries(brawlerMapping).find(([name, id]) => name === selectedBrawler.name)?.[1];
+  const brawler_image_url = brawlerId 
+    ? `https://cdn.brawlify.com/brawlers/borderless/${brawlerId}.png`
+    : '/brawlstar.png';
 
   return (
     <motion.button 

@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, useCallback, useRef } from 'react';
 import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
-import { fetchMaps, fetchBrawlers, predictBrawlers, getPickrate } from './api-handler';
+import { fetchMaps, fetchBrawlers, predictBrawlers, getPickrate, MapInterface, Mapping, getMapping } from './api-handler';
 
 interface BrawlerPickerProps {
   name: string;
@@ -16,6 +16,9 @@ interface BrawlerContextType {
   error: string | null;
   brawlerScores: { [key: string]: number };
   brawlerPickrates: { [key: string]: number};
+  maps: MapInterface | null;
+  brawlerMapping: Mapping;
+  loadingMapping: boolean;
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -42,14 +45,39 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [brawlerScores, setBrawlerScores] = useState<{ [key: string]: number }>({});
   const [brawlerPickrates, setBrawlerPickrates] = useState<{ [key: string]: number}>({});
+  const [maps, setMaps] = useState<MapInterface | null>(null);
+  const [brawlerMapping, setBrawlerMapping] = useState<Mapping>({});
+  const [loadingMapping, setLoadingMapping] = useState(true);
 
   useEffect(() => {
-    fetchMaps().then(setAvailableMaps).catch(err => {
+    const getMaps = async () => {
+    try {
+      const fetchedMaps = await fetchMaps();
+      setMaps(fetchedMaps);
+      setAvailableMaps(Object.keys(fetchedMaps.maps));
+    }
+    catch( err ) {
       console.error("Error fetching maps:", err);
       setError("Failed to fetch maps");
-    });
+    }
+    };
+    getMaps();
   }, []);
 
+  useEffect(() => {
+    const fetchMapping = async () => {
+      try {
+        const mapping = await getMapping();
+        setBrawlerMapping(mapping);
+        setLoadingMapping(false);
+      } catch (error) {
+        setError('Failed to fetch brawler mapping');
+        setLoadingMapping(false);
+      }
+    };
+
+    fetchMapping();
+  }, []);
     
   const pickratesFetchedRef = useRef(false);
 
@@ -168,6 +196,9 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       error,
       brawlerScores,
       brawlerPickrates,
+      maps,
+      brawlerMapping,
+      loadingMapping,
       setFirstPick,
       setSelectedMap,
       selectBrawler,
