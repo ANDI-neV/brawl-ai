@@ -1,5 +1,6 @@
 import json
 import os
+import string
 from typing import Dict, List
 import numpy as np
 import pandas as pd
@@ -720,7 +721,16 @@ def get_all_maps():
     with open(map_json, 'r') as f:
         map_id_mapping = json.load(f)
 
-    return map_id_mapping
+    current_maps_json = 'out/models/map_id_mapping.json'
+    with open(current_maps_json, 'r') as f:
+        current_maps = json.load(f)
+
+    filtered_maps = {}
+    for active_map in list(current_maps.keys()):
+        filtered_maps[active_map] = map_id_mapping[string.capwords(active_map).replace("'", "")]
+
+    print(filtered_maps)
+    return filtered_maps
 
 
 def train_model():
