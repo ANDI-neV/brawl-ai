@@ -317,10 +317,11 @@ def get_brawler_dict(picks: List[str], first_pick: bool) -> Dict[str, str]:
     if first_pick:
         for i, brawler in enumerate(picks):
             brawler_dict[first_pick_sequence[i]] = picks[i]
+            print(f"brawler dict (first): {brawler_dict}")
     else:
         for i, brawler in enumerate(picks):
             brawler_dict[second_pick_sequence[i]] = picks[i]
-
+            print(f"brawler dict (second): {brawler_dict}")
     return brawler_dict
 
 
@@ -570,14 +571,17 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping,
         positions or if the map is not found.
     """
     # Possible picking combinations used during training
+    print(f"first_pick: {first_pick}")
     if (first_pick):
         possible_combinations = picking_combinations1
     else:
         possible_combinations = picking_combinations2
+    print(f"possible combos: {possible_combinations}")
     # Find a matching combination
     print(f"Current picks: {current_picks_dict}")
     for combination in possible_combinations:
-        if all(pos in current_picks_dict for pos in combination[:-1]):
+        if (all(pos in current_picks_dict for pos in combination[:-1]) and
+                len(combination[:-1]) == len(current_picks_dict)):
             selected_combination = combination
             print(f"Selected combination: {selected_combination}")
             break
@@ -820,6 +824,7 @@ def predict(picks_dict, map_name, first_pick):
         picks_dict (Dict[str, str]): A dictionary of current picks, mapping
             positions to brawler names.
         map_name (str): The name of the current map.
+        first_pick (bool): Team that has pick priority.
 
     Returns:
         Dict[str, float]: A dictionary mapping brawler names to their

@@ -311,4 +311,6 @@ def test_map_data():
 
 
 if __name__ == "__main__":
-    brawler_to_supercell_id_mapping()
+    brawler_list = get_brawler_list()
+    cache_brawler_pickrates(brawler_list)
+    cache_brawler_winrates(brawler_list)

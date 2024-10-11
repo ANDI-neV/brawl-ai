@@ -43,7 +43,7 @@ async def get_brawlers():
 
 
 last_prediction_time = 0
-PREDICTION_COOLDOWN = 1  # 1 second cooldown between predictions
+PREDICTION_COOLDOWN = 0.1  # 0.1 second cooldown between predictions
 
 
 @app.post("/pickrate")

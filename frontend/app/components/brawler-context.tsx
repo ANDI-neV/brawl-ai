@@ -25,6 +25,7 @@ interface BrawlerContextType {
   brawlerMapping: Mapping;
   loadingMapping: boolean;
   selectedMapData: MapData;
+  availableGameModes: string[];
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -55,6 +56,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [selectedMapData, setSelectedMapData] = useState<MapData>({game_mode: '', img_url: ''});
   const [brawlerMapping, setBrawlerMapping] = useState<Mapping>({});
   const [loadingMapping, setLoadingMapping] = useState(true);
+  const [availableGameModes, setAvailableGameModes] = useState<string[]>([]);
 
   useEffect(() => {
     const getMaps = async () => {
@@ -62,6 +64,8 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       const fetchedMaps = await fetchMaps();
       setMaps(fetchedMaps);
       setAvailableMaps(Object.keys(fetchedMaps.maps));
+      console.log("maps available: ", Object.keys(fetchedMaps.maps))
+      getGameModes(fetchedMaps);
     }
     catch( err ) {
       console.error("Error fetching maps:", err);
@@ -70,6 +74,17 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     };
     getMaps();
   }, []);
+
+  const getGameModes = useCallback((maps: MapInterface) => {
+    const filteredGameModes: string[] = []
+    Object.values(maps.maps).map((map) => {
+      if (!filteredGameModes.includes(map.game_mode)) {
+        filteredGameModes.push(map.game_mode)
+      }
+    })
+    console.log("Available game modes: ", filteredGameModes)
+    setAvailableGameModes(filteredGameModes)
+  }, []) 
 
   useEffect(() => {
     const fetchMapping = async () => {
@@ -209,6 +224,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       brawlerMapping,
       loadingMapping,
       selectedMapData,
+      availableGameModes,
       setFirstPick,
       setSelectedMap,
       selectBrawler,
