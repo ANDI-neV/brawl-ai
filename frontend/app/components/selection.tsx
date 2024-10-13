@@ -1,9 +1,9 @@
 "use client";
 import { useBrawler } from './brawler-context';
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import type { Selection } from "@nextui-org/react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -24,9 +24,9 @@ function Menu() {
 
   const filteredMaps = useMemo(() => {
     if (selectedGameMode === "") {
-      return availableMaps;
+      return availableMaps.sort();
     } else {
-      return availableMaps.filter(map => maps.maps[map]?.game_mode === selectedGameMode);
+      return availableMaps.filter(map => maps.maps[map]?.game_mode === selectedGameMode).sort();
     }
   }, [availableMaps, maps, selectedGameMode]);
 
@@ -107,11 +107,58 @@ function Menu() {
   );
 }
 
+const FilterByPlayer = () => {
+  const { currentPlayer, filterPlayerBrawlers, setCurrentPlayer, setFilterPlayerBrawlers, setMinBrawlerLevel } = useBrawler();
+  const [playerTag, setPlayerTag] = useState<string>("");
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPlayerTag(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    setCurrentPlayer(playerTag);
+  };
+
+  return (
+    <div className='flex-col'>
+      <div className='p-2 rounded-2xl border border-gray-300 items-center justify-between flex bg-gray-200'>
+        <input
+          type="text"
+          placeholder="Player tag..."
+          value={playerTag}
+          onChange={handleInputChange}
+          className='p-2 rounded-xl mr-2 bg-gray-100 flex-grow'
+        />
+        <motion.button 
+          className='rounded-xl p-2 bg-green-300'
+          onClick={handleSubmit}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9, transition: { duration: 0.3 } }}
+        >
+          <Check />
+        </motion.button>
+      </div>
+      <div className=''>
+        <motion.button 
+          className='rounded-xl p-2 bg-green-300'
+          onClick={() => setFilterPlayerBrawlers(!filterPlayerBrawlers)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9, transition: { duration: 0.3 } }}
+        >
+          <Check />
+        </motion.button>
+      </div>
+    </div>
+  );
+};
+
+
 const Selection = () => {
   const { firstPick, setFirstPick, resetEverything } = useBrawler();
 
   return (
     <div className='w-full flex flex-col md:flex-row gap-x-12 py-3 items-center gap-y-3 justify-center mb-16 md:mb-0'>
+      <FilterByPlayer/>
       <Menu />
       <motion.button
         className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl'

@@ -9,6 +9,7 @@ import torch.nn as nn
 import torch.optim as optim
 from sqlalchemy import create_engine, URL
 import configparser
+import requests
 
 BRAWLERS_JSON_PATH = 'out/brawlers/brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
@@ -54,6 +55,39 @@ def get_map_pickrate(map):
     with (open(os.path.join(here, BRAWLER_PICKRATES_JSON_PATH), 'r')
           as json_file):
         return json.load(json_file)[map]
+
+
+def get_filtered_brawlers(player_tag, min_level):
+    url = "https://api.brawlstars.com"
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    token = config["Credentials"]["api"]
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+
+    if player_tag.startswith('#'):
+        player_tag = player_tag[1:]
+
+    try:
+        response = requests.get(f"{url}/v1/players/%23{player_tag}", headers=headers)
+        response.raise_for_status()
+
+        data = response.json()
+        print(f"API Response: {data}")
+
+        brawlers = data.get("brawlers", [])
+        filtered_brawlers = [
+            str.lower(brawler["name"])
+            for brawler in brawlers
+            if brawler.get("power", 0) >= min_level
+        ]
+
+        return filtered_brawlers
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error making request to Brawl Stars API: {e}")
+        return []
 
 
 brawler_data = prepare_brawler_data()
@@ -132,7 +166,7 @@ class BrawlStarsTransformer(nn.Module):
             padding_idx=PAD_TOKEN_INDEX
         )
         self.map_embedding = nn.Embedding(n_maps, d_model)
-        self.team_projection = nn.Linear(1, d_model)
+        self.team_embedding = nn.Embedding(3, d_model, padding_idx=0)
         self.position_embedding = nn.Embedding(
             max_seq_len, d_model, padding_idx=0
         )
@@ -168,8 +202,7 @@ class BrawlStarsTransformer(nn.Module):
             output for final prediction.
         """
         x = self.brawler_embedding(brawlers)
-        team_feature = team_indicators.float().unsqueeze(-1)
-        x = x + self.team_projection(team_feature)
+        x = x + self.team_embedding(team_indicators)
         x = x + self.position_embedding(positions)
         x = x + self.map_embedding(map_id).unsqueeze(1)
 
@@ -779,10 +812,10 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/transformer_7.pth')
+    torch.save(model.state_dict(), 'out/models/transformer_8.pth')
 
 
-def load_model(n_brawlers, n_maps, model_path='out/models/transformer_7.pth',
+def load_model(n_brawlers, n_maps, model_path='out/models/transformer_8.pth',
                d_model=64, nhead=4, num_layers=2):
     """
     Loads a trained BrawlStarsTransformer model from a file.

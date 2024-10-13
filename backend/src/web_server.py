@@ -43,7 +43,7 @@ async def get_brawlers():
 
 
 last_prediction_time = 0
-PREDICTION_COOLDOWN = 0.1  # 0.1 second cooldown between predictions
+PREDICTION_COOLDOWN = 0  # 0.1 second cooldown between predictions
 
 
 @app.post("/pickrate")
@@ -120,6 +120,26 @@ async def get_brawler_mapping():
 async def update_brawler_mapping():
     scraper.brawler_to_supercell_id_mapping()
     return {"message": "Brawler mapping updated successfully"}
+
+
+class FilteredBrawlerRequest(BaseModel):
+    player_tag: str
+    min_level: int
+
+
+@app.post("/filtered-player-brawlers")
+async def filter_player_brawlers(request: FilteredBrawlerRequest):
+    try:
+        print(f"Player tag: {request.player_tag}, "
+              f"Minimum brawler level: {request.min_level}")
+
+        filtered_brawlers = ai.get_filtered_brawlers(request.player_tag, request.min_level)
+
+        return {"brawlers": filtered_brawlers}
+    except Exception as e:
+        print(f"Error during prediction: {e}")
+        raise HTTPException(status_code=500, detail="Prediction failed")
+
 
 if __name__ == "__main__":
     import uvicorn

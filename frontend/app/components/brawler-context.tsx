@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, useCallback, useRef } from 'react';
 import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
-import { fetchMaps, fetchBrawlers, predictBrawlers, getPickrate, MapInterface, Mapping, getMapping } from './api-handler';
+import { fetchMaps, fetchBrawlers, predictBrawlers, getPickrate, MapInterface, Mapping, getMapping, getPlayerBrawlers } from './api-handler';
 
 interface BrawlerPickerProps {
   name: string;
@@ -26,6 +26,9 @@ interface BrawlerContextType {
   loadingMapping: boolean;
   selectedMapData: MapData;
   availableGameModes: string[];
+  currentPlayer: string;
+  currentPlayerBrawlers: string[];
+  filterPlayerBrawlers: boolean;
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -34,6 +37,10 @@ interface BrawlerContextType {
   retrieveBrawlerPickrates: (map: string) => void;
   mapSelectionSetup: (map: string) => void;
   resetEverything: () => void;
+  setCurrentPlayer: (player: string) => void;
+  setCurrentPlayerBrawlers: (brawlers: string[]) => void;
+  setMinBrawlerLevel: (brawlerLevel: number) => void;
+  setFilterPlayerBrawlers: (filterPlayerBrawlers: boolean) => void;
 }
 
 const BrawlerContext = createContext<BrawlerContextType | undefined>(undefined);
@@ -57,6 +64,10 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [brawlerMapping, setBrawlerMapping] = useState<Mapping>({});
   const [loadingMapping, setLoadingMapping] = useState(true);
   const [availableGameModes, setAvailableGameModes] = useState<string[]>([]);
+  const [currentPlayer, setCurrentPlayer] = useState<string>("");
+  const [minBrawlerLevel, setMinBrawlerLevel] = useState<number>(11);
+  const [currentPlayerBrawlers, setCurrentPlayerBrawlers] = useState<string[]>([]);
+  const [filterPlayerBrawlers, setFilterPlayerBrawlers] = useState<boolean>(true);
 
   useEffect(() => {
     const getMaps = async () => {
@@ -74,6 +85,23 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     };
     getMaps();
   }, []);
+
+  useEffect(() => {
+    const getCurrentPlayerBrawlers = async () => {
+      if (currentPlayer !== "") {
+        console.log("Get current player brawlers for: ", currentPlayer);
+        try {
+          const player = currentPlayer.charAt(0) !== "#" ? "#" + currentPlayer : currentPlayer;
+          const filteredBrawlers = await getPlayerBrawlers(player, minBrawlerLevel);
+          setCurrentPlayerBrawlers(filteredBrawlers.brawlers);
+        } catch (err) {
+          console.error("Error fetching filtered Brawlers:", err);
+        }
+      }
+    };
+  
+    getCurrentPlayerBrawlers();
+  }, [currentPlayer, minBrawlerLevel]);
 
   const getGameModes = useCallback((maps: MapInterface) => {
     const filteredGameModes: string[] = []
@@ -225,6 +253,9 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       loadingMapping,
       selectedMapData,
       availableGameModes,
+      currentPlayer,
+      currentPlayerBrawlers,
+      filterPlayerBrawlers,
       setFirstPick,
       setSelectedMap,
       selectBrawler,
@@ -232,7 +263,11 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       updatePredictions,
       retrieveBrawlerPickrates,
       mapSelectionSetup,
-      resetEverything
+      resetEverything,
+      setCurrentPlayer,
+      setCurrentPlayerBrawlers,
+      setMinBrawlerLevel,
+      setFilterPlayerBrawlers
     }}>
       {children}
     </BrawlerContext.Provider>

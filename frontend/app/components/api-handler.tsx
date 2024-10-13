@@ -85,3 +85,21 @@ export const getMapping = async (retries = 3): Promise<Mapping> => {
     throw error;
   }
 }
+
+interface FilteredPlayerBrawlers {
+  brawlers: string[]
+}
+
+export const getPlayerBrawlers = async (playerTag: string, minLevel: number, retries = 3): Promise<FilteredPlayerBrawlers> => {
+  try {
+    const response = await axios.post<FilteredPlayerBrawlers>(`${API_URL}/filtered-player-brawlers`, {player_tag: playerTag, min_level: minLevel});
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 429 && retries > 0 ) {
+      console.log(`Rate limited, retrying in 0.5 seconds... (${retries} retries left)`);
+      await delay(500);
+      return getPlayerBrawlers(playerTag, minLevel, retries - 1);
+    }
+    throw error;
+  }
+}

@@ -16,8 +16,8 @@ interface TableHeaderProps {
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({ title, sortable = false, sortKey, currentSort, onSort }) => (
-  <th scope="col" className="px-6 py-3">
-    <motion.button  onClick={() => sortable && onSort(sortKey)} className="flex items-center"
+  <th scope="col" className="px-6 py-3 text-center">
+    <motion.button  onClick={() => sortable && onSort(sortKey)} className="flex items-center justify-center w-full"
       whileHover={{ scale: 1.1, zIndex: 10 }}
       whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}>
       {title}
@@ -49,18 +49,18 @@ const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick, 
     className={`border-b bg-gray-800 border-gray-700 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-600'}`} 
     onClick={() => !disabled && onClick(brawler)}
   >
-    <th scope="row" className="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+    <th scope="row" className="px-2 md:px-4 py-1 md:py-2 font-medium text-white text-center flex items-center justify-center">
       <BrawlerIcon brawler={brawler.name}/>
     </th>
-    <td className="px-6 py-4 mx-auto items-center">{score !== null ? score.toFixed(3): 'N/A'}</td>
-    <td className="px-6 py-4 mx-auto items-center">{pickrate !== null ? pickrate?.toFixed(3): 'N/A' }</td>
+    <td className="px-2 py-4 mx-auto items-center text-lg text-center">{score !== null ? score.toFixed(3): 'N/A'}</td>
+    <td className="px-2 py-4 mx-auto items-center text-lg text-center">{pickrate !== null ? (pickrate?.valueOf()*100).toFixed(2) + "%": 'N/A' }</td>
   </tr>
 );
 
 export default function BrawlerPicker() {
   const [filter, setFilter] = useState("");
   const [sort, setSort] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'score', direction: 'desc' });
-  const { selectBrawler, updatePredictions, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores, brawlerPickrates } = useBrawler();
+  const { selectBrawler, updatePredictions, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores, brawlerPickrates, currentPlayerBrawlers, filterPlayerBrawlers } = useBrawler();
   const [localAvailableBrawlers, setLocalAvailableBrawlers] = useState<BrawlerPickerProps[]>(availableBrawlers);
 
   useEffect(() => {
@@ -94,8 +94,16 @@ export default function BrawlerPicker() {
   };
 
   const filteredAndSortedBrawlers = useMemo(() => {
+    const playerBrawlers = currentPlayerBrawlers.map(brawler => brawler.toLowerCase());
+  
     return localAvailableBrawlers
       .filter(brawler => brawler.name.toLowerCase().includes(filter.toLowerCase()))
+      .filter(brawler => {
+        if (filterPlayerBrawlers && currentPlayerBrawlers.length > 0) {
+          return playerBrawlers.includes(brawler.name.toLowerCase());
+        }
+        return true;
+      })
       .sort((a, b) => {
         if (sort.key === 'score') {
           const scoreA = brawlerScores[a.name.toLowerCase()] ?? -Infinity;
@@ -109,7 +117,7 @@ export default function BrawlerPicker() {
         }
         return 0;
       });
-  }, [localAvailableBrawlers, filter, sort, brawlerScores]);
+  }, [localAvailableBrawlers, filter, sort, brawlerScores, brawlerPickrates, currentPlayerBrawlers]);
 
   return (
     <div className="relative">
