@@ -99,6 +99,7 @@ export default function BrawlerPicker() {
     return localAvailableBrawlers
       .filter(brawler => brawler.name.toLowerCase().includes(filter.toLowerCase()))
       .filter(brawler => {
+        console.log("Filter player brawlers: ", filterPlayerBrawlers)
         if (filterPlayerBrawlers && currentPlayerBrawlers.length > 0) {
           return playerBrawlers.includes(brawler.name.toLowerCase());
         }
@@ -117,7 +118,7 @@ export default function BrawlerPicker() {
         }
         return 0;
       });
-  }, [localAvailableBrawlers, filter, sort, brawlerScores, brawlerPickrates, currentPlayerBrawlers]);
+  }, [localAvailableBrawlers, filter, sort, brawlerScores, brawlerPickrates, currentPlayerBrawlers, filterPlayerBrawlers]);
 
   return (
     <div className="relative">

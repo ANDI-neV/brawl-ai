@@ -138,14 +138,15 @@ const FilterByPlayer = () => {
           <Check />
         </motion.button>
       </div>
-      <div className=''>
+      <div className='p-2'>
         <motion.button 
-          className='rounded-xl p-2 bg-green-300'
+          className='rounded-xl p-2 bg-green-300 border-2'
           onClick={() => setFilterPlayerBrawlers(!filterPlayerBrawlers)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9, transition: { duration: 0.3 } }}
+          style={{backgroundColor: filterPlayerBrawlers ? '#86efac' : '#f7798e', borderColor: filterPlayerBrawlers ? '#4ade80' : '#fe098e'}}
         >
-          <Check />
+          {filterPlayerBrawlers ? "filter on" : "filter off"} 
         </motion.button>
       </div>
     </div>
@@ -161,18 +162,18 @@ const Selection = () => {
       <FilterByPlayer/>
       <Menu />
       <motion.button
-        className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl'
+        className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl border-2'
         onClick={() => setFirstPick(!firstPick)}
-        style={{backgroundColor: firstPick ? '#76a8f9' : '#f7798e'}}
+        style={{backgroundColor: firstPick ? '#76a8f9' : '#f7798e', borderColor: firstPick ? '#3b82f6' : '#ef4444'}}
         whileHover={{ scale: 1.1, zIndex: 10 }}
         whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
       >
         {firstPick ? 'First Pick' : 'Second Pick'}
       </motion.button>
       <motion.button
-        className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl'
+        className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl border-2'
         onClick={() => resetEverything()}
-        style={{backgroundColor: '#9e9191'}}
+        style={{backgroundColor: '#9e9191', borderColor: '#304091'}}
         whileHover={{ scale: 1.1, zIndex: 10 }}
         whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
       >
