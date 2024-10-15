@@ -28,7 +28,7 @@ interface BrawlerContextType {
   availableGameModes: string[];
   currentPlayer: string;
   currentPlayerBrawlers: string[];
-  filterPlayerBrawlers: boolean;
+  filterPlayerBrawlers: boolean | null;
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -67,7 +67,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [currentPlayer, setCurrentPlayer] = useState<string>("");
   const [minBrawlerLevel, setMinBrawlerLevel] = useState<number>(11);
   const [currentPlayerBrawlers, setCurrentPlayerBrawlers] = useState<string[]>([]);
-  const [filterPlayerBrawlers, setFilterPlayerBrawlers] = useState<boolean>(true);
+  const [filterPlayerBrawlers, setFilterPlayerBrawlers] = useState<boolean | null>(null);
 
   useEffect(() => {
     const getMaps = async () => {
@@ -94,6 +94,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
           const player = currentPlayer.charAt(0) !== "#" ? "#" + currentPlayer : currentPlayer;
           const filteredBrawlers = await getPlayerBrawlers(player, minBrawlerLevel);
           setCurrentPlayerBrawlers(filteredBrawlers.brawlers);
+          setFilterPlayerBrawlers(true);
         } catch (err) {
           console.error("Error fetching filtered Brawlers:", err);
         }

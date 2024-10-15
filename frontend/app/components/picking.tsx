@@ -9,7 +9,7 @@ const Picking = () => {
             <div className="flex flex-col lg:flex-row lg:justify-center lg:items-start gap-24">
                 <div className="w-full lg:w-auto flex flex-col justify-center items-center relative">
                     <div className="z-20">
-                        <TeamDisplay team="right" bgColor="#f43f5e"/>
+                        <TeamDisplay team="right" bgColor="#ef4444"/>
                     </div>
                     <div className="w-full h-full z-10 -my-16">
                         <MapDisplay/>

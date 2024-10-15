@@ -3,7 +3,7 @@ import { useBrawler } from './brawler-context';
 import React, { useMemo, useEffect, useState } from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import type { Selection } from "@nextui-org/react";
-import { ChevronDown, Check } from "lucide-react";
+import { ChevronDown, Check, Info } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -39,7 +39,7 @@ function Menu() {
         <DropdownTrigger>
           <Button 
             variant="flat" 
-            className="w-full justify-between bg-gray-800 text-white border border-gray-700 rounded-xl h-[50px] items-center flex"
+            className="w-full justify-between bg-gray-700 text-white border border-gray-900 rounded-2xl h-[55px] items-center flex"
           >
             <span className="capitalize">{selectedMap || "Select Map"}</span>
             <ChevronDown className="text-gray-400" size={20} />
@@ -52,10 +52,10 @@ function Menu() {
           selectionMode="single"
           selectedKeys={selectedKeys}
           onSelectionChange={handleSelectionChange}
-          className="bg-gray-800 text-white p-2 rounded-xl max-h-64 overflow-auto custom-scrollbar"
+          className="bg-gray-700 text-white p-2 rounded-xl max-h-64 overflow-auto custom-scrollbar"
         >
           {filteredMaps.map((map) => (
-            <DropdownItem key={map} className="text-white hover:bg-gray-700 px-2 py-2 rounded-xl gap-x-2">
+            <DropdownItem key={map} className="text-white hover:bg-gray-600 px-2 py-2 rounded-xl gap-x-2">
               <div className="flex items-center gap-2">
                 {maps.maps[map]?.game_mode ? (
                   <Image
@@ -120,8 +120,16 @@ const FilterByPlayer = () => {
   };
 
   return (
+    <div className='flex flex-row'>
+    <motion.button
+          className="h-[45px] w-[45px] mt-[5px] mr-[10px] bg-gray-200 rounded-xl flex items-center justify-center"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Info size={24} />
+        </motion.button>
     <div className='flex-col'>
-      <div className='p-2 rounded-2xl border border-gray-300 items-center justify-between flex bg-gray-200'>
+      <div className='p-2 rounded-2xl border border-gray-300 items-center justify-between flex bg-gray-200 h-[55px]'>
         <input
           type="text"
           placeholder="Player tag..."
@@ -142,13 +150,15 @@ const FilterByPlayer = () => {
         <motion.button 
           className='rounded-xl p-2 bg-green-300 border-2'
           onClick={() => setFilterPlayerBrawlers(!filterPlayerBrawlers)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9, transition: { duration: 0.3 } }}
-          style={{backgroundColor: filterPlayerBrawlers ? '#86efac' : '#f7798e', borderColor: filterPlayerBrawlers ? '#4ade80' : '#fe098e'}}
+          whileHover={filterPlayerBrawlers === null ? {} : {scale: 1.1}}
+          whileTap={ filterPlayerBrawlers === null ? {} : {scale: 0.9, transition: { duration: 0.3 }}}
+          disabled={filterPlayerBrawlers === null}
+          style={{backgroundColor: filterPlayerBrawlers === null ? '#e5e7eb' : filterPlayerBrawlers ? '#4ade80' : '#fe098e', borderColor: filterPlayerBrawlers === null ? '#d1d5db' : filterPlayerBrawlers ? '#4ade80' : '#fe098e'}}
         >
-          {filterPlayerBrawlers ? "filter on" : "filter off"} 
+          {filterPlayerBrawlers ?  "filter on" : "filter off"} 
         </motion.button>
       </div>
+    </div>
     </div>
   );
 };
@@ -158,22 +168,21 @@ const Selection = () => {
   const { firstPick, setFirstPick, resetEverything } = useBrawler();
 
   return (
-    <div className='w-full flex flex-col md:flex-row gap-x-12 py-3 items-center gap-y-3 justify-center mb-16 md:mb-0'>
+    <div className='w-full flex flex-col md:flex-row gap-x-12 py-3 gap-y-3 justify-center mb-16 md:mb-0'>
       <FilterByPlayer/>
       <Menu />
       <motion.button
-        className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl border-2'
+        className='flex w-[150px] h-[55px] rounded-2xl justify-center items-center p-2 font-bold text-xl border-2'
         onClick={() => setFirstPick(!firstPick)}
-        style={{backgroundColor: firstPick ? '#76a8f9' : '#f7798e', borderColor: firstPick ? '#3b82f6' : '#ef4444'}}
+        style={{backgroundColor: firstPick ? '#76a8f9' : '#f47c7c', borderColor: firstPick ? '#3b82f6' : '#ef4444'}}
         whileHover={{ scale: 1.1, zIndex: 10 }}
         whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
       >
         {firstPick ? 'First Pick' : 'Second Pick'}
       </motion.button>
       <motion.button
-        className='flex w-[150px] h-[50px] rounded-xl justify-center items-center p-2 font-bold text-xl border-2'
+        className='flex w-[150px] h-[55px] rounded-2xl justify-center items-center p-2 font-bold text-xl border-2 bg-gray-200 border-gray-300'
         onClick={() => resetEverything()}
-        style={{backgroundColor: '#9e9191', borderColor: '#304091'}}
         whileHover={{ scale: 1.1, zIndex: 10 }}
         whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
       >
