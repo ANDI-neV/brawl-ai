@@ -29,6 +29,7 @@ interface BrawlerContextType {
   currentPlayer: string;
   currentPlayerBrawlers: string[];
   filterPlayerBrawlers: boolean | null;
+  minBrawlerLevel: number;
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -257,6 +258,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       currentPlayer,
       currentPlayerBrawlers,
       filterPlayerBrawlers,
+      minBrawlerLevel,
       setFirstPick,
       setSelectedMap,
       selectBrawler,

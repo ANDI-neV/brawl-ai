@@ -137,8 +137,8 @@ async def filter_player_brawlers(request: FilteredBrawlerRequest):
 
         return {"brawlers": filtered_brawlers}
     except Exception as e:
-        print(f"Error during prediction: {e}")
-        raise HTTPException(status_code=500, detail="Prediction failed")
+        print(f"Error during player brawler retrieval: {e}")
+        raise HTTPException(status_code=500, detail="Player brawler retrieval failed")
 
 
 if __name__ == "__main__":

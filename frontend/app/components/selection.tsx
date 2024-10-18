@@ -146,22 +146,44 @@ const FilterByPlayer = () => {
           <Check />
         </motion.button>
       </div>
-      <div className='p-2'>
-        <motion.button 
-          className='rounded-xl p-2 bg-green-300 border-2'
-          onClick={() => setFilterPlayerBrawlers(!filterPlayerBrawlers)}
-          whileHover={filterPlayerBrawlers === null ? {} : {scale: 1.1}}
-          whileTap={ filterPlayerBrawlers === null ? {} : {scale: 0.9, transition: { duration: 0.3 }}}
-          disabled={filterPlayerBrawlers === null}
-          style={{backgroundColor: filterPlayerBrawlers === null ? '#e5e7eb' : filterPlayerBrawlers ? '#4ade80' : '#fe098e', borderColor: filterPlayerBrawlers === null ? '#d1d5db' : filterPlayerBrawlers ? '#4ade80' : '#fe098e'}}
-        >
-          {filterPlayerBrawlers ?  "filter on" : "filter off"} 
-        </motion.button>
-      </div>
+      <PlayerTagFilters/>
     </div>
     </div>
   );
 };
+
+const PlayerTagFilters = () => {
+  const {filterPlayerBrawlers, minBrawlerLevel, setMinBrawlerLevel, setFilterPlayerBrawlers} = useBrawler();
+  if (filterPlayerBrawlers === null) {
+    return
+  }
+  return (
+    <div className='mt-2 ml-2 flex flex-row items-center'>
+        <motion.button 
+          className='rounded-xl p-2 bg-green-300 border-2'
+          onClick={() => setFilterPlayerBrawlers(!filterPlayerBrawlers)}
+          whileHover={{scale: 1.1}}
+          whileTap={{scale: 0.9, transition: { duration: 0.3 }}}
+          disabled={filterPlayerBrawlers === null}
+          style={{backgroundColor: filterPlayerBrawlers ? '#86efac' : '#fb7185', borderColor: filterPlayerBrawlers ? '#4ade80' : '#fb7185'}}
+        >
+          {filterPlayerBrawlers ?  "filter on" : "filter off"} 
+        </motion.button>
+        <div>
+          test
+        </div>
+      </div>
+  );
+}
+
+const LevelButton = (brawlerLevel: number) => {
+  return (
+    <motion.button
+    >
+
+    </motion.button>
+  )
+}
 
 
 const Selection = () => {

@@ -408,7 +408,7 @@ def get_brawler_index(brawler):
 
 
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
-                            nhead=4, num_layers=2, batch_size=64, epochs=100,
+                            nhead=4, num_layers=2, batch_size=64, epochs=10,
                             learning_rate=0.001):
     """
     Trains the BrawlStarsTransformer model on the provided training samples.
@@ -802,7 +802,7 @@ def train_model():
     here = os.path.dirname(os.path.abspath(__file__))
     training_samples = get_brawler_vectors(match_data,
                                            map_id_mapping=map_id_mapping,
-                                           limit=None)
+                                           limit=1000)
 
     print("Map ID Mapping:")
     for map_name, map_id in map_id_mapping.items():
@@ -812,10 +812,10 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/transformer_8.pth')
+    torch.save(model.state_dict(), 'out/models/transformer_3.pth')
 
 
-def load_model(n_brawlers, n_maps, model_path='out/models/transformer_8.pth',
+def load_model(n_brawlers, n_maps, model_path='out/models/transformer_3.pth',
                d_model=64, nhead=4, num_layers=2):
     """
     Loads a trained BrawlStarsTransformer model from a file.
