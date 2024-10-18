@@ -1,6 +1,8 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, useCallback, useRef } from 'react';
 import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
 import { fetchMaps, fetchBrawlers, predictBrawlers, getPickrate, MapInterface, Mapping, getMapping, getPlayerBrawlers } from './api-handler';
+import axios from 'axios';
+
 
 interface BrawlerPickerProps {
   name: string;
@@ -30,6 +32,7 @@ interface BrawlerContextType {
   currentPlayerBrawlers: string[];
   filterPlayerBrawlers: boolean | null;
   minBrawlerLevel: number;
+  playerTagError: boolean;
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -42,6 +45,7 @@ interface BrawlerContextType {
   setCurrentPlayerBrawlers: (brawlers: string[]) => void;
   setMinBrawlerLevel: (brawlerLevel: number) => void;
   setFilterPlayerBrawlers: (filterPlayerBrawlers: boolean) => void;
+  setPlayerTagError: (playerTagError: boolean) => void;
 }
 
 const BrawlerContext = createContext<BrawlerContextType | undefined>(undefined);
@@ -68,6 +72,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [currentPlayer, setCurrentPlayer] = useState<string>("");
   const [minBrawlerLevel, setMinBrawlerLevel] = useState<number>(11);
   const [currentPlayerBrawlers, setCurrentPlayerBrawlers] = useState<string[]>([]);
+  const [playerTagError, setPlayerTagError] = useState<boolean>(false);
   const [filterPlayerBrawlers, setFilterPlayerBrawlers] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -94,10 +99,17 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
         try {
           const player = currentPlayer.charAt(0) !== "#" ? "#" + currentPlayer : currentPlayer;
           const filteredBrawlers = await getPlayerBrawlers(player, minBrawlerLevel);
+          setPlayerTagError(false)
           setCurrentPlayerBrawlers(filteredBrawlers.brawlers);
           setFilterPlayerBrawlers(true);
-        } catch (err) {
-          console.error("Error fetching filtered Brawlers:", err);
+        } catch (error) {
+          if (axios.isAxiosError(error) && error.response?.status === 404) {
+            setPlayerTagError(true);
+            setCurrentPlayer('');
+            setFilterPlayerBrawlers(false)
+          } else {
+            console.error("Error fetching filtered Brawlers:", error);
+          }
         }
       }
     };
@@ -259,6 +271,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       currentPlayerBrawlers,
       filterPlayerBrawlers,
       minBrawlerLevel,
+      playerTagError,
       setFirstPick,
       setSelectedMap,
       selectBrawler,
@@ -270,7 +283,8 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       setCurrentPlayer,
       setCurrentPlayerBrawlers,
       setMinBrawlerLevel,
-      setFilterPlayerBrawlers
+      setFilterPlayerBrawlers,
+      setPlayerTagError
     }}>
       {children}
     </BrawlerContext.Provider>

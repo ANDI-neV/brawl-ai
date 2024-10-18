@@ -3,8 +3,8 @@ import { useBrawler } from './brawler-context';
 import React, { useMemo, useEffect, useState } from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import type { Selection } from "@nextui-org/react";
-import { ChevronDown, Check, Info } from "lucide-react";
-import { motion } from "framer-motion";
+import { ChevronDown, Check, Info, X } from "lucide-react";
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from "next/image";
 
 function Menu() {
@@ -108,16 +108,25 @@ function Menu() {
 }
 
 const FilterByPlayer = () => {
-  const { currentPlayer, filterPlayerBrawlers, setCurrentPlayer, setFilterPlayerBrawlers, setMinBrawlerLevel } = useBrawler();
+  const { playerTagError, setPlayerTagError, setCurrentPlayer, setFilterPlayerBrawlers, setMinBrawlerLevel } = useBrawler();
   const [playerTag, setPlayerTag] = useState<string>("");
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerTag(event.target.value);
   };
 
   const handleSubmit = () => {
+    setPlayerTagError(false)
     setCurrentPlayer(playerTag);
   };
+
+  useEffect(() => {
+    if (playerTagError) {
+      const timer = setTimeout(() => {
+        setPlayerTagError(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [playerTagError]);
 
   return (
     <div className='flex flex-row'>
@@ -129,21 +138,21 @@ const FilterByPlayer = () => {
           <Info size={24} />
         </motion.button>
     <div className='flex-col'>
-      <div className='p-2 rounded-2xl border border-gray-300 items-center justify-between flex bg-gray-200 h-[55px]'>
+      <div className={`p-2 rounded-2xl border border-gray-300 bg-gray-200 items-center justify-between flex  h-[55px]`}>
         <input
           type="text"
           placeholder="Player tag..."
           value={playerTag}
           onChange={handleInputChange}
-          className='p-2 rounded-xl mr-2 bg-gray-100 flex-grow'
+          className={`p-2 rounded-xl mr-2 border ${playerTagError ? 'border-red-300 bg-red-200' : 'border-gray-300 bg-gray-100'} bg-gray-100 flex-grow`}
         />
         <motion.button 
-          className='rounded-xl p-2 bg-green-300'
+          className={`rounded-xl p-2  ${playerTagError ? 'bg-red-300' : 'bg-green-300'}`}
           onClick={handleSubmit}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9, transition: { duration: 0.3 } }}
         >
-          <Check />
+          {playerTagError ?  <X/> : <Check />}
         </motion.button>
       </div>
       <PlayerTagFilters/>
@@ -152,35 +161,76 @@ const FilterByPlayer = () => {
   );
 };
 
+const ToggleSwitch = ( {isOn, toggleSwitch} ) => {
+  const spring = {
+    type: "spring",
+    stiffness: 700,
+    damping: 30
+  };
+
+  return (
+    <div 
+      className={`w-16 h-8 flex items-center rounded-full p-1 cursor-pointer ${
+        isOn ? 'bg-green-400' : 'bg-red-400'
+      }`} 
+      onClick={toggleSwitch}
+    >
+      <motion.div 
+        className={`w-6 h-6 rounded-full ${
+          isOn ? 'bg-white' : 'bg-gray-200'
+        }`} 
+        layout
+        transition={spring}
+        animate={{ x: isOn ? 32 : 0 }}
+      />
+    </div>
+  );
+};
+
+
 const PlayerTagFilters = () => {
   const {filterPlayerBrawlers, minBrawlerLevel, setMinBrawlerLevel, setFilterPlayerBrawlers} = useBrawler();
+  const levels = [9,10,11]
   if (filterPlayerBrawlers === null) {
     return
   }
+
   return (
-    <div className='mt-2 ml-2 flex flex-row items-center'>
-        <motion.button 
-          className='rounded-xl p-2 bg-green-300 border-2'
-          onClick={() => setFilterPlayerBrawlers(!filterPlayerBrawlers)}
-          whileHover={{scale: 1.1}}
-          whileTap={{scale: 0.9, transition: { duration: 0.3 }}}
-          disabled={filterPlayerBrawlers === null}
-          style={{backgroundColor: filterPlayerBrawlers ? '#86efac' : '#fb7185', borderColor: filterPlayerBrawlers ? '#4ade80' : '#fb7185'}}
-        >
-          {filterPlayerBrawlers ?  "filter on" : "filter off"} 
-        </motion.button>
-        <div>
-          test
+    <div className='mt-5 flex flex-row items-center justify-start relative'>
+      <div className="flex flex-col items-center justify-center mr-4 w-20">
+        <ToggleSwitch 
+          isOn={filterPlayerBrawlers} 
+          toggleSwitch={() => setFilterPlayerBrawlers(!filterPlayerBrawlers)} 
+        />
+        <span className="font-bold text-center mt-1">
+          {filterPlayerBrawlers ? "Filter On" : "Filter Off"}
+        </span>
+      </div>
+      <div className="flex-1">
+        <div className="relative">
+          <div className="absolute -top-4 left-1 z-20">
+            <span className="px-2 py-0.5 bg-green-300 text-gray-900 text-sm rounded-xl">Min Brawler Level</span>
+          </div>
+          <div className='flex items-center justify-center gap-4 font-bold bg-gray-300 rounded-2xl pt-3 pb-2 pr-2 pl-2'>
+            {levels.map(LevelButton)}
+          </div>
         </div>
       </div>
+    </div>
   );
 }
 
 const LevelButton = (brawlerLevel: number) => {
+  const {minBrawlerLevel, setMinBrawlerLevel} = useBrawler();
   return (
     <motion.button
+    key={brawlerLevel}
+    className={`bg-gray-200 p-1 min-w-[40px] h-[40px] rounded-xl ${minBrawlerLevel === brawlerLevel ? 'ring-2 border-blue-500 border-2 ring-blue-500' : ''}`}
+    whileTap={{scale: 0.9, transition: { duration: 0.3 }}}
+    whileHover={{ scale: 1.1, zIndex: 10, backgroundColor: "#9ca3af" }}
+    onClick={() => setMinBrawlerLevel(brawlerLevel)}
     >
-
+      {brawlerLevel}
     </motion.button>
   )
 }

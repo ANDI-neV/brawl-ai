@@ -10,6 +10,7 @@ import torch.optim as optim
 from sqlalchemy import create_engine, URL
 import configparser
 import requests
+from requests.exceptions import HTTPError
 
 BRAWLERS_JSON_PATH = 'out/brawlers/brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
@@ -57,6 +58,10 @@ def get_map_pickrate(map):
         return json.load(json_file)[map]
 
 
+class PlayerNotFoundError(Exception):
+    pass
+
+
 def get_filtered_brawlers(player_tag, min_level):
     url = "https://api.brawlstars.com"
     config = configparser.ConfigParser()
@@ -85,9 +90,14 @@ def get_filtered_brawlers(player_tag, min_level):
 
         return filtered_brawlers
 
+    except HTTPError as e:
+        if e.response.status_code == 404:
+            raise PlayerNotFoundError("Player tag not found")
+        raise
+
     except requests.exceptions.RequestException as e:
         print(f"Error making request to Brawl Stars API: {e}")
-        return []
+        raise
 
 
 brawler_data = prepare_brawler_data()

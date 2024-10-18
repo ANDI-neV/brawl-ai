@@ -8,6 +8,7 @@ import time
 import ai as ai
 from pathlib import Path
 import scraper
+from ai import PlayerNotFoundError
 
 
 app = FastAPI()
@@ -127,6 +128,7 @@ class FilteredBrawlerRequest(BaseModel):
     min_level: int
 
 
+
 @app.post("/filtered-player-brawlers")
 async def filter_player_brawlers(request: FilteredBrawlerRequest):
     try:
@@ -136,6 +138,8 @@ async def filter_player_brawlers(request: FilteredBrawlerRequest):
         filtered_brawlers = ai.get_filtered_brawlers(request.player_tag, request.min_level)
 
         return {"brawlers": filtered_brawlers}
+    except PlayerNotFoundError:
+        raise HTTPException(status_code=404, detail="Player tag not found")
     except Exception as e:
         print(f"Error during player brawler retrieval: {e}")
         raise HTTPException(status_code=500, detail="Player brawler retrieval failed")
