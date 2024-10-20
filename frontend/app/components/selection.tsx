@@ -107,9 +107,57 @@ function Menu() {
   );
 }
 
+const PlayerTagInformation = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative inline-block">
+      <motion.nav
+        initial={false}
+        animate={isOpen ? "open" : "closed"}
+        className="menu"
+      >
+        <motion.button
+          className="h-[45px] w-[45px] mt-[5px] mr-[10px] bg-gray-200 rounded-xl flex items-center justify-center relative z-10"
+          whileHover={{ scale: 1.05 }}
+          onClick={() => setIsOpen(!isOpen)}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Info size={24} />
+        </motion.button>
+        <motion.div
+          className="absolute bottom-full transform -translate-x-1/2 mb-2 z-20"
+          variants={{
+            open: {
+              opacity: 1,
+              y: 0,
+              display: "block",
+            },
+            closed: {
+              opacity: 0,
+              y: 10,
+              transitionEnd: {
+                display: "none",
+              },
+            },
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="w-64 rounded-xl bg-gray-300 p-2 shadow-lg text-sm">
+            Enter your Player Tag to receive only suggestions based on the Brawlers you have. You may also filter by the Minimum Level of Brawlers you want displayed
+          </div>
+        </motion.div>
+      </motion.nav>
+    </div>
+  );
+}
+
+
+
 const FilterByPlayer = () => {
   const { playerTagError, setPlayerTagError, setCurrentPlayer, setFilterPlayerBrawlers, setMinBrawlerLevel } = useBrawler();
-  const [playerTag, setPlayerTag] = useState<string>("");
+  const [playerTag, setPlayerTag] = useState("");
+  
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerTag(event.target.value);
   };
@@ -129,37 +177,32 @@ const FilterByPlayer = () => {
   }, [playerTagError]);
 
   return (
-    <div className='flex flex-row'>
-    <motion.button
-          className="h-[45px] w-[45px] mt-[5px] mr-[10px] bg-gray-200 rounded-xl flex items-center justify-center"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Info size={24} />
-        </motion.button>
-    <div className='flex-col'>
-      <div className={`p-2 rounded-2xl border border-gray-300 bg-gray-200 items-center justify-between flex  h-[55px]`}>
-        <input
-          type="text"
-          placeholder="Player tag..."
-          value={playerTag}
-          onChange={handleInputChange}
-          className={`p-2 rounded-xl mr-2 border ${playerTagError ? 'border-red-300 bg-red-200' : 'border-gray-300 bg-gray-100'} bg-gray-100 flex-grow`}
-        />
-        <motion.button 
-          className={`rounded-xl p-2  ${playerTagError ? 'bg-red-300' : 'bg-green-300'}`}
-          onClick={handleSubmit}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9, transition: { duration: 0.3 } }}
-        >
-          {playerTagError ?  <X/> : <Check />}
-        </motion.button>
+    <div className="flex items-start">
+      <PlayerTagInformation />
+      <div className="flex-grow">
+        <div className={`p-2 rounded-2xl border border-gray-300 bg-gray-200 flex items-center h-[55px]`}>
+          <input
+            type="text"
+            placeholder="Player tag..."
+            value={playerTag}
+            onChange={handleInputChange}
+            className={`p-2 rounded-xl mr-2 border ${playerTagError ? 'border-red-300 bg-red-200' : 'border-gray-300 bg-gray-100'} flex-grow`}
+          />
+          <motion.button 
+            className={`rounded-xl p-2 ${playerTagError ? 'bg-red-300' : 'bg-green-300'}`}
+            onClick={handleSubmit}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9, transition: { duration: 0.3 } }}
+          >
+            {playerTagError ? <X /> : <Check />}
+          </motion.button>
+        </div>
+        <PlayerTagFilters />
       </div>
-      <PlayerTagFilters/>
-    </div>
     </div>
   );
 };
+
 
 const ToggleSwitch = ( {isOn, toggleSwitch} ) => {
   const spring = {

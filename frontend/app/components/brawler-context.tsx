@@ -106,7 +106,9 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
           if (axios.isAxiosError(error) && error.response?.status === 404) {
             setPlayerTagError(true);
             setCurrentPlayer('');
-            setFilterPlayerBrawlers(false)
+            if (filterPlayerBrawlers !== null) {
+              setFilterPlayerBrawlers(false)
+            }
           } else {
             console.error("Error fetching filtered Brawlers:", error);
           }
