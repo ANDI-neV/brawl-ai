@@ -155,8 +155,15 @@ const PlayerTagInformation = () => {
 
 
 const FilterByPlayer = () => {
-  const { playerTagError, setPlayerTagError, setCurrentPlayer, setFilterPlayerBrawlers, setMinBrawlerLevel } = useBrawler();
-  const [playerTag, setPlayerTag] = useState("");
+  const { 
+    playerTagError, 
+    setPlayerTagError, 
+    setCurrentPlayer, 
+    currentPlayer, 
+    setFilterPlayerBrawlers, 
+    setMinBrawlerLevel 
+  } = useBrawler();
+  const [playerTag, setPlayerTag] = useState(currentPlayer);
   
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerTag(event.target.value);
@@ -174,7 +181,7 @@ const FilterByPlayer = () => {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [playerTagError]);
+  }, [playerTagError, setPlayerTagError]);
 
   return (
     <div className="flex items-start">

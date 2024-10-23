@@ -69,7 +69,10 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [brawlerMapping, setBrawlerMapping] = useState<Mapping>({});
   const [loadingMapping, setLoadingMapping] = useState(true);
   const [availableGameModes, setAvailableGameModes] = useState<string[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<string>("");
+  const [currentPlayer, setCurrentPlayer] = useState<string>(() => {
+    const savedPlayerTag = localStorage.getItem('playerTag');
+    return savedPlayerTag || "";
+  });
   const [minBrawlerLevel, setMinBrawlerLevel] = useState<number>(11);
   const [currentPlayerBrawlers, setCurrentPlayerBrawlers] = useState<string[]>([]);
   const [playerTagError, setPlayerTagError] = useState<boolean>(false);
@@ -91,6 +94,14 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     };
     getMaps();
   }, []);
+
+  useEffect(() => {
+    if (currentPlayer) {
+      localStorage.setItem('playerTag', currentPlayer);
+    } else {
+      localStorage.removeItem('playerTag');
+    }
+  }, [currentPlayer]);
 
   useEffect(() => {
     const getCurrentPlayerBrawlers = async () => {
