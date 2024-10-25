@@ -51,7 +51,6 @@ export default function BrawlerSlot({ index, bgColor, team }: BrawlerSlotProps) 
 
   const lighterBgColor = lightenColor(bgColor, 0.3); // 30% lighter
   const lighterBgColor2 = lightenColor(bgColor, 0.15); // 15% lighter
-  console.log("lighter colors: ", lighterBgColor, "; ligher 2: ", lighterBgColor2)
 
   if (!selectedBrawler) {
     return (

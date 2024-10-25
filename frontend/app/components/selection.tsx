@@ -55,7 +55,7 @@ function Menu() {
           className="bg-gray-700 text-white p-2 rounded-xl max-h-64 overflow-auto custom-scrollbar"
         >
           {filteredMaps.map((map) => (
-            <DropdownItem key={map} className="text-white hover:bg-gray-600 px-2 py-2 rounded-xl gap-x-2">
+            <DropdownItem key={map} textValue={map} className="text-white hover:bg-gray-600 px-2 py-2 rounded-xl gap-x-2">
               <div className="flex items-center gap-2">
                 {maps.maps[map]?.game_mode ? (
                   <Image
@@ -63,6 +63,11 @@ function Menu() {
                     alt={map}
                     width={30}
                     height={30}
+                    style={{
+                      width: 'auto',
+                      height: 'auto',
+                      objectFit: 'contain'
+                    }}
                     onError={(e) => {
                       e.currentTarget.src = '/brawlstar.png'; 
                     }}
@@ -90,8 +95,9 @@ function Menu() {
               <Image
                 src={`/game_modes/${game_mode}.png`}
                 alt={game_mode}
-                layout="fill"
-                objectFit="contain"
+                fill={true}
+                style={{objectFit: "contain"}}
+                sizes="(max-width: 768px) 100vw, 33vw"
                 onError={(e) => {
                   e.currentTarget.src = '/brawlstar.png'; 
                 }}
@@ -155,15 +161,22 @@ const PlayerTagInformation = () => {
 
 
 const FilterByPlayer = () => {
-  const { playerTagError, setPlayerTagError, setCurrentPlayer, setFilterPlayerBrawlers, setMinBrawlerLevel } = useBrawler();
-  const [playerTag, setPlayerTag] = useState("");
+  const { 
+    playerTagError, 
+    setPlayerTagError, 
+    setCurrentPlayer, 
+    currentPlayer, 
+    setFilterPlayerBrawlers, 
+    setMinBrawlerLevel 
+  } = useBrawler();
+  const [playerTag, setPlayerTag] = useState(currentPlayer);
   
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerTag(event.target.value);
   };
 
   const handleSubmit = () => {
-    setPlayerTagError(false)
+    setPlayerTagError(false);
     setCurrentPlayer(playerTag);
   };
 
@@ -174,7 +187,7 @@ const FilterByPlayer = () => {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [playerTagError]);
+  }, [playerTagError, setPlayerTagError]);
 
   return (
     <div className="flex items-start">
@@ -232,10 +245,31 @@ const ToggleSwitch = ( {isOn, toggleSwitch} ) => {
 
 
 const PlayerTagFilters = () => {
-  const {filterPlayerBrawlers, minBrawlerLevel, setMinBrawlerLevel, setFilterPlayerBrawlers} = useBrawler();
-  const levels = [9,10,11]
+  const { 
+    filterPlayerBrawlers, 
+    setFilterPlayerBrawlers,
+    minBrawlerLevel,
+    setMinBrawlerLevel 
+  } = useBrawler();
+  
+  const levels = [9, 10, 11];
+
+  const renderLevelButton = (brawlerLevel: number) => (
+    <motion.button
+      key={brawlerLevel}
+      className={`bg-gray-200 p-1 min-w-[40px] h-[40px] rounded-xl ${
+        minBrawlerLevel === brawlerLevel ? 'ring-2 border-blue-500 border-2 ring-blue-500' : ''
+      }`}
+      whileTap={{scale: 0.9, transition: { duration: 0.3 }}}
+      whileHover={{ scale: 1.1, zIndex: 10, backgroundColor: "#9ca3af" }}
+      onClick={() => setMinBrawlerLevel(brawlerLevel)}
+    >
+      {brawlerLevel}
+    </motion.button>
+  );
+
   if (filterPlayerBrawlers === null) {
-    return
+    return null;
   }
 
   return (
@@ -252,38 +286,26 @@ const PlayerTagFilters = () => {
       <div className="flex-1">
         <div className="relative">
           <div className="absolute -top-4 left-1 z-20">
-            <span className="px-2 py-0.5 bg-green-300 text-gray-900 text-sm rounded-xl">Min Brawler Level</span>
+            <span className="px-2 py-0.5 bg-green-300 text-gray-900 text-sm rounded-xl">
+              Min Brawler Level
+            </span>
           </div>
           <div className='flex items-center justify-center gap-4 font-bold bg-gray-300 rounded-2xl pt-3 pb-2 pr-2 pl-2'>
-            {levels.map(LevelButton)}
+            {levels.map(renderLevelButton)}
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
-const LevelButton = (brawlerLevel: number) => {
-  const {minBrawlerLevel, setMinBrawlerLevel} = useBrawler();
-  return (
-    <motion.button
-    key={brawlerLevel}
-    className={`bg-gray-200 p-1 min-w-[40px] h-[40px] rounded-xl ${minBrawlerLevel === brawlerLevel ? 'ring-2 border-blue-500 border-2 ring-blue-500' : ''}`}
-    whileTap={{scale: 0.9, transition: { duration: 0.3 }}}
-    whileHover={{ scale: 1.1, zIndex: 10, backgroundColor: "#9ca3af" }}
-    onClick={() => setMinBrawlerLevel(brawlerLevel)}
-    >
-      {brawlerLevel}
-    </motion.button>
-  )
-}
 
 
 const Selection = () => {
   const { firstPick, setFirstPick, resetEverything } = useBrawler();
 
   return (
-    <div className='w-full flex flex-col md:flex-row gap-x-12 py-3 gap-y-3 justify-center mb-16 md:mb-0'>
+    <div className='w-full flex flex-col items-center md:items-stretch md:flex-row gap-x-12 py-3 gap-y-3 justify-center mb-16 md:mb-0'>
       <FilterByPlayer/>
       <Menu />
       <motion.button

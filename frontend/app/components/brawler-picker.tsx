@@ -42,18 +42,21 @@ interface TableRowProps {
   pickrate: number | null;
   onClick: (brawler: BrawlerPickerProps) => void;
   disabled: boolean;
+  isAboveFold: boolean;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick, disabled }) => (
+const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick, disabled, isAboveFold}) => (
   <tr 
     className={`border-b bg-gray-800 border-gray-700 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-600'}`} 
     onClick={() => !disabled && onClick(brawler)}
   >
-    <th scope="row" className="px-2 md:px-4 py-1 md:py-2 font-medium text-white text-center flex items-center justify-center">
-      <BrawlerIcon brawler={brawler.name}/>
+    <th scope="row" className="px-2 md:px-4 py-1 font-medium text-white text-center flex items-center justify-center">
+      <BrawlerIcon 
+        brawler={brawler.name} 
+        isAboveFold={isAboveFold}/>
     </th>
-    <td className="px-2 py-4 mx-auto items-center text-lg text-center">{score !== null ? score.toFixed(3): 'N/A'}</td>
-    <td className="px-2 py-4 mx-auto items-center text-lg text-center">{pickrate !== null ? (pickrate?.valueOf()*100).toFixed(2) + "%": 'N/A' }</td>
+    <td className="px-2 py-4 mx-auto items-center text-md text-center">{score !== null ? score.toFixed(3): 'N/A'}</td>
+    <td className="px-2 py-4 mx-auto items-center text-md text-center">{pickrate !== null ? (pickrate?.valueOf()*100).toFixed(2) + "%": 'N/A' }</td>
   </tr>
 );
 
@@ -99,7 +102,6 @@ export default function BrawlerPicker() {
     return localAvailableBrawlers
       .filter(brawler => brawler.name.toLowerCase().includes(filter.toLowerCase()))
       .filter(brawler => {
-        console.log("Filter player brawlers: ", filterPlayerBrawlers)
         if (filterPlayerBrawlers && currentPlayerBrawlers.length > 0) {
           return playerBrawlers.includes(brawler.name.toLowerCase());
         }
@@ -141,7 +143,7 @@ export default function BrawlerPicker() {
               </tr>
             </thead>
             <tbody>
-              {filteredAndSortedBrawlers.map((brawler) => (
+              {filteredAndSortedBrawlers.map((brawler, index) => (
                 <TableRow 
                   key={brawler.name} 
                   brawler={brawler}
@@ -149,6 +151,7 @@ export default function BrawlerPicker() {
                   pickrate={brawlerPickrates[brawler.name.toLowerCase()] ?? null}
                   onClick={handleClick}
                   disabled={!isMapSelected}
+                  isAboveFold={index < 6}
                 />
               ))}
             </tbody>

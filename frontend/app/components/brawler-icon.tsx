@@ -7,9 +7,10 @@ import { useBrawler } from './brawler-context';
 
 interface BrawlerIconProps {
   brawler: string;
+  isAboveFold?: boolean;
 }
 
-export default function BrawlerIcon({ brawler }: BrawlerIconProps) {
+export default function BrawlerIcon({ brawler, isAboveFold = false }: BrawlerIconProps) {
   const { loadingMapping, error, brawlerMapping } = useBrawler();
 
   if (loadingMapping) return <div>Loading...</div>;
@@ -18,19 +19,20 @@ export default function BrawlerIcon({ brawler }: BrawlerIconProps) {
   if (!brawlerId) return <div>Brawler not found</div>;
 
   return (
-    <div className="md:h-[100px] md:w-[100px] h-[75px] w-[75px] border-4 md:border-8 border-black bg-white bg-opacity-10 p-2 relative rounded-xl overflow-hidden">
+    <div className="md:h-[75px] md:w-[75px] h-[60px] w-[60px] border-[4px] md:border-[5px] border-black bg-white bg-opacity-10 p-2 relative rounded-lg overflow-hidden">
       <Image 
-        className="rounded-xl object-cover object-left"
+        className="rounded-md object-cover object-left"
         src={`https://cdn.brawlify.com/brawlers/borderless/${brawlerId}.png`}
         alt={brawler} 
         fill
         sizes="(max-width: 768px) 75px, 100px"
+        priority={isAboveFold}
         style={{
           objectFit: 'cover',
           objectPosition: 'left center'
         }}
       />
-      <div className='absolute bottom-0 left-0 right-0 bg-slate-600 bg-opacity-60 text-white text-xs md:text-s rounded-b-xl font-bold text-center p-1'> 
+      <div className='absolute bottom-0 left-0 right-0 bg-slate-600 bg-opacity-60 text-white text-xs md:text-s rounded-b-xl font-bold text-center p-0.5'> 
         {brawler}
       </div>
     </div>

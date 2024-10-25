@@ -1,3 +1,4 @@
+"use client";
 import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, useCallback, useRef } from 'react';
 import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
 import { fetchMaps, fetchBrawlers, predictBrawlers, getPickrate, MapInterface, Mapping, getMapping, getPlayerBrawlers } from './api-handler';
@@ -48,6 +49,19 @@ interface BrawlerContextType {
   setPlayerTagError: (playerTagError: boolean) => void;
 }
 
+const getInitialPlayerTag = () => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('playerTag') || "";
+    }
+    return "";
+  } catch (error) {
+    console.warn('localStorage is not available:', error);
+    return "";
+  }
+};
+
+
 const BrawlerContext = createContext<BrawlerContextType | undefined>(undefined);
 
 function get_brawlers(): BrawlerPickerProps[] {
@@ -69,7 +83,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [brawlerMapping, setBrawlerMapping] = useState<Mapping>({});
   const [loadingMapping, setLoadingMapping] = useState(true);
   const [availableGameModes, setAvailableGameModes] = useState<string[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<string>("");
+  const [currentPlayer, setCurrentPlayer] = useState<string>(getInitialPlayerTag);
   const [minBrawlerLevel, setMinBrawlerLevel] = useState<number>(11);
   const [currentPlayerBrawlers, setCurrentPlayerBrawlers] = useState<string[]>([]);
   const [playerTagError, setPlayerTagError] = useState<boolean>(false);
@@ -91,6 +105,21 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     };
     getMaps();
   }, []);
+
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        if (currentPlayer) {
+          localStorage.setItem('playerTag', currentPlayer);
+        } else {
+          localStorage.removeItem('playerTag');
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to access localStorage:', error);
+    }
+  }, [currentPlayer]);
+
 
   useEffect(() => {
     const getCurrentPlayerBrawlers = async () => {
