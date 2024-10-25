@@ -822,10 +822,10 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/transformer_8.pth')
+    torch.save(model.state_dict(), 'out/models/ai_model.pth')
 
 
-def load_model(n_brawlers, n_maps, model_path='out/models/transformer_8.pth',
+def load_model(n_brawlers, n_maps, model_path='out/models/ai_model.pth',
                d_model=64, nhead=4, num_layers=2):
     """
     Loads a trained BrawlStarsTransformer model from a file.
