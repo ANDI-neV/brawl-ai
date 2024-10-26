@@ -232,16 +232,15 @@ def get_opposite_team(team: str) -> str:
 
 def get_match_dictionary(match: pd.Series, result: bool) -> Dict:
     """
-    Creates a dictionary for a given match. Each match 6 players,
-    with 3 on each team, with 'a' representing team 1 and 'b' team 2.
-    The brawlers picked by the players are converted into their unique
-    indices.
+    Creates a dictionary for a given match, properly handling team affiliations
+    based on match result.
 
     Args:
         match (pd.Series): Match that was played.
-        result (bool): Result of the match played.
+        result (bool): True if team 'a' won, False if team 'b' won.
     Returns:
-        Dict: Converted Match.
+        Dict: Dictionary mapping player positions to brawler indices, maintaining
+        correct team affiliations.
     """
     if result:
         return {f'{team}{i}': get_brawler_index(match[f'{team}{i}'])
@@ -326,7 +325,13 @@ def get_brawler_vectors(match_data: pd.DataFrame,
                 invalid_samples += 1
                 continue
 
-            team_indicators = [1 if player[0] == 'a' else 2 for player in combination[:-1]]
+            team_indicators = []
+            for player in combination[:-1]:
+                if player[0] == 'a':
+                    team_indicators.append(1)  # Ally team
+                else:
+                    team_indicators.append(2)  # Enemy team
+
             positions = [i for i in range(len(current_picks))]
 
             training_samples.append({
@@ -418,7 +423,7 @@ def get_brawler_index(brawler):
 
 
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
-                            nhead=4, num_layers=2, batch_size=64, epochs=10,
+                            nhead=4, num_layers=2, batch_size=64, epochs=50,
                             learning_rate=0.001):
     """
     Trains the BrawlStarsTransformer model on the provided training samples.
@@ -641,33 +646,29 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping,
 
     # Prepare model inputs
     brawlers = [CLS_TOKEN_INDEX] + current_picks_indices
-    team_indicators = [0] + [1 if pos[0] == 'a' else 2 for pos
-                             in current_picks_positions]
+    team_indicators = [0]  # CLS token
+    for pos in current_picks_positions:
+        if pos[0] == 'a':
+            team_indicators.append(1)  # Ally team
+        else:
+            team_indicators.append(2)  # Enemy team
+
     positions = [0] + [i + 1 for i in range(len(current_picks_indices))]
 
     seq_len = len(brawlers)
     padding_length = max_seq_len - seq_len
+
     brawlers_padded = brawlers + [PAD_TOKEN_INDEX] * padding_length
     team_indicators_padded = team_indicators + [0] * padding_length
     positions_padded = positions + [0] * padding_length
     padding_mask = [False] * seq_len + [True] * padding_length
 
-    # Convert to tensors
-    brawlers_tensor = torch.tensor([brawlers_padded], dtype=torch.long)
-    team_indicators_tensor = torch.tensor([team_indicators_padded],
-                                          dtype=torch.long)
-    positions_tensor = torch.tensor([positions_padded], dtype=torch.long)
-    padding_mask_tensor = torch.tensor([padding_mask], dtype=torch.bool)
-    map_id = map_id_mapping.get(map_name)
-    if map_id is None:
-        raise ValueError(f"Map '{map_name}' not found in map_id_mapping.")
-    map_id_tensor = torch.tensor([map_id], dtype=torch.long)
     return {
-        'brawlers': brawlers_tensor,
-        'team_indicators': team_indicators_tensor,
-        'positions': positions_tensor,
-        'map_id': map_id_tensor,
-        'padding_mask': padding_mask_tensor
+        'brawlers': torch.tensor([brawlers_padded], dtype=torch.long),
+        'team_indicators': torch.tensor([team_indicators_padded], dtype=torch.long),
+        'positions': torch.tensor([positions_padded], dtype=torch.long),
+        'map_id': torch.tensor([map_id_mapping[map_name]], dtype=torch.long),
+        'padding_mask': torch.tensor([padding_mask], dtype=torch.bool)
     }
 
 
@@ -812,7 +813,7 @@ def train_model():
     here = os.path.dirname(os.path.abspath(__file__))
     training_samples = get_brawler_vectors(match_data,
                                            map_id_mapping=map_id_mapping,
-                                           limit=1000)
+                                           limit=None)
 
     print("Map ID Mapping:")
     for map_name, map_id in map_id_mapping.items():

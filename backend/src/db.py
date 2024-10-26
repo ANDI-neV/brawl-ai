@@ -338,4 +338,3 @@ class ThreadedDBWorker:
 
 if __name__ == "__main__":
     db = Database()
-    print(db.get_battles_count())

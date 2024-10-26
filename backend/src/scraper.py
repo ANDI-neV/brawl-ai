@@ -181,6 +181,7 @@ def main():
     print("Brawler data successfully fetched and saved.")
 
     scrape_brawler_images(brawler_data)
+    save_map_data()
 
 
 def scrape_brawler_images(brawler_data):
@@ -255,8 +256,6 @@ def cache_brawler_pickrates(brawler_list: list[Any]):
     with open(os.path.join(BRAWLERS_DIR, 'brawler_pickrates.json'), 'w') as f:
         json.dump(map_pickrates, f, indent=2)
 
-#/html/body/div[2]/div[2]/div[2]/div/div[2]/div[2]/a
-
 
 def scrape_map_data():
     response = requests.get("https://brawlify.com/maps/")
@@ -311,6 +310,4 @@ def test_map_data():
 
 
 if __name__ == "__main__":
-    brawler_list = get_brawler_list()
-    cache_brawler_pickrates(brawler_list)
-    cache_brawler_winrates(brawler_list)
+    main()
