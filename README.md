@@ -35,6 +35,7 @@ Free usage available at [brawl-ai.com](https://brawl-ai.com)
 git clone https://github.com/ANDI-neV/brawl-ai.git
 ```
 2. Install dependencies following the frontend readme
+3. Create a `config.ini` in `backend/src` and add your api key
 
 ## 📝 License
 MIT
