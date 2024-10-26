@@ -310,4 +310,5 @@ def test_map_data():
 
 
 if __name__ == "__main__":
-    main()
+    brawler_list = get_brawler_list()
+    cache_brawler_winrates(brawler_list)

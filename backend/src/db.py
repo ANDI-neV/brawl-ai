@@ -306,7 +306,7 @@ class Database:
         return matches / total_games if total_games > 0 else 0
 
     def check_brawler_winrate_for_map(
-        self, brawler: str, map_name: str = None
+        self, brawler: str, map_name: str
     ) -> float:
         query = """
             SELECT
@@ -314,13 +314,9 @@ class Database:
                     OR ((b1=%s OR b2=%s OR b3=%s) AND result=0) THEN 1 ELSE 0 END) as wins,
                 COUNT(*) as total_games
             FROM battles
-            WHERE a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s
+            WHERE (a1=%s OR a2=%s OR a3=%s OR b1=%s OR b2=%s OR b3=%s) AND map=%s
         """
-        params = (brawler,) * 12
-
-        if map_name:
-            query += " AND map=%s"
-            params += (map_name,)
+        params = (brawler,) * 12 + (map_name,)
 
         self.cur.execute(query, params)
         wins, total_games = self.cur.fetchone()

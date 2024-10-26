@@ -1,6 +1,5 @@
 "use client";
 import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, useCallback, useRef } from 'react';
-import brawlerJson from "../../../backend/src/out/brawlers/brawlers.json";
 import { fetchMaps, fetchBrawlers, predictBrawlers, getPickrate, MapInterface, Mapping, getMapping, getPlayerBrawlers } from './api-handler';
 import axios from 'axios';
 
@@ -64,14 +63,10 @@ const getInitialPlayerTag = () => {
 
 const BrawlerContext = createContext<BrawlerContextType | undefined>(undefined);
 
-function get_brawlers(): BrawlerPickerProps[] {
-  return Object.keys(brawlerJson).map(name => ({ name }));
-}
-
 export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [selectedBrawlers, setSelectedBrawlers] = useState<(BrawlerPickerProps | null)[]>(Array(6).fill(null));
   const [firstPick, setFirstPick] = useState(true);
-  const allBrawlers = useMemo(() => get_brawlers(), []);
+  const [allBrawlers, setAllBrawlers] = useState<BrawlerPickerProps[]>([]);
   const [availableMaps, setAvailableMaps] = useState<string[]>([]);
   const [selectedMap, setSelectedMap] = useState<string>('');
   const [isPredicting, setIsPredicting] = useState(false);
@@ -88,6 +83,24 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [currentPlayerBrawlers, setCurrentPlayerBrawlers] = useState<string[]>([]);
   const [playerTagError, setPlayerTagError] = useState<boolean>(false);
   const [filterPlayerBrawlers, setFilterPlayerBrawlers] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const getBrawlers = async () => {
+      try {
+        const fetchedBrawlers = await fetchBrawlers();
+        const brawlerObjects: BrawlerPickerProps[] = fetchedBrawlers.map(name => ({
+          name: name
+        }));
+        
+        setAllBrawlers(brawlerObjects);
+      }
+      catch( err ) {
+        console.error("Error fetching brawlers:", err);
+        setError("Failed to fetch brawlers");
+      }
+      };
+      getBrawlers();
+  }, []);
 
   useEffect(() => {
     const getMaps = async () => {

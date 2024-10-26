@@ -738,8 +738,8 @@ def test_team_composition(model, current_picks_dict, map_name,
         index_to_brawler_name.
     """
     input_data = prepare_input(current_picks_dict, map_name,
-                               map_id_mapping, max_seq_len,
-                               first_pick)
+                               map_id_mapping, first_pick,
+                                max_seq_len)
 
     already_picked_brawlers = [get_brawler_index(brawler_name)
                                for brawler_name in current_picks_dict.values()]
