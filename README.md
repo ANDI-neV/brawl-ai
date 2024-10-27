@@ -87,7 +87,7 @@ python src/feeding.py
 5. Configure training parameters in `ai.py`
 6. Run the training script:
 ```bash
-python src/train.py
+python src/ai.py
 ```
 ## 📝 License
 MIT
