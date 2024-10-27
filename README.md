@@ -90,7 +90,7 @@ python src/feeding.py
 python src/ai.py
 ```
 ## 📝 License
-MIT
+GPLv3
 
 ## 🙏 Acknowledgments
 - Brawl Stars API for providing game data
