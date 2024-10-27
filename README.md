@@ -5,8 +5,9 @@
 A solution for optimizing ranked drafting sequences in the mobile game Brawl Stars by Supercell.
 
 <p align="center">
-  <img src="https://private-user-images.githubusercontent.com/89548801/380198324-7b6584da-c97f-42ba-9fca-af95e479c42f.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjk5NTYzNDksIm5iZiI6MTcyOTk1NjA0OSwicGF0aCI6Ii84OTU0ODgwMS8zODAxOTgzMjQtN2I2NTg0ZGEtYzk3Zi00MmJhLTlmY2EtYWY5NWU0NzljNDJmLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDEwMjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQxMDI2VDE1MjA0OVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWUyMjEwYjdmNjMxNGUzOTM1NTE2ZjI2ZmEwMThjYmJhM2M2YTlmYjUwODM3ZDE1ODAwZTAyNjYwY2UxZGU3NDMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.WrzrEj6WZ-9H7yRL8-OKmM69uP6_ri7D4_kKUINiVTM" width="600" alt="BrawlAI Screenshot">
+  <img src="https://github.com/user-attachments/assets/a06d8375-7905-4995-bd9d-9b874c3810a5">
 </p>
+
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
