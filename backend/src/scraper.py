@@ -180,8 +180,7 @@ def main():
     save_brawler_data(brawler_data)
     print("Brawler data successfully fetched and saved.")
 
-    scrape_brawler_images(brawler_data)
-    save_map_data()
+    cache_stripped_brawler_data()
 
 
 def scrape_brawler_images(brawler_data):
@@ -257,6 +256,25 @@ def cache_brawler_pickrates(brawler_list: list[Any]):
         json.dump(map_pickrates, f, indent=2)
 
 
+def cache_stripped_brawler_data():
+    with open(os.path.join(BRAWLERS_DIR, 'brawlers.json'), 'r') as f:
+        brawler_data = json.load(f)
+
+    classes = sorted(set(stats['class'] for stats in brawler_data.values()))
+    class_to_idx = {cls: idx for idx, cls in enumerate(classes)}
+
+    stripped_brawler_data = {}
+    for brawler_name, brawler_info in brawler_data.items():
+        print(brawler_name, ": ", brawler_info)
+        brawler_index = brawler_info['index']
+        brawler_class = class_to_idx[brawler_info['class']]
+        stripped_brawler_data[brawler_name] = {}
+        stripped_brawler_data[brawler_name]['class_idx'] = brawler_class
+        stripped_brawler_data[brawler_name]['index'] = brawler_index
+
+    with open(os.path.join(BRAWLERS_DIR, 'stripped_brawlers.json'), 'w') as f:
+        json.dump(stripped_brawler_data, f, indent=2)
+
 def scrape_map_data():
     response = requests.get("https://brawlify.com/maps/")
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -310,5 +328,4 @@ def test_map_data():
 
 
 if __name__ == "__main__":
-    brawler_list = get_brawler_list()
-    cache_brawler_winrates(brawler_list)
+    cache_stripped_brawler_data()

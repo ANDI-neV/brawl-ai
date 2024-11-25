@@ -219,7 +219,7 @@ class DevBrawlManager():
             player = (player_api["tag"][1:], player_api["name"])
             self.db.insert_player(player)
 
-        runtime = 45
+        runtime = 5
         while (time.time() - start_time) < 60 * runtime:
             print(f"Time left: "
                   f"{(60 * runtime - (time.time() - start_time)) / 60:.2f} "
