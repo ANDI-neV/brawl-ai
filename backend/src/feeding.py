@@ -22,7 +22,7 @@ class DevBrawlManager():
     10. Mark the player as checked
     11. Repeat
     """
-    def __init__(self):
+    def __init__(self, date):
         self.api = DevBrawlAPI()
         self.db = Database()
         random.seed(datetime.now().timestamp())
@@ -46,9 +46,10 @@ class DevBrawlManager():
         self.new_best_players = [
             "#Q88GUGP"
             ]
-        self.min_timestamp = datetime.fromtimestamp(1728043200,
+        time_step = time.mktime(datetime.strptime(date, "%d.%m.%Y").timetuple())
+        self.min_timestamp = datetime.fromtimestamp(time_step,
                                                     tz=timezone.utc)
-        # 04.10.24, 12:00 GMT, Last Update
+
 
     def push_battle(self, battle: Tuple):
         self.db.insert_battle(battle)
@@ -267,7 +268,7 @@ class BattleLogsThread(threading.Thread):
 
 
 if __name__ == "__main__":
-    manager = DevBrawlManager()
+    manager = DevBrawlManager("04.10.24")
     for player in manager.new_best_players:
         player_stats = manager.api.get_player_stats(player)
         if player_stats:
