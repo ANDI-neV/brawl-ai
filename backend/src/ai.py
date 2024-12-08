@@ -12,7 +12,7 @@ import configparser
 import requests
 from requests.exceptions import HTTPError
 
-BRAWLERS_JSON_PATH = 'out/brawlers/brawlers.json'
+BRAWLERS_JSON_PATH = 'out/brawlers/stripped_brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
 BRAWLER_PICKRATES_JSON_PATH = 'out/brawlers/brawler_pickrates.json'
 picking_combinations1 = [['a1', 'b1', 'b2', 'a2'],
@@ -102,6 +102,9 @@ def get_filtered_brawlers(player_tag, min_level):
 
 brawler_data = prepare_brawler_data()
 n_brawlers = len(brawler_data)
+n_classes = max([brawler['class_idx'] for brawler in brawler_data.values()])
+CLASS_CLS_TOKEN_INDEX = n_classes + 1
+CLASS_PAD_TOKEN_INDEX = n_classes + 2
 CLS_TOKEN_INDEX = n_brawlers
 PAD_TOKEN_INDEX = n_brawlers + 1
 n_brawlers_with_special_tokens = n_brawlers + 2
@@ -154,6 +157,7 @@ class BrawlStarsTransformer(nn.Module):
     Args:
         n_brawlers (int): Number of unique brawlers in the game.
         n_maps (int): Number of unique maps in the game.
+        n_brawler_classes (int): Number of brawler classes in the game.
         d_model (int, optional): Dimension of the model.
             Defaults to 64.
         nhead (int, optional): Number of heads in multi-head attention.
@@ -167,8 +171,8 @@ class BrawlStarsTransformer(nn.Module):
         The model uses special tokens: PAD_TOKEN_INDEX for padding and assumes
         a CLS token at position 0 (Thus the sequence length of 7 instead of 6).
     """
-    def __init__(self, n_brawlers, n_maps, d_model=64, nhead=4, num_layers=2,
-                 dropout=0.1, max_seq_len=7):
+    def __init__(self, n_brawlers, n_maps, n_brawler_classes, d_model=64, nhead=4,
+                 num_layers=2, dropout=0.1, max_seq_len=7):
 
         super().__init__()
         self.brawler_embedding = nn.Embedding(
@@ -181,6 +185,8 @@ class BrawlStarsTransformer(nn.Module):
             max_seq_len, d_model, padding_idx=0
         )
 
+        self.class_embedding = nn.Embedding(n_brawler_classes, d_model, padding_idx=CLASS_PAD_TOKEN_INDEX)
+
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=d_model, nhead=nhead, dropout=dropout, batch_first=True
         )
@@ -190,13 +196,14 @@ class BrawlStarsTransformer(nn.Module):
         self.output_layer = nn.Linear(d_model, n_brawlers)
         print(f"Output layer size: {n_brawlers}")
 
-    def forward(self, brawlers, team_indicators, positions, map_id,
+    def forward(self, brawlers, brawler_classes, team_indicators, positions, map_id,
                 src_key_padding_mask=None):
         """
         Forward pass of the BrawlStarsTransformer.
 
         Args:
             brawlers (Tensor): Tensor of brawler indices.
+            brawler_classes (Tensor): Tensor of the brawler classes.
             team_indicators (Tensor): Tensor indicating team affiliations.
             positions (Tensor): Tensor of position indices.
             map_id (Tensor): Tensor of map identifiers.
@@ -212,6 +219,7 @@ class BrawlStarsTransformer(nn.Module):
             output for final prediction.
         """
         x = self.brawler_embedding(brawlers)
+        x = x + self.class_embedding(brawler_classes)
         x = x + self.team_embedding(team_indicators)
         x = x + self.position_embedding(positions)
         x = x + self.map_embedding(map_id).unsqueeze(1)
@@ -232,15 +240,16 @@ def get_opposite_team(team: str) -> str:
 
 def get_match_dictionary(match: pd.Series, result: bool) -> Dict:
     """
-    Creates a dictionary for a given match, properly handling team affiliations
-    based on match result.
+    Creates a dictionary for a given match. Each match 6 players,
+    with 3 on each team, with 'a' representing team 1 and 'b' team 2.
+    The brawlers picked by the players are converted into their unique
+    indices.
 
     Args:
         match (pd.Series): Match that was played.
-        result (bool): True if team 'a' won, False if team 'b' won.
+        result (bool): Result of the match played.
     Returns:
-        Dict: Dictionary mapping player positions to brawler indices, maintaining
-        correct team affiliations.
+        Dict: Converted Match.
     """
     if result:
         return {f'{team}{i}': get_brawler_index(match[f'{team}{i}'])
@@ -279,7 +288,7 @@ def get_match_vector(combination: List[str], match_dictionary: Dict) \
 
 def get_brawler_vectors(match_data: pd.DataFrame,
                         map_id_mapping: Dict[str, int],
-                        limit: int = None) -> List[Dict]:
+                        limit: int = 1000) -> List[Dict]:
     """
     Generates training samples from match data for brawler prediction.
 
@@ -334,8 +343,12 @@ def get_brawler_vectors(match_data: pd.DataFrame,
 
             positions = [i for i in range(len(current_picks))]
 
+            brawler_classes = [get_brawler_class_from_index(brawler_name)
+                               for brawler_name in full_sequence[:-1]]
+
             training_samples.append({
                 'current_picks': current_picks,
+                'brawler_classes': brawler_classes,
                 'team_indicators': team_indicators,
                 'positions': positions,
                 'next_pick': next_pick,
@@ -422,8 +435,25 @@ def get_brawler_index(brawler):
     return index
 
 
+def get_brawler_class(brawler):
+    brawler_class = brawler_data.get(str.lower(brawler), {}).get("class_idx")
+    if brawler_class is None:
+        print(f"Warning: Brawler '{brawler}' not found in brawler_data")
+        return None
+    return brawler_class
+
+
+def get_brawler_class_from_index(brawler_index):
+    for brawler_name, data in brawler_data.items():
+        if data.get("index") == brawler_index:
+            return data.get("class_idx")
+
+    print(f"Warning: Brawler with index '{brawler_index}' not found in brawler_data")
+    return None
+
+
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
-                            nhead=4, num_layers=2, batch_size=64, epochs=50,
+                            nhead=4, num_layers=2, batch_size=64, epochs=25,
                             learning_rate=0.001):
     """
     Trains the BrawlStarsTransformer model on the provided training samples.
@@ -452,7 +482,7 @@ def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
         (CPU or CUDA), and trains it using CrossEntropyLoss and Adam optimizer.
         It prints the loss for each epoch.
     """
-    model = BrawlStarsTransformer(PAD_TOKEN_INDEX + 1, n_maps, d_model,
+    model = BrawlStarsTransformer(PAD_TOKEN_INDEX + 1, n_maps, CLASS_PAD_TOKEN_INDEX + 1, d_model,
                                   nhead, num_layers)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
@@ -473,6 +503,7 @@ def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
                 continue
 
             brawlers = batch['brawlers'].to(device)
+            brawler_classes = batch['brawler_classes'].to(device)
             team_indicators = batch['team_indicators'].to(device)
             positions = batch['positions'].to(device)
             map_id = batch['map_id'].to(device)
@@ -482,6 +513,7 @@ def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
             optimizer.zero_grad()
             logits = model(
                 brawlers,
+                brawler_classes,
                 team_indicators,
                 positions,
                 map_id,
@@ -525,6 +557,7 @@ def prepare_batch(samples, max_seq_len=7):
         max_seq_len and prepares all required inputs for the transformer model.
     """
     brawlers_list = []
+    brawler_classes_list = []
     team_indicators_list = []
     positions_list = []
     target_list = []
@@ -533,6 +566,7 @@ def prepare_batch(samples, max_seq_len=7):
 
     for s in samples:
         current_picks = s['current_picks']
+        brawler_classes = s['brawler_classes']
         team_indicators = s['team_indicators']
         positions = s['positions']
         map_id = s['map_id']
@@ -542,18 +576,21 @@ def prepare_batch(samples, max_seq_len=7):
         current_picks = [CLS_TOKEN_INDEX] + list(current_picks)
         team_indicators = [0] + list(team_indicators)  # 0 for CLS token
         positions = [0] + [p + 1 for p in positions]  # Shift positions by 1
+        brawler_classes = [CLASS_CLS_TOKEN_INDEX] + list(brawler_classes)
 
         seq_len = len(current_picks)
 
         # Pad sequences
         padding_length = max_seq_len - seq_len
         brawlers_padded = current_picks + [PAD_TOKEN_INDEX] * padding_length
+        brawler_classes_padded = brawler_classes + [CLASS_PAD_TOKEN_INDEX] * padding_length
         team_indicators_padded = team_indicators + [0] * padding_length
         positions_padded = positions + [0] * padding_length
 
         padding_mask = [False] * seq_len + [True] * padding_length
 
         brawlers_list.append(brawlers_padded)
+        brawler_classes_list.append(brawler_classes_padded)
         team_indicators_list.append(team_indicators_padded)
         positions_list.append(positions_padded)
         target_list.append(target)
@@ -562,6 +599,8 @@ def prepare_batch(samples, max_seq_len=7):
 
     return {
         'brawlers': torch.tensor(brawlers_list, dtype=torch.long),
+        'brawler_classes': torch.tensor(brawler_classes_list,
+                                        dtype=torch.long),
         'team_indicators': torch.tensor(team_indicators_list,
                                         dtype=torch.long),
         'positions': torch.tensor(positions_list, dtype=torch.long),
@@ -644,6 +683,9 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping,
     current_picks_indices = [get_brawler_index(brawler_name)
                              for brawler_name in current_picks_names]
 
+    brawler_classes = [get_brawler_class(brawler_name)
+                       for brawler_name in current_picks_names]
+
     # Prepare model inputs
     brawlers = [CLS_TOKEN_INDEX] + current_picks_indices
     team_indicators = [0]  # CLS token
@@ -659,16 +701,29 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping,
     padding_length = max_seq_len - seq_len
 
     brawlers_padded = brawlers + [PAD_TOKEN_INDEX] * padding_length
+    brawler_classes_padded = brawler_classes + [CLASS_PAD_TOKEN_INDEX] * padding_length
     team_indicators_padded = team_indicators + [0] * padding_length
     positions_padded = positions + [0] * padding_length
     padding_mask = [False] * seq_len + [True] * padding_length
 
+    # Convert to tensors
+    brawlers_tensor = torch.tensor([brawlers_padded], dtype=torch.long)
+    brawler_classes_tensor = torch.tensor([brawler_classes_padded], dtype=torch.long)
+    team_indicators_tensor = torch.tensor([team_indicators_padded],
+                                          dtype=torch.long)
+    positions_tensor = torch.tensor([positions_padded], dtype=torch.long)
+    padding_mask_tensor = torch.tensor([padding_mask], dtype=torch.bool)
+    map_id = map_id_mapping.get(map_name)
+    if map_id is None:
+        raise ValueError(f"Map '{map_name}' not found in map_id_mapping.")
+    map_id_tensor = torch.tensor([map_id], dtype=torch.long)
     return {
-        'brawlers': torch.tensor([brawlers_padded], dtype=torch.long),
-        'team_indicators': torch.tensor([team_indicators_padded], dtype=torch.long),
-        'positions': torch.tensor([positions_padded], dtype=torch.long),
-        'map_id': torch.tensor([map_id_mapping[map_name]], dtype=torch.long),
-        'padding_mask': torch.tensor([padding_mask], dtype=torch.bool)
+        'brawlers': brawlers_tensor,
+        'brawler_classes': brawler_classes_tensor,
+        'team_indicators': team_indicators_tensor,
+        'positions': positions_tensor,
+        'map_id': map_id_tensor,
+        'padding_mask': padding_mask_tensor
     }
 
 
@@ -823,10 +878,10 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/ai_model.pth')
+    torch.save(model.state_dict(), 'out/models/ai_model_test.pth')
 
 
-def load_model(n_brawlers, n_maps, model_path='out/models/ai_model.pth',
+def load_model(n_brawlers, n_maps, model_path='out/models/ai_model_test.pth',
                d_model=64, nhead=4, num_layers=2):
     """
     Loads a trained BrawlStarsTransformer model from a file.
