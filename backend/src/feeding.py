@@ -6,7 +6,7 @@ import random
 from datetime import datetime, timezone
 import threading
 from typing import Tuple, List, Dict, Any
-
+import argparse
 
 class DevBrawlManager():
     """
@@ -268,7 +268,15 @@ class BattleLogsThread(threading.Thread):
 
 
 if __name__ == "__main__":
-    manager = DevBrawlManager("04.10.24")
+    parser = argparse.ArgumentParser(description='Brawl Stars Data Collection')
+    parser.add_argument('--last_update',
+                        type=str,
+                        default=datetime.now().strftime("%d.%m.%Y"),
+                        help='Date for data collection (format: DD.MM.YYYY)')
+
+    args = parser.parse_args()
+
+    manager = DevBrawlManager(args.date)
     for player in manager.new_best_players:
         player_stats = manager.api.get_player_stats(player)
         if player_stats:

@@ -11,6 +11,7 @@ class BrawlAIPipeline:
     def __init__(self, rank_threshold: int, initial_player_id: str, last_update: str):
         self.rank_threshold = rank_threshold
         self.initial_player_id = initial_player_id
+        self.last_update = last_update
 
         logging.basicConfig(
             level=logging.INFO,
@@ -24,7 +25,7 @@ class BrawlAIPipeline:
 
     def update_brawler_data(self) -> None:
         try:
-            subprocess.run(["python", "web_scraper.py"], check=True)
+            subprocess.run(["python", "scraper.py", "--last_update", self.last_update], check=True)
             self.logger.info("Brawler data updated successfully")
         except subprocess.CalledProcessError as e:
             self.logger.error(f"Web scraping failed: {str(e)}")
@@ -32,10 +33,18 @@ class BrawlAIPipeline:
 
     def retrain_model(self) -> None:
         try:
-            subprocess.run(["python", "train_model.py"], check=True)
+            subprocess.run(["python", "ai.py"], check=True)
             self.logger.info("Model retraining completed")
         except subprocess.CalledProcessError as e:
             self.logger.error(f"Model retraining failed: {str(e)}")
+            raise
+
+    def feed_database(self) -> None:
+        try:
+            subprocess.run(["python", "feeding.py"], check=True)
+            self.logger.info("Model retraining completed")
+        except subprocess.CalledProcessError as e:
+            self.logger.error(f"Feeding database failed: {str(e)}")
             raise
 
     def run_pipeline(self) -> bool:
