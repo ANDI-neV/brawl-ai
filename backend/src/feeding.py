@@ -50,7 +50,6 @@ class DevBrawlManager():
         self.min_timestamp = datetime.fromtimestamp(time_step,
                                                     tz=timezone.utc)
 
-
     def push_battle(self, battle: Tuple):
         self.db.insert_battle(battle)
 
@@ -63,7 +62,7 @@ class DevBrawlManager():
         players = []
         for team in battle["battle"]["teams"]:
             for player in team:
-                if 16 <= player["brawler"]["trophies"] <= 19:
+                if 15 <= player["brawler"]["trophies"] <= 19:
                     players.append((player["tag"][1:], player["name"]))
         return players
 
@@ -142,7 +141,7 @@ class DevBrawlManager():
 
     @staticmethod
     def check_rank_requirement(battle):
-        return sum(int(player["brawler"]["trophies"]) >= 16 for team
+        return sum(int(player["brawler"]["trophies"]) >= 15 for team
                    in battle["battle"]["teams"] for player in team) >= 5
 
     def cycle(self):
@@ -150,6 +149,7 @@ class DevBrawlManager():
             batch_size = 200
             players_list = self.get_unchecked_player(batch_size)
             player_tags = [player[0] for player in players_list]
+            print("player tags before:", player_tags)
 
             start_time = time.time()
             battle_logs = self.get_battlelogs(player_tags)
@@ -165,11 +165,11 @@ class DevBrawlManager():
                     new_players.extend(self.get_players_from_battlelog(battle))
 
             new_players = list(set(new_players))  # Remove duplicates
-            player_tags = [player[0] for player in new_players]
-            existing_players = self.db.get_if_players_exist(player_tags)
-            player_tags = list(set(player_tags) - set(existing_players))
+            new_player_tags = [player[0] for player in new_players]
+            existing_players = self.db.get_if_players_exist(new_player_tags)
+            new_player_tags = list(set(player_tags) - set(existing_players))
 
-            player_stats_list = self.get_player_stats(player_tags)
+            player_stats_list = self.get_player_stats(new_player_tags)
             eligible_players = [stats["tag"][1:] for stats in player_stats_list
                                 if self.check_ranked_eligibility(stats)]
 
@@ -185,7 +185,7 @@ class DevBrawlManager():
 
             print(f"Real Battles: {len(real_battles)}")
 
-            self.db.insert_many_players(new_players)
+            self.db.insert_many_players(eligible_players)
             for battle in real_battles:
                 battle_id = random.randint(0, 10000000000000)
                 unix_time = time.mktime(
@@ -201,6 +201,7 @@ class DevBrawlManager():
                               battle["battle"]["teams"][1][2]["brawler"]["name"],
                               1 if battle["battle"]["result"] == "victory" else 0)
                 self.push_battle(sql_battle)
+            print("player tags: ", player_tags)
             self.db.set_many_players_checked(player_tags)
             self.db.commit()
 
@@ -220,8 +221,8 @@ class DevBrawlManager():
             player = (player_api["tag"][1:], player_api["name"])
             self.db.insert_player(player)
 
-        runtime = 5
-        while (time.time() - start_time) < 60 * runtime:
+        runtime = 120
+        while (time.time() - start_time) < 60 * runtime and self.db.get_checked_players_percentage() < 0.98:
             print(f"Time left: "
                   f"{(60 * runtime - (time.time() - start_time)) / 60:.2f} "
                   f"min")
@@ -276,8 +277,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    manager = DevBrawlManager(args.date)
-    for player in manager.new_best_players:
+    manager = DevBrawlManager(args.last_update)
+    for player in manager.best_players:
         player_stats = manager.api.get_player_stats(player)
         if player_stats:
             player = (player_stats["tag"][1:], player_stats["name"])

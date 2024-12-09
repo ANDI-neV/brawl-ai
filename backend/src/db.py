@@ -77,7 +77,7 @@ class Database:
 
     def get_unchecked_player(self, count: int = 1) -> List[Tuple]:
         self.cur.execute(
-            "SELECT * FROM players WHERE checked = 0 AND canRanked=-1 LIMIT %s",
+            "SELECT * FROM players WHERE CURRENT_TIMESTAMP - last_checked > INTERVAL '12 hours' AND canRanked=-1 LIMIT %s",
             (count,)
         )
         return self.cur.fetchall()
@@ -101,7 +101,7 @@ class Database:
         self.cur.execute(
             """
             SELECT * FROM players 
-            ORDER BY RANDOM()
+            WHERE CURRENT_TIMESTAMP - last_checked > INTERVAL '12 hours'
             LIMIT %s
             """,
             (count,)
@@ -112,8 +112,7 @@ class Database:
         self.cur.execute(
             """
             UPDATE players 
-            SET checked = 1, 
-                last_checked = CURRENT_TIMESTAMP
+            SET last_checked = CURRENT_TIMESTAMP
             WHERE tag = %s
             """,
             (tag,)
@@ -121,7 +120,7 @@ class Database:
         self.conn.commit()
 
     def get_checked_players_percentage(self) -> float:
-        self.cur.execute("SELECT COUNT(*) FROM players WHERE checked=1")
+        self.cur.execute("SELECT COUNT(*) FROM players WHERE CURRENT_TIMESTAMP - last_checked < INTERVAL '12 hours'")
         checked = self.cur.fetchone()[0]
         self.cur.execute("SELECT COUNT(*) FROM players")
         total = self.cur.fetchone()[0]
@@ -146,8 +145,8 @@ class Database:
         if self.cur.fetchone():
             return
         self.cur.execute(
-            "INSERT INTO players (tag, name, checked, canRanked) VALUES (%s, %s, %s, %s)",
-            (tag, name, 0, -1)
+            "INSERT INTO players (tag, name, last_checked, canRanked) VALUES (%s, %s, %s, %s)",
+            (tag, name, '001-01-01 00:00:00', -1)
         )
         self.commit()
 
@@ -178,11 +177,11 @@ class Database:
 
         # Prepare the SQL query
         insert_query = """
-        INSERT INTO players (tag, name, checked, canRanked)
-        VALUES (%s, %s, 0, -1)
+        INSERT INTO players (tag, name, last_checked, canRanked)
+        VALUES (%s, %s, '001-01-01 00:00:00', -1)
         ON CONFLICT (tag) DO UPDATE
         SET name = EXCLUDED.name,
-            checked = 0,
+            last_checked = '001-01-01 00:00:00',
             canRanked = -1
         """
 
@@ -197,15 +196,11 @@ class Database:
         self.conn.commit()
         print(f"Successfully inserted/updated {len(u_players)} players")
 
-    def set_player_checked(self, tag: str):
-        self.cur.execute("UPDATE players SET checked=1 WHERE tag=%s", (tag,))
-        self.conn.commit()
-
     def rollback(self):
         self.conn.rollback()
 
     def set_many_players_checked(self, tags):
-        self.cur.execute("UPDATE players SET checked=1 WHERE tag = ANY(%s)", [tags])
+        self.cur.execute("UPDATE players SET last_checked=CURRENT_TIMESTAMP WHERE tag = ANY(%s)", [tags])
         self.conn.commit()
 
     def get_winrate(self, brawler: str) -> float:
@@ -322,6 +317,15 @@ class Database:
         wins, total_games = self.cur.fetchone()
 
         return wins / total_games if total_games > 0 else 0
+
+    def get_database_structure(self):
+        self.cur.execute("""SELECT column_name, data_type 
+                            FROM information_schema.columns 
+                            WHERE table_name = 'players';
+                            """)
+        headers = self.cur.fetchall()
+        print(headers)
+        print([i[0] for i in headers])
 
 
 class ThreadedDBWorker:
