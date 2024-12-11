@@ -55,14 +55,9 @@ class BrawlAIPipeline:
 
             db.delete_all_battles()
 
-            is_valid = self.validate_model()
-
-            if is_valid:
-                self.logger.info("Pipeline completed successfully")
-            else:
-                self.logger.warning("Pipeline completed but model validation failed")
-
-            return is_valid
+            self.update_brawler_data()
+            self.feed_database()
+            self.retrain_model()
 
         except Exception as e:
             self.logger.error(f"Pipeline failed: {str(e)}")

@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 import threading
 from typing import Tuple, List, Dict, Any
 import argparse
+import os
+
 
 class DevBrawlManager():
     """
@@ -268,6 +270,16 @@ class BattleLogsThread(threading.Thread):
                 time.sleep(0.2)
 
 
+def set_last_update(date):
+    with open(os.path.join("./out", 'last_update.json'), 'w') as f:
+        json.dump(date, f)
+
+
+def get_last_update():
+    with open(os.path.join("./out", 'last_update.json'), 'r') as f:
+        return json.load(f)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Brawl Stars Data Collection')
     parser.add_argument('--last_update',
@@ -276,8 +288,14 @@ if __name__ == "__main__":
                         help='Date for data collection (format: DD.MM.YYYY)')
 
     args = parser.parse_args()
+    date = ""
+    if args:
+        set_last_update(args.last_update)
+        date = args.last_update
+    else:
+        date = get_last_update()
 
-    manager = DevBrawlManager(args.last_update)
+    manager = DevBrawlManager(date)
     for player in manager.best_players:
         player_stats = manager.api.get_player_stats(player)
         if player_stats:
