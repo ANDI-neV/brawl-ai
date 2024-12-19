@@ -43,11 +43,9 @@ class DevBrawlManager():
             "JUYYJGO", "288LL2VY9",
             "9OVQGVL9G", "82YCOCYC", "QGOGOYPO", "ZULVL8YR9",
             "V998RULC", "YYJQUVR2", "PUG2V98UP", "GJJQPYC9",
-            "8YVCLOPPY", "98VOQCOQJ", "GRQLGPU", "P9928Y8U2"
-        ]
-        self.new_best_players = [
+            "8YVCLOPPY", "98VOQCOQJ", "GRQLGPU", "P9928Y8U2",
             "#Q88GUGP"
-            ]
+        ]
         time_step = time.mktime(datetime.strptime(date, "%d.%m.%Y").timetuple())
         self.min_timestamp = datetime.fromtimestamp(time_step,
                                                     tz=timezone.utc)
@@ -284,22 +282,26 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Brawl Stars Data Collection')
     parser.add_argument('--last_update',
                         type=str,
-                        default=datetime.now().strftime("%d.%m.%Y"),
-                        help='Date for data collection (format: DD.MM.YYYY)')
+                        help='Date for data collection (format: DD.MM.YYYY)',
+                        required=True)
 
     args = parser.parse_args()
     date = ""
     if args:
         set_last_update(args.last_update)
         date = args.last_update
+        print(date)
+
     else:
         date = get_last_update()
 
+
     manager = DevBrawlManager(date)
-    for player in manager.best_players:
-        player_stats = manager.api.get_player_stats(player)
-        if player_stats:
-            player = (player_stats["tag"][1:], player_stats["name"])
-            manager.db.insert_player(player)
+    if manager.db.get_players_count() == 0:
+        for player in manager.best_players:
+            player_stats = manager.api.get_player_stats(player)
+            if player_stats:
+                player = (player_stats["tag"][1:], player_stats["name"])
+                manager.db.insert_player(player)
 
     manager.feed_db()

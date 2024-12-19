@@ -67,13 +67,13 @@ class Database:
         self.cur.execute(
             "TRUNCATE TABLE battles"
         )
-        db.commit()
+        self.commit()
 
     def delete_all_players(self):
         self.cur.execute(
             "TRUNCATE TABLE players"
         )
-        db.commit()
+        self.commit()
 
     def get_unchecked_player(self, count: int = 1) -> List[Tuple]:
         self.cur.execute(

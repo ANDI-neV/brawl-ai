@@ -67,7 +67,6 @@ def add_supercell_brawler_indices(brawler_dict):
 def brawler_to_supercell_id_mapping():
     api = DevBrawlAPI()
     data = api.get_brawler_information()
-    print(data)
     brawler_id_dict = {}
     for brawler in data['items']:
         brawler_id_dict[str.lower(brawler['name'])] = int(brawler['id'])
@@ -100,9 +99,7 @@ def get_brawler_data(brawler_name, brawler_url, index):
                 brawler_info[label] = value
             elif label in hyper_labels:
                 if "hypercharge" not in brawler_info:
-                    brawler_info["hypercharge"] = {}
-                brawler_info["hypercharge"][label] = (
-                    convert_percent_to_float(value.replace("+", "").strip()))
+                    brawler_info["hypercharge"] = True
             elif label not in brawler_info:
                 brawler_info[label] = parse_label_info(value)
 
@@ -174,8 +171,7 @@ def main():
 
         brawler_data[str.lower(brawler_name)] = brawler_details
 
-    cache_brawler_winrates(brawler_list)
-    cache_brawler_pickrates(brawler_list)
+
 
     save_brawler_data(brawler_data)
     print("Brawler data successfully fetched and saved.")
@@ -214,9 +210,10 @@ def scrape_brawler_image(brawler_name, url, images_dir):
         print(f"No image found for {brawler_name}")
 
 
-def cache_brawler_winrates(brawler_list: list[Any]):
+def cache_brawler_winrates():
     print("Retrieving winrates for all brawlers for each map.")
     db = Database()
+    brawler_list = get_brawler_list()
 
     map_winrates = {}
     maps = db.get_all_maps()
@@ -227,7 +224,6 @@ def cache_brawler_winrates(brawler_list: list[Any]):
             winrate = (
                 db.check_brawler_winrate_for_map(brawler=brawler_name.upper(),
                                                  map_name=map))
-            print(f"Winrate for {brawler_name} on {map}: {winrate}")
             brawler_winrates[brawler_name] = winrate
         map_winrates[map] = brawler_winrates
 
@@ -235,9 +231,10 @@ def cache_brawler_winrates(brawler_list: list[Any]):
         json.dump(map_winrates, f, indent=2)
 
 
-def cache_brawler_pickrates(brawler_list: list[Any]):
+def cache_brawler_pickrates():
     print("Retrieving pickrates for all brawlers for each map.")
     db = Database()
+    brawler_list = get_brawler_list()
 
     map_pickrates = {}
     maps = db.get_all_maps()
@@ -248,7 +245,6 @@ def cache_brawler_pickrates(brawler_list: list[Any]):
             pickrate = (
                 db.check_brawler_significance_for_map(brawler_name.upper(),
                                                       map))
-            print(f"Pickrate for {brawler_name} on {map}: {pickrate}")
             brawler_significance[brawler_name] = pickrate
         map_pickrates[map] = brawler_significance
 
@@ -265,7 +261,6 @@ def cache_stripped_brawler_data():
 
     stripped_brawler_data = {}
     for brawler_name, brawler_info in brawler_data.items():
-        print(brawler_name, ": ", brawler_info)
         brawler_index = brawler_info['index']
         brawler_class = class_to_idx[brawler_info['class']]
         stripped_brawler_data[brawler_name] = {}
@@ -328,4 +323,4 @@ def test_map_data():
 
 
 if __name__ == "__main__":
-    cache_stripped_brawler_data()
+    main()

@@ -11,6 +11,7 @@ from sqlalchemy import create_engine, URL
 import configparser
 import requests
 from requests.exceptions import HTTPError
+from scraper import cache_brawler_winrates, cache_brawler_pickrates
 
 BRAWLERS_JSON_PATH = 'out/brawlers/stripped_brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
@@ -970,3 +971,5 @@ def test():
 
 if __name__ == '__main__':
     train_model()
+    cache_brawler_winrates()
+    cache_brawler_pickrates()
