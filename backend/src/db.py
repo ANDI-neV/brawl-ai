@@ -155,8 +155,7 @@ class Database:
         INSERT INTO players (tag, name, last_checked)
         VALUES (%s, %s, '001-01-01 00:00:00')
         ON CONFLICT (tag) DO UPDATE
-        SET name = EXCLUDED.name,
-            last_checked = '001-01-01 00:00:00'
+        SET name = EXCLUDED.name
         """
         # Execute the query for each player
         for player in players:

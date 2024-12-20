@@ -219,6 +219,11 @@ class BrawlStarsTransformer(nn.Module):
             before passing through the Transformer. It uses the CLS token
             output for final prediction.
         """
+        print("Brawlers shape:", brawlers.shape)
+        print("Brawler classes shape:", brawler_classes.shape)
+        print("Team indicators shape:", team_indicators.shape)
+        print("Positions shape:", positions.shape)
+        print("Map ID shape:", map_id.shape)
         x = self.brawler_embedding(brawlers)
         x = x + self.class_embedding(brawler_classes)
         x = x + self.team_embedding(team_indicators)
@@ -454,7 +459,7 @@ def get_brawler_class_from_index(brawler_index):
 
 
 def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
-                            nhead=4, num_layers=2, batch_size=64, epochs=25,
+                            nhead=4, num_layers=2, batch_size=64, epochs=50,
                             learning_rate=0.001):
     """
     Trains the BrawlStarsTransformer model on the provided training samples.
@@ -678,31 +683,21 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping,
                          "the provided positions.")
 
     # Get current picks and positions
-    current_picks_names = [current_picks_dict[pos] for pos
-                           in selected_combination[:-1]]
-    current_picks_positions = selected_combination[:-1]
-    current_picks_indices = [get_brawler_index(brawler_name)
-                             for brawler_name in current_picks_names]
+    current_picks_names = [current_picks_dict[pos] for pos in selected_combination[:-1]]
+    current_picks_indices = [get_brawler_index(brawler_name) for brawler_name in current_picks_names]
+    brawler_classes = [get_brawler_class(brawler_name) for brawler_name in current_picks_names]
 
-    brawler_classes = [get_brawler_class(brawler_name)
-                       for brawler_name in current_picks_names]
+    print(f"Current Brawler names:{current_picks_names}")
 
-    # Prepare model inputs
     brawlers = [CLS_TOKEN_INDEX] + current_picks_indices
-    team_indicators = [0]  # CLS token
-    for pos in current_picks_positions:
-        if pos[0] == 'a':
-            team_indicators.append(1)  # Ally team
-        else:
-            team_indicators.append(2)  # Enemy team
-
+    team_indicators = [1] + [1 if pos[0] == 'a' else 2 for pos in selected_combination[:-1]]
     positions = [0] + [i + 1 for i in range(len(current_picks_indices))]
 
     seq_len = len(brawlers)
     padding_length = max_seq_len - seq_len
 
     brawlers_padded = brawlers + [PAD_TOKEN_INDEX] * padding_length
-    brawler_classes_padded = brawler_classes + [CLASS_PAD_TOKEN_INDEX] * padding_length
+    brawler_classes_padded = [CLASS_CLS_TOKEN_INDEX] + brawler_classes + [CLASS_PAD_TOKEN_INDEX] * padding_length
     team_indicators_padded = team_indicators + [0] * padding_length
     positions_padded = positions + [0] * padding_length
     padding_mask = [False] * seq_len + [True] * padding_length
@@ -717,6 +712,7 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping,
     map_id = map_id_mapping.get(map_name)
     if map_id is None:
         raise ValueError(f"Map '{map_name}' not found in map_id_mapping.")
+
     map_id_tensor = torch.tensor([map_id], dtype=torch.long)
     return {
         'brawlers': brawlers_tensor,
@@ -751,12 +747,14 @@ def predict_next_brawler(model, input_data, already_picked_indices):
     device = next(model.parameters()).device
     brawlers = input_data['brawlers'].to(device)
     team_indicators = input_data['team_indicators'].to(device)
+    brawler_classes = input_data['brawler_classes'].to(device)
     positions = input_data['positions'].to(device)
     map_id = input_data['map_id'].to(device)
     padding_mask = input_data['padding_mask'].to(device)
     with torch.no_grad():
         logits = model(
             brawlers,
+            brawler_classes,
             team_indicators,
             positions,
             map_id,
@@ -794,8 +792,7 @@ def test_team_composition(model, current_picks_dict, map_name,
         index_to_brawler_name.
     """
     input_data = prepare_input(current_picks_dict, map_name,
-                               map_id_mapping, first_pick,
-                                max_seq_len)
+                               map_id_mapping, first_pick, max_seq_len)
 
     already_picked_brawlers = [get_brawler_index(brawler_name)
                                for brawler_name in current_picks_dict.values()]
@@ -907,7 +904,7 @@ def load_model(n_brawlers, n_maps, model_path='out/models/ai_model_test.pth',
         given parameters, loads the state dict from the specified file, and
         moves the model to the available device.
     """
-    model = BrawlStarsTransformer(n_brawlers_with_special_tokens, n_maps, d_model, nhead,
+    model = BrawlStarsTransformer(n_brawlers_with_special_tokens, n_maps, CLASS_PAD_TOKEN_INDEX + 1, d_model, nhead,
                                   num_layers)
     model.load_state_dict(torch.load(model_path, map_location='cpu'))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
