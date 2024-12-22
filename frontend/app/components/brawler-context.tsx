@@ -33,6 +33,7 @@ interface BrawlerContextType {
   filterPlayerBrawlers: boolean | null;
   minBrawlerLevel: number;
   playerTagError: boolean;
+  brawlerBans: string[];
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -46,6 +47,7 @@ interface BrawlerContextType {
   setMinBrawlerLevel: (brawlerLevel: number) => void;
   setFilterPlayerBrawlers: (filterPlayerBrawlers: boolean) => void;
   setPlayerTagError: (playerTagError: boolean) => void;
+  setBrawlerBans: (brawlers: string[]) => void;
 }
 
 const getInitialPlayerTag = () => {
@@ -83,6 +85,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [currentPlayerBrawlers, setCurrentPlayerBrawlers] = useState<string[]>([]);
   const [playerTagError, setPlayerTagError] = useState<boolean>(false);
   const [filterPlayerBrawlers, setFilterPlayerBrawlers] = useState<boolean | null>(null);
+  const [brawlerBans, setBrawlerBans] = useState<string[]>([]);
 
   useEffect(() => {
     const getBrawlers = async () => {
@@ -316,6 +319,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       filterPlayerBrawlers,
       minBrawlerLevel,
       playerTagError,
+      brawlerBans,
       setFirstPick,
       setSelectedMap,
       selectBrawler,
@@ -328,7 +332,8 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       setCurrentPlayerBrawlers,
       setMinBrawlerLevel,
       setFilterPlayerBrawlers,
-      setPlayerTagError
+      setPlayerTagError,
+      setBrawlerBans
     }}>
       {children}
     </BrawlerContext.Provider>
