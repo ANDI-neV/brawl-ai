@@ -6,6 +6,8 @@ import random
 from datetime import datetime, timezone
 import threading
 from typing import Tuple, List, Dict, Any
+import argparse
+import os
 
 
 class DevBrawlManager():
@@ -22,7 +24,7 @@ class DevBrawlManager():
     10. Mark the player as checked
     11. Repeat
     """
-    def __init__(self):
+    def __init__(self, date):
         self.api = DevBrawlAPI()
         self.db = Database()
         random.seed(datetime.now().timestamp())
@@ -41,14 +43,12 @@ class DevBrawlManager():
             "JUYYJGO", "288LL2VY9",
             "9OVQGVL9G", "82YCOCYC", "QGOGOYPO", "ZULVL8YR9",
             "V998RULC", "YYJQUVR2", "PUG2V98UP", "GJJQPYC9",
-            "8YVCLOPPY", "98VOQCOQJ", "GRQLGPU", "P9928Y8U2"
-        ]
-        self.new_best_players = [
+            "8YVCLOPPY", "98VOQCOQJ", "GRQLGPU", "P9928Y8U2",
             "#Q88GUGP"
-            ]
-        self.min_timestamp = datetime.fromtimestamp(1728043200,
+        ]
+        time_step = time.mktime(datetime.strptime(date, "%d.%m.%Y").timetuple())
+        self.min_timestamp = datetime.fromtimestamp(time_step,
                                                     tz=timezone.utc)
-        # 04.10.24, 12:00 GMT, Last Update
 
     def push_battle(self, battle: Tuple):
         self.db.insert_battle(battle)
@@ -62,7 +62,7 @@ class DevBrawlManager():
         players = []
         for team in battle["battle"]["teams"]:
             for player in team:
-                if 16 <= player["brawler"]["trophies"] <= 19:
+                if 15 <= player["brawler"]["trophies"] <= 19:
                     players.append((player["tag"][1:], player["name"]))
         return players
 
@@ -103,6 +103,7 @@ class DevBrawlManager():
 
     def get_battlelogs(self, player_tags):
         logs = []
+        player_tags_to_remove = []
         '''for playerTag in playerTags:
             logs.append(api.getPlayerBattlelog(playerTag))'''
         batch_size = 40
@@ -121,7 +122,8 @@ class DevBrawlManager():
             thread.join()
         for thread in threads:
             logs += thread.result
-        return logs
+            player_tags_to_remove += thread.player_tags_to_remove
+        return logs, player_tags_to_remove
 
     @staticmethod
     def check_battle_with_only_eligible_players(battle,
@@ -141,7 +143,7 @@ class DevBrawlManager():
 
     @staticmethod
     def check_rank_requirement(battle):
-        return sum(int(player["brawler"]["trophies"]) >= 16 for team
+        return sum(int(player["brawler"]["trophies"]) >= 15 for team
                    in battle["battle"]["teams"] for player in team) >= 5
 
     def cycle(self):
@@ -151,7 +153,13 @@ class DevBrawlManager():
             player_tags = [player[0] for player in players_list]
 
             start_time = time.time()
-            battle_logs = self.get_battlelogs(player_tags)
+            battle_logs, player_tags_to_remove = self.get_battlelogs(player_tags)
+
+            for player_tag in player_tags_to_remove:
+                self.db.delete_player(player_tag)
+
+            player_tags = list(set(player_tags) - set(player_tags_to_remove))
+
             print(f"Battlelogs took: {time.time() - start_time:.2f} seconds")
             battles = [battle for log in battle_logs for battle in log["items"]]
             new_players = []
@@ -164,12 +172,12 @@ class DevBrawlManager():
                     new_players.extend(self.get_players_from_battlelog(battle))
 
             new_players = list(set(new_players))  # Remove duplicates
-            player_tags = [player[0] for player in new_players]
-            existing_players = self.db.get_if_players_exist(player_tags)
-            player_tags = list(set(player_tags) - set(existing_players))
+            new_player_tags = [player[0] for player in new_players]
+            existing_players = self.db.get_if_players_exist(new_player_tags)
+            new_player_tags = list(set(new_player_tags) - set(existing_players))
 
-            player_stats_list = self.get_player_stats(player_tags)
-            eligible_players = [stats["tag"][1:] for stats in player_stats_list
+            player_stats_list = self.get_player_stats(new_player_tags)
+            eligible_players = [stats for stats in player_stats_list
                                 if self.check_ranked_eligibility(stats)]
 
             print(f"Time taken: {time.time() - start_time:.2f} seconds")
@@ -184,7 +192,7 @@ class DevBrawlManager():
 
             print(f"Real Battles: {len(real_battles)}")
 
-            self.db.insert_many_players(new_players)
+            self.db.insert_many_players(eligible_players)
             for battle in real_battles:
                 battle_id = random.randint(0, 10000000000000)
                 unix_time = time.mktime(
@@ -219,8 +227,8 @@ class DevBrawlManager():
             player = (player_api["tag"][1:], player_api["name"])
             self.db.insert_player(player)
 
-        runtime = 5
-        while (time.time() - start_time) < 60 * runtime:
+        runtime = 120
+        while (time.time() - start_time) < 60 * runtime and self.db.get_checked_players_percentage() < 0.98:
             print(f"Time left: "
                   f"{(60 * runtime - (time.time() - start_time)) / 60:.2f} "
                   f"min")
@@ -255,23 +263,54 @@ class BattleLogsThread(threading.Thread):
         self.batch = batch
         self.api = api
         self.result = []
+        self.player_tags_to_remove = []
 
     def run(self):
         for player_tag in self.batch:
             for _ in range(3):
                 logs_value = self.api.get_player_battlelog(player_tag)
-                if logs_value is not None:
+                if logs_value == "notFound":
+                    self.player_tags_to_remove.append(player_tag)
+                    break
+                elif logs_value is not None:
                     self.result.append(logs_value)
                     break
-                time.sleep(0.2)
+                else:
+                    time.sleep(0.2)
+
+
+def set_last_update(date):
+    with open(os.path.join("./out", 'last_update.json'), 'w') as f:
+        json.dump(date, f)
+
+
+def get_last_update():
+    with open(os.path.join("./out", 'last_update.json'), 'r') as f:
+        return json.load(f)
 
 
 if __name__ == "__main__":
-    manager = DevBrawlManager()
-    for player in manager.new_best_players:
-        player_stats = manager.api.get_player_stats(player)
-        if player_stats:
-            player = (player_stats["tag"][1:], player_stats["name"])
-            manager.db.insert_player(player)
+    parser = argparse.ArgumentParser(description='Brawl Stars Data Collection')
+    parser.add_argument('--last_update',
+                        type=str,
+                        help='Date for data collection (format: DD.MM.YYYY)')
+
+    args = parser.parse_args()
+    date = ""
+    print(args)
+    if args.last_update:
+        set_last_update(args.last_update)
+        date = args.last_update
+        print(date)
+    else:
+        date = get_last_update()
+
+    manager = DevBrawlManager(date)
+    if manager.db.get_players_count() == 0:
+        for player in manager.best_players:
+            player_stats = manager.api.get_player_stats(player)
+            if player_stats:
+                player = (player_stats["tag"][1:], player_stats["name"])
+                manager.db.insert_player(player)
 
     manager.feed_db()

@@ -334,5 +334,25 @@
   "moe": {
     "class_idx": 3,
     "index": 84
+  },
+  "buzz lightyear": {
+    "class_idx": 3,
+    "index": 85
+  },
+  "juju": {
+    "class_idx": 0,
+    "index": 86
+  },
+  "meeple": {
+    "class_idx": 2,
+    "index": 87
+  },
+  "ollie": {
+    "class_idx": 6,
+    "index": 88
+  },
+  "shade": {
+    "class_idx": 1,
+    "index": 89
   }
 }
