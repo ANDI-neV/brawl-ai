@@ -49,6 +49,7 @@ interface BrawlerContextType {
   setPlayerTagError: (playerTagError: boolean) => void;
   setBrawlerBans: (brawlers: BrawlerPickerProps[]) => void;
   selectBrawlerBan: (brawler: BrawlerPickerProps) => void;
+  removeBrawlerBan: (brawler: BrawlerPickerProps) => void;
 }
 
 const getInitialPlayerTag = () => {
@@ -207,6 +208,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     pickratesFetchedRef.current = false
     setBrawlerScores({})
     setBrawlerPickrates({})
+    setBrawlerBans([])
   }, [])
 
   const retrieveBrawlerPickrates = useCallback((map: string) => {
@@ -287,6 +289,17 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const removeBrawlerBan = useCallback((brawler: BrawlerPickerProps) => {
+    setBrawlerBans(prev => {
+      const newSelection = [...prev];
+      const index = newSelection.indexOf(brawler, 0)
+      if (index > -1) {
+        newSelection.splice(index, 1);
+      }
+      return newSelection;
+    });
+  }, []);
+
   const clearSlot = useCallback((slot: number) => {
     setSelectedBrawlers(prev => {
       const newSelection = [...prev];
@@ -343,7 +356,8 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       setFilterPlayerBrawlers,
       setPlayerTagError,
       setBrawlerBans,
-      selectBrawlerBan
+      selectBrawlerBan,
+      removeBrawlerBan      
     }}>
       {children}
     </BrawlerContext.Provider>

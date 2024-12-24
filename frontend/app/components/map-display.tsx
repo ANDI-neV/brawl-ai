@@ -2,7 +2,6 @@
 import React from 'react';
 import Image from "next/image";
 import { useBrawler } from './brawler-context';
-import { MapInterface } from './api-handler';
 
 const MapDisplay = () => {
     const { maps, selectedMap } = useBrawler();

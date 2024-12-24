@@ -87,7 +87,7 @@ export default function BrawlerPicker() {
 
   const handleRightClick = (brawler: BrawlerPickerProps) => {
     if (!isMapSelected) return;
-    if (brawlerBans.length <= 6) {
+    if (brawlerBans.length < 6) {
       selectBrawlerBan(brawler);
       setFilter("");
     } else {
