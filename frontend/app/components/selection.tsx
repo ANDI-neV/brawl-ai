@@ -305,7 +305,7 @@ const Selection = () => {
   const { firstPick, setFirstPick, resetEverything } = useBrawler();
 
   return (
-    <div className='w-full flex flex-col items-center md:items-stretch md:flex-row gap-x-12 py-3 gap-y-3 justify-center mb-16 md:mb-0'>
+    <div className='w-full flex flex-col items-center lg:items-stretch lg:flex-row gap-x-12 py-3 gap-y-3 justify-center mb-16 lg:mb-0'>
       <FilterByPlayer/>
       <Menu />
       <motion.button

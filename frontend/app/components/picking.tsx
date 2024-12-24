@@ -6,7 +6,7 @@ import BrawlerBans from "./brawler-bans";
 
 const Picking = () => {
     return (
-        <div className="container mx-auto px-4 py-8 max-w-full">
+        <div className="container mx-auto px-4 py-8">
             <div className="flex flex-col lg:flex-row lg:justify-center lg:items-start gap-8">
                 <div className="w-full lg:w-auto flex flex-col justify-center items-center relative">
                     <div className="z-20">
