@@ -41,14 +41,16 @@ interface TableRowProps {
   score: number | null;
   pickrate: number | null;
   onClick: (brawler: BrawlerPickerProps) => void;
+  onRightClick: (brawler: BrawlerPickerProps) => void;
   disabled: boolean;
   isAboveFold: boolean;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick, disabled, isAboveFold}) => (
+const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick, onRightClick, disabled, isAboveFold}) => (
   <tr 
     className={`border-b bg-gray-800 border-gray-700 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-600'}`} 
     onClick={() => !disabled && onClick(brawler)}
+    onContextMenu={(e) => {!disabled && onRightClick(brawler); e.preventDefault()}}
   >
     <th scope="row" className="px-2 md:px-4 py-1 font-medium text-white text-center flex items-center justify-center">
       <BrawlerIcon 
@@ -63,7 +65,7 @@ const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick, 
 export default function BrawlerPicker() {
   const [filter, setFilter] = useState("");
   const [sort, setSort] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'score', direction: 'desc' });
-  const { selectBrawler, updatePredictions, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores, brawlerPickrates, currentPlayerBrawlers, filterPlayerBrawlers } = useBrawler();
+  const { selectBrawler, updatePredictions, selectBrawlerBan, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores, brawlerPickrates, currentPlayerBrawlers, filterPlayerBrawlers, brawlerBans } = useBrawler();
   const [localAvailableBrawlers, setLocalAvailableBrawlers] = useState<BrawlerPickerProps[]>(availableBrawlers);
 
   useEffect(() => {
@@ -83,6 +85,16 @@ export default function BrawlerPicker() {
     }
   };
 
+  const handleRightClick = (brawler: BrawlerPickerProps) => {
+    if (!isMapSelected) return;
+    if (brawlerBans.length < 6) {
+      selectBrawlerBan(brawler);
+      setFilter("");
+    } else {
+      alert("All slots are filled. Clear a slot before banning a new brawler.");
+    }
+  };
+
   const filterBrawlers = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isMapSelected) return;
     setFilter(e.target.value);
@@ -98,12 +110,21 @@ export default function BrawlerPicker() {
 
   const filteredAndSortedBrawlers = useMemo(() => {
     const playerBrawlers = currentPlayerBrawlers.map(brawler => brawler.toLowerCase());
+    console.log("current player brawlers: ", playerBrawlers)
+    const playerBans = brawlerBans.map(brawlerBan => brawlerBan.name.toLowerCase());
+    console.log("player bans: ", playerBans)
   
     return localAvailableBrawlers
       .filter(brawler => brawler.name.toLowerCase().includes(filter.toLowerCase()))
       .filter(brawler => {
         if (filterPlayerBrawlers && currentPlayerBrawlers.length > 0) {
           return playerBrawlers.includes(brawler.name.toLowerCase());
+        }
+        return true;
+      })
+      .filter(brawler => {
+        if (filterPlayerBrawlers && currentPlayerBrawlers.length > 0) {
+          return !playerBans.includes(brawler.name.toLowerCase());
         }
         return true;
       })
@@ -120,18 +141,10 @@ export default function BrawlerPicker() {
         }
         return 0;
       });
-  }, [localAvailableBrawlers, filter, sort, brawlerScores, brawlerPickrates, currentPlayerBrawlers, filterPlayerBrawlers]);
+  }, [localAvailableBrawlers, filter, sort, brawlerScores, brawlerPickrates, currentPlayerBrawlers, filterPlayerBrawlers, brawlerBans]);
 
   return (
     <div className="relative">
-      <input
-        type="text"
-        placeholder="Filter brawlers..."
-        value={filter}
-        onChange={filterBrawlers}
-        className={`w-full p-2 mb-4 border rounded-xl ${!isMapSelected ? 'cursor-not-allowed opacity-50' : ''}`}
-        disabled={!isMapSelected}
-      />
       <div className={`relative overflow-x-auto h-[500px] shadow-md rounded-xl bg-gray-800 custom-scrollbar ${!isMapSelected ? 'pointer-events-none' : ''}`}>
         <div className="min-w-[250px]">
           <table className="w-full text-sm text-left rtl:text-right text-gray-400">
@@ -150,6 +163,7 @@ export default function BrawlerPicker() {
                   score={brawlerScores[brawler.name.toLowerCase()] ?? null}
                   pickrate={brawlerPickrates[brawler.name.toLowerCase()] ?? null}
                   onClick={handleClick}
+                  onRightClick={handleRightClick}
                   disabled={!isMapSelected}
                   isAboveFold={index < 6}
                 />
@@ -163,6 +177,14 @@ export default function BrawlerPicker() {
         </div>
       )}
       </div>
+      <input
+        type="text"
+        placeholder="Filter brawlers..."
+        value={filter}
+        onChange={filterBrawlers}
+        className={`w-full p-2 mt-4 border rounded-xl ${!isMapSelected ? 'cursor-not-allowed opacity-50' : ''}`}
+        disabled={!isMapSelected}
+      />
       
     </div>
   );

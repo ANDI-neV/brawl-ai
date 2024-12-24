@@ -33,6 +33,7 @@ interface BrawlerContextType {
   filterPlayerBrawlers: boolean | null;
   minBrawlerLevel: number;
   playerTagError: boolean;
+  brawlerBans: BrawlerPickerProps[];
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
   selectBrawler: (brawler: BrawlerPickerProps, slot: number) => void;
@@ -46,6 +47,9 @@ interface BrawlerContextType {
   setMinBrawlerLevel: (brawlerLevel: number) => void;
   setFilterPlayerBrawlers: (filterPlayerBrawlers: boolean) => void;
   setPlayerTagError: (playerTagError: boolean) => void;
+  setBrawlerBans: (brawlers: BrawlerPickerProps[]) => void;
+  selectBrawlerBan: (brawler: BrawlerPickerProps) => void;
+  removeBrawlerBan: (brawler: BrawlerPickerProps) => void;
 }
 
 const getInitialPlayerTag = () => {
@@ -83,6 +87,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   const [currentPlayerBrawlers, setCurrentPlayerBrawlers] = useState<string[]>([]);
   const [playerTagError, setPlayerTagError] = useState<boolean>(false);
   const [filterPlayerBrawlers, setFilterPlayerBrawlers] = useState<boolean | null>(null);
+  const [brawlerBans, setBrawlerBans] = useState<BrawlerPickerProps[]>([]);
 
   useEffect(() => {
     const getBrawlers = async () => {
@@ -203,6 +208,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     pickratesFetchedRef.current = false
     setBrawlerScores({})
     setBrawlerPickrates({})
+    setBrawlerBans([])
   }, [])
 
   const retrieveBrawlerPickrates = useCallback((map: string) => {
@@ -275,6 +281,25 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const selectBrawlerBan = useCallback((brawler: BrawlerPickerProps) => {
+    setBrawlerBans(prev => {
+      const newSelection = [...prev];
+      newSelection.push(brawler);
+      return newSelection;
+    });
+  }, []);
+
+  const removeBrawlerBan = useCallback((brawler: BrawlerPickerProps) => {
+    setBrawlerBans(prev => {
+      const newSelection = [...prev];
+      const index = newSelection.indexOf(brawler, 0)
+      if (index > -1) {
+        newSelection.splice(index, 1);
+      }
+      return newSelection;
+    });
+  }, []);
+
   const clearSlot = useCallback((slot: number) => {
     setSelectedBrawlers(prev => {
       const newSelection = [...prev];
@@ -316,6 +341,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       filterPlayerBrawlers,
       minBrawlerLevel,
       playerTagError,
+      brawlerBans,
       setFirstPick,
       setSelectedMap,
       selectBrawler,
@@ -328,7 +354,10 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       setCurrentPlayerBrawlers,
       setMinBrawlerLevel,
       setFilterPlayerBrawlers,
-      setPlayerTagError
+      setPlayerTagError,
+      setBrawlerBans,
+      selectBrawlerBan,
+      removeBrawlerBan      
     }}>
       {children}
     </BrawlerContext.Provider>
