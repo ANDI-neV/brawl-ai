@@ -15,8 +15,11 @@ const BrawlerBans = () => {
         },
         [brawlerMapping]
     );
-        
     
+    var isTouch = false
+    if (typeof window !== "undefined") {
+        isTouch = window.matchMedia("(pointer: coarse)").matches
+    }
 
     return (
         <div className="relative bg-gray-300 rounded-2xl p-2 pt-3">
@@ -26,7 +29,7 @@ const BrawlerBans = () => {
             <div className='flex flex-row lg:flex-col justify-center'>
                 {brawlerBans.length == 0 ?
             <div className='w-20 items-center text-center font-bold text-sm mx-auto'>
-                    {window.matchMedia("(pointer: coarse)").matches ? "Long press to ban a brawler" : "Right click to ban a brawler"}
+                    {isTouch ? "Long press to ban a brawler" : "Right click to ban a brawler"}
             </div>:
             brawlerBans.map(brawler => (
                     <motion.button className='h-16 w-16 md:h-20 md:w-20 p-1'
