@@ -642,6 +642,27 @@ index_to_brawler_name = {data['index']: name for name, data
                          in brawler_data.items()}
 
 
+def acquire_combination(brawler_dict, first_pick):
+    print(f"first_pick: {first_pick}")
+    if (first_pick):
+        possible_combinations = picking_combinations1
+    else:
+        possible_combinations = picking_combinations2
+    print(f"possible combos: {possible_combinations}")
+    # Find a matching combination
+    print(f"Current picks: {brawler_dict}")
+    for combination in possible_combinations:
+        if (all(pos in brawler_dict for pos in combination[:-1]) and
+                len(combination[:-1]) == len(brawler_dict)):
+            selected_combination = combination
+            print(f"Selected combination: {selected_combination}")
+            break
+    else:
+        raise ValueError("No matching combination found for "
+                         "the provided positions.")
+    return selected_combination
+
+
 def prepare_input(current_picks_dict, map_name, map_id_mapping,
                   first_pick, max_seq_len=7):
     """
@@ -671,23 +692,7 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping,
         positions or if the map is not found.
     """
     # Possible picking combinations used during training
-    print(f"first_pick: {first_pick}")
-    if (first_pick):
-        possible_combinations = picking_combinations1
-    else:
-        possible_combinations = picking_combinations2
-    print(f"possible combos: {possible_combinations}")
-    # Find a matching combination
-    print(f"Current picks: {current_picks_dict}")
-    for combination in possible_combinations:
-        if (all(pos in current_picks_dict for pos in combination[:-1]) and
-                len(combination[:-1]) == len(current_picks_dict)):
-            selected_combination = combination
-            print(f"Selected combination: {selected_combination}")
-            break
-    else:
-        raise ValueError("No matching combination found for "
-                         "the provided positions.")
+    selected_combination = acquire_combination(current_picks_dict, first_pick)
 
     # Get current picks and positions
     current_picks_names = [current_picks_dict[pos] for pos in selected_combination[:-1]]
