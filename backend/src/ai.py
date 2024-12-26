@@ -940,7 +940,7 @@ def create_onnx_model():
     model = BrawlStarsTransformer(n_brawlers_with_special_tokens, n_maps, CLASS_PAD_TOKEN_INDEX + 1,
                                   d_model=64, nhead=4, num_layers=2)
     device = torch.device("cpu")
-    model.load_state_dict(torch.load("./out/models/ai_model_test.pth", map_location=torch.device("cpu")))
+    model.load_state_dict(torch.load("./out/models/model.pth", map_location=torch.device("cpu")))
     model.eval()
     model.to(device)
     batch_size = 1
