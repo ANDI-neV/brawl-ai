@@ -12,23 +12,23 @@ function Menu() {
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set(selectedMap ? [selectedMap] : []));
   const [selectedGameMode, setSelectedGameMode] = React.useState<string>("");
 
+  const filteredMaps = useMemo(() => (
+    selectedGameMode === ""
+      ? availableMaps.sort()
+      : availableMaps.filter(map => maps?.maps[map]?.game_mode === selectedGameMode).sort()
+  ), [availableMaps, maps, selectedGameMode]);
+
   const handleSelectionChange = (keys: Selection) => {
     setSelectedKeys(keys);
     const selected = Array.from(keys)[0] as string;
     mapSelectionSetup(selected);
   };
+
   if (!maps) {
     return <div>Loading...</div>;
-  };
-  console.log("maps: ", maps);
+  }
 
-  const filteredMaps = useMemo(() => {
-    if (selectedGameMode === "") {
-      return availableMaps.sort();
-    } else {
-      return availableMaps.filter(map => maps.maps[map]?.game_mode === selectedGameMode).sort();
-    }
-  }, [availableMaps, maps, selectedGameMode]);
+  console.log("maps: ", maps);
 
   return (
     <div className="w-64 relative">
@@ -216,8 +216,12 @@ const FilterByPlayer = () => {
   );
 };
 
+type ToggleSwitchProps = {
+  isOn: boolean;
+  toggleSwitch: () => void;
+};
 
-const ToggleSwitch = ( {isOn, toggleSwitch} ) => {
+const ToggleSwitch = ({ isOn, toggleSwitch }: ToggleSwitchProps) => {
   const spring = {
     type: "spring",
     stiffness: 700,

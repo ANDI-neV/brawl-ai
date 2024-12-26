@@ -122,7 +122,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     }
     };
     getMaps();
-  }, []);
+  });
 
   useEffect(() => {
     try {
@@ -164,7 +164,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     };
   
     getCurrentPlayerBrawlers();
-  }, [currentPlayer, minBrawlerLevel]);
+  }, [currentPlayer, minBrawlerLevel, filterPlayerBrawlers]);
 
   const getGameModes = useCallback((maps: MapInterface) => {
     const filteredGameModes: string[] = []
@@ -271,7 +271,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       retrieveBrawlerPickrates(map);
     }
     updatePredictions(map, selectedBrawlers.filter(Boolean).map(b => b!.name), firstPick);
-  }, [selectedBrawlers, firstPick, updatePredictions]);
+  }, [selectedBrawlers, firstPick, maps, updatePredictions, retrieveBrawlerPickrates]);
 
   const selectBrawler = useCallback((brawler: BrawlerPickerProps, slot: number) => {
     setSelectedBrawlers(prev => {
