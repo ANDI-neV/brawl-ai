@@ -5,10 +5,11 @@ from pydantic import BaseModel
 from typing import List
 import json
 import time
-import ai as ai
 from pathlib import Path
 import scraper
-from ai import PlayerNotFoundError
+from ai import (get_map_score, get_all_maps, get_all_brawlers, get_brawler_dict,
+                get_map_pickrate, PlayerNotFoundError, get_filtered_brawlers)
+import inference as infer
 
 
 app = FastAPI()
@@ -35,12 +36,12 @@ class PickrateRequest(BaseModel):
 
 @app.get("/maps")
 async def get_maps():
-    return {"maps": ai.get_all_maps()}
+    return {"maps": get_all_maps()}
 
 
 @app.get("/brawlers")
 async def get_brawlers():
-    return {"brawlers": ai.get_all_brawlers()}
+    return {"brawlers": get_all_brawlers()}
 
 
 last_prediction_time = 0
@@ -61,7 +62,7 @@ async def retrieve_map_pickrates(request: PickrateRequest):
 
     try:
         print(f"Pickrate request: Map: {request.map}")
-        probabilities = ai.get_map_pickrate(request.map)
+        probabilities = get_map_pickrate(request.map)
         print(f"Pickrate results: {probabilities}")
         return {"pickrate": probabilities}
     except Exception as e:
@@ -87,11 +88,11 @@ async def predict_brawlers(request: PredictionRequest):
               f"Brawlers: {request.brawlers}, "
               f"First Pick: {request.first_pick}")
         if (request.brawlers == []):
-            probabilities = ai.get_map_winrate(request.map)
+            probabilities = get_map_score(request.map)
         else:
-            brawler_dict = ai.get_brawler_dict(request.brawlers,
+            brawler_dict = get_brawler_dict(request.brawlers,
                                                request.first_pick)
-            probabilities = ai.predict(brawler_dict, request.map, request.first_pick)
+            probabilities = infer.predict(brawler_dict, request.map, request.first_pick)
         print(f"Prediction results: {probabilities}")
         return {"probabilities": probabilities}
     except Exception as e:
@@ -135,7 +136,7 @@ async def filter_player_brawlers(request: FilteredBrawlerRequest):
         print(f"Player tag: {request.player_tag}, "
               f"Minimum brawler level: {request.min_level}")
 
-        filtered_brawlers = ai.get_filtered_brawlers(request.player_tag, request.min_level)
+        filtered_brawlers = get_filtered_brawlers(request.player_tag, request.min_level)
 
         return {"brawlers": filtered_brawlers}
     except PlayerNotFoundError:

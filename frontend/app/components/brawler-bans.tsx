@@ -1,25 +1,30 @@
 "use client"
 import { useBrawler } from './brawler-context';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Image from "next/image";
 import { motion } from 'framer-motion';
 
 
 const BrawlerBans = () => {
     const {brawlerBans, brawlerMapping, removeBrawlerBan} = useBrawler();
-    const getBrawlerImageUrl = useCallback((brawler: string) => {
-        const brawlerId = Object.entries(brawlerMapping).find(([name, id]) => name === brawler)?.[1];
-        return brawlerId 
-        ? `https://cdn.brawlify.com/brawlers/borderless/${brawlerId}.png`
-        : '/brawlstar.png';
+    const [isTouch, setIsTouch] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+        }
+    }, []);
+
+    const getBrawlerImageUrl = useCallback(
+        (brawler: string) => {
+            const brawlerId = Object.entries(brawlerMapping).find(([name, id]) => name === brawler)?.[1];
+            return brawlerId 
+                ? `https://cdn.brawlify.com/brawlers/borderless/${brawlerId}.png`
+                : '/brawlstar.png';
         },
         [brawlerMapping]
     );
-    
-    var isTouch = false
-    if (typeof window !== "undefined") {
-        isTouch = window.matchMedia("(pointer: coarse)").matches
-    }
+
 
     return (
         <div className="relative bg-gray-300 rounded-2xl p-2 pt-3">

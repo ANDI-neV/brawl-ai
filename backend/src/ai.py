@@ -12,6 +12,9 @@ import configparser
 import requests
 from requests.exceptions import HTTPError
 from scraper import cache_brawler_winrates, cache_brawler_pickrates
+import onnx
+import onnxruntime as ort
+
 
 BRAWLERS_JSON_PATH = 'out/brawlers/stripped_brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
@@ -57,6 +60,15 @@ def get_map_pickrate(map):
     with (open(os.path.join(here, BRAWLER_PICKRATES_JSON_PATH), 'r')
           as json_file):
         return json.load(json_file)[map]
+
+
+def get_map_score(map):
+    pick_rate = dict(get_map_pickrate(map))
+    winrate = dict(get_map_winrate(map))
+    score = {}
+    for brawler in pick_rate.keys():
+        score[brawler] = float(pick_rate[brawler])*float(winrate[brawler])
+    return score
 
 
 class PlayerNotFoundError(Exception):
@@ -229,6 +241,10 @@ class BrawlStarsTransformer(nn.Module):
         x = x + self.team_embedding(team_indicators)
         x = x + self.position_embedding(positions)
         x = x + self.map_embedding(map_id).unsqueeze(1)
+
+        print("Input to TransformerEncoder:")
+        print("x:", x.shape)
+        print("src_key_padding_mask:", src_key_padding_mask.shape, src_key_padding_mask.dtype)
 
         x = self.transformer_encoder(x,
                                      src_key_padding_mask=src_key_padding_mask)
@@ -635,6 +651,27 @@ index_to_brawler_name = {data['index']: name for name, data
                          in brawler_data.items()}
 
 
+def acquire_combination(brawler_dict, first_pick):
+    print(f"first_pick: {first_pick}")
+    if (first_pick):
+        possible_combinations = picking_combinations1
+    else:
+        possible_combinations = picking_combinations2
+    print(f"possible combos: {possible_combinations}")
+    # Find a matching combination
+    print(f"Current picks: {brawler_dict}")
+    for combination in possible_combinations:
+        if (all(pos in brawler_dict for pos in combination[:-1]) and
+                len(combination[:-1]) == len(brawler_dict)):
+            selected_combination = combination
+            print(f"Selected combination: {selected_combination}")
+            break
+    else:
+        raise ValueError("No matching combination found for "
+                         "the provided positions.")
+    return selected_combination
+
+
 def prepare_input(current_picks_dict, map_name, map_id_mapping,
                   first_pick, max_seq_len=7):
     """
@@ -664,23 +701,7 @@ def prepare_input(current_picks_dict, map_name, map_id_mapping,
         positions or if the map is not found.
     """
     # Possible picking combinations used during training
-    print(f"first_pick: {first_pick}")
-    if (first_pick):
-        possible_combinations = picking_combinations1
-    else:
-        possible_combinations = picking_combinations2
-    print(f"possible combos: {possible_combinations}")
-    # Find a matching combination
-    print(f"Current picks: {current_picks_dict}")
-    for combination in possible_combinations:
-        if (all(pos in current_picks_dict for pos in combination[:-1]) and
-                len(combination[:-1]) == len(current_picks_dict)):
-            selected_combination = combination
-            print(f"Selected combination: {selected_combination}")
-            break
-    else:
-        raise ValueError("No matching combination found for "
-                         "the provided positions.")
+    selected_combination = acquire_combination(current_picks_dict, first_pick)
 
     # Get current picks and positions
     current_picks_names = [current_picks_dict[pos] for pos in selected_combination[:-1]]
@@ -876,10 +897,10 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/ai_model_test.pth')
+    torch.save(model.state_dict(), 'out/models/model.pth')
 
 
-def load_model(n_brawlers, n_maps, model_path='out/models/ai_model_test.pth',
+def load_model(n_brawlers, n_maps, model_path='out/models/model.pth',
                d_model=64, nhead=4, num_layers=2):
     """
     Loads a trained BrawlStarsTransformer model from a file.
@@ -913,9 +934,68 @@ def load_model(n_brawlers, n_maps, model_path='out/models/ai_model_test.pth',
     return model
 
 
+def create_onnx_model():
+    map_id_mapping = load_map_id_mapping()
+    n_maps = len(map_id_mapping)
+    model = BrawlStarsTransformer(n_brawlers_with_special_tokens, n_maps, CLASS_PAD_TOKEN_INDEX + 1,
+                                  d_model=64, nhead=4, num_layers=2)
+    device = torch.device("cpu")
+    model.load_state_dict(torch.load("./out/models/ai_model_test.pth", map_location=torch.device("cpu")))
+    model.eval()
+    model.to(device)
+    batch_size = 1
+    seq_len = 7
+    n_brawler_classes = n_classes
+
+    # Dummy inputs
+    dummy_brawlers = torch.randint(0, n_brawlers_with_special_tokens, (batch_size, seq_len), dtype=torch.long).to(device)
+    dummy_brawler_classes = torch.randint(0, n_brawler_classes, (batch_size, seq_len), dtype=torch.long).to(device)
+    dummy_team_indicators = torch.randint(0, 3, (batch_size, seq_len), dtype=torch.long).to(device)
+    dummy_positions = torch.arange(seq_len).unsqueeze(0).repeat(batch_size, 1).to(device)
+    dummy_map_id = torch.randint(0, n_maps, (batch_size,), dtype=torch.long).to(device)
+    dummy_src_key_padding_mask = torch.zeros(batch_size, seq_len, dtype=torch.bool).to(device)
+
+    torch.onnx.export(
+        model,
+        (dummy_brawlers, dummy_brawler_classes, dummy_team_indicators, dummy_positions, dummy_map_id,
+         dummy_src_key_padding_mask),
+        "./out/models/model.onnx",
+        export_params=True,
+        opset_version=17,
+        do_constant_folding=True,
+        input_names=["brawlers", "brawler_classes", "team_indicators", "positions", "map_id", "src_key_padding_mask"],
+        output_names=["output"],
+        dynamic_axes={
+            "brawlers": {0: "batch_size", 1: "seq_len"},
+            "brawler_classes": {0: "batch_size", 1: "seq_len"},
+            "team_indicators": {0: "batch_size", 1: "seq_len"},
+            "positions": {0: "batch_size", 1: "seq_len"},
+            "map_id": {0: "batch_size"},
+            "src_key_padding_mask": {0: "batch_size", 1: "seq_len"},
+            "output": {0: "batch_size"}
+        }
+    )
+
+    onnx_model = onnx.load("./out/models/model.onnx")
+    onnx.checker.check_model(onnx_model)
+
+    ort_session = ort.InferenceSession("./out/models/model.onnx")
+    input_data = {
+        "brawlers": dummy_brawlers.numpy(),
+        "brawler_classes": dummy_brawler_classes.numpy(),
+        "team_indicators": dummy_team_indicators.numpy(),
+        "positions": dummy_positions.numpy(),
+        "map_id": dummy_map_id.numpy(),
+        "src_key_padding_mask": dummy_src_key_padding_mask.numpy()
+    }
+    outputs = ort_session.run(None, input_data)
+
+    print("ONNX Inference Output:", outputs)
+
+
 def predict(picks_dict, map_name, first_pick):
     """
-    Predicts the next brawler pick based on the current picks and map.
+    Predicts the next brawler pick based on the current picks and map.-
 
     Args:
         picks_dict (Dict[str, str]): A dictionary of current picks, mapping
@@ -967,6 +1047,4 @@ def test():
 
 
 if __name__ == '__main__':
-    train_model()
-    cache_brawler_winrates()
-    cache_brawler_pickrates()
+    get_map_score("Out in the Open")
