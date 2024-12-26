@@ -14,6 +14,8 @@ from requests.exceptions import HTTPError
 from scraper import cache_brawler_winrates, cache_brawler_pickrates
 import onnx
 import onnxruntime as ort
+import subprocess
+import requests
 
 
 BRAWLERS_JSON_PATH = 'out/brawlers/stripped_brawlers.json'
@@ -1046,5 +1048,43 @@ def test():
     predict(current_picks_dict, map_name, first_pick=True)
 
 
+def transfer_files():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    pi_user = config['Pi']['pi_user']
+    pi_host = config['Pi']['pi_host']
+    pi_path = config['Pi']['pi_path']
+    local_files = ["model.onnx", "brawler_pickrates.json", "brawler_winrates.json"]
+
+    try:
+        for file in local_files:
+            subprocess.run(["rsync", "-avz", file, f"{pi_user}@{pi_host}:{pi_path}"], check=True)
+        print("Files transferred successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error during file transfer: {e}")
+
+
+def reload_model():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    pi_host = config['Pi']['pi_host']
+
+    try:
+        response = requests.post(f"http://{pi_host}:7001/reload-model", timeout=10)
+        response.raise_for_status()
+        print("Model reload request sent successfully")
+    except requests.RequestException as e:
+        print(f"Error sending reload request: {e}")
+        raise
+
+
 if __name__ == '__main__':
-    get_map_score("Out in the Open")
+    try:
+        train_model()
+        create_onnx_model()
+        cache_brawler_winrates()
+        cache_brawler_pickrates()
+        transfer_files()
+        reload_model()
+    except Exception as e:
+        print(f"Error in pipeline: {e}")
