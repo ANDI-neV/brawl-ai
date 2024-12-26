@@ -62,6 +62,15 @@ def get_map_pickrate(map):
         return json.load(json_file)[map]
 
 
+def get_map_score(map):
+    pick_rate = dict(get_map_pickrate(map))
+    winrate = dict(get_map_winrate(map))
+    score = {}
+    for brawler in pick_rate.keys():
+        score[brawler] = float(pick_rate[brawler])*float(winrate[brawler])
+    return score
+
+
 class PlayerNotFoundError(Exception):
     pass
 
@@ -1038,7 +1047,4 @@ def test():
 
 
 if __name__ == '__main__':
-    train_model()
-    create_onnx_model()
-    cache_brawler_winrates()
-    cache_brawler_pickrates()
+    get_map_score("Out in the Open")

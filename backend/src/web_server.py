@@ -7,7 +7,7 @@ import json
 import time
 from pathlib import Path
 import scraper
-from ai import (get_map_winrate, get_all_maps, get_all_brawlers, get_brawler_dict,
+from ai import (get_map_score, get_all_maps, get_all_brawlers, get_brawler_dict,
                 get_map_pickrate, PlayerNotFoundError, get_filtered_brawlers)
 import inference as infer
 
@@ -88,7 +88,7 @@ async def predict_brawlers(request: PredictionRequest):
               f"Brawlers: {request.brawlers}, "
               f"First Pick: {request.first_pick}")
         if (request.brawlers == []):
-            probabilities = get_map_winrate(request.map)
+            probabilities = get_map_score(request.map)
         else:
             brawler_dict = get_brawler_dict(request.brawlers,
                                                request.first_pick)

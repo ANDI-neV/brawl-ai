@@ -177,6 +177,7 @@ def main():
     print("Brawler data successfully fetched and saved.")
 
     cache_stripped_brawler_data()
+    brawler_to_supercell_id_mapping()
 
 
 def scrape_brawler_images(brawler_data):

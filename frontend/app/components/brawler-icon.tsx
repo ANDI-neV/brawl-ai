@@ -16,7 +16,7 @@ export default function BrawlerIcon({ brawler, isAboveFold = false }: BrawlerIco
   if (loadingMapping) return <div>Loading...</div>;
 
   const brawlerId = Object.entries(brawlerMapping).find(([name, id]) => name === brawler)?.[1];
-  if (!brawlerId) return <div>Brawler not found</div>;
+  if (!brawlerId) {console.log("brawler not found: ", brawler);  return <div>Brawler not found</div>};
 
   return (
     <div className="md:h-[75px] md:w-[75px] h-[60px] w-[60px] border-[4px] md:border-[5px] border-black bg-white bg-opacity-10 p-2 relative rounded-lg overflow-hidden">
