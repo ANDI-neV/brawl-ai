@@ -9,8 +9,7 @@ from pathlib import Path
 import scraper
 from ai import (get_map_score, get_all_maps, get_all_brawlers, get_brawler_dict,
                 get_map_pickrate, PlayerNotFoundError, get_filtered_brawlers)
-import inference as infer
-
+from inference import predict, reload_model
 
 app = FastAPI()
 
@@ -92,7 +91,7 @@ async def predict_brawlers(request: PredictionRequest):
         else:
             brawler_dict = get_brawler_dict(request.brawlers,
                                                request.first_pick)
-            probabilities = infer.predict(brawler_dict, request.map, request.first_pick)
+            probabilities = predict(brawler_dict, request.map, request.first_pick)
         print(f"Prediction results: {probabilities}")
         return {"probabilities": probabilities}
     except Exception as e:
@@ -101,6 +100,7 @@ async def predict_brawlers(request: PredictionRequest):
 
 
 BRAWLER_MAPPING_FILE = Path("./out/brawlers/brawler_supercell_id_mapping.json")
+
 
 def load_brawler_mapping():
     try:
@@ -129,7 +129,6 @@ class FilteredBrawlerRequest(BaseModel):
     min_level: int
 
 
-
 @app.post("/filtered-player-brawlers")
 async def filter_player_brawlers(request: FilteredBrawlerRequest):
     try:
@@ -144,6 +143,16 @@ async def filter_player_brawlers(request: FilteredBrawlerRequest):
     except Exception as e:
         print(f"Error during player brawler retrieval: {e}")
         raise HTTPException(status_code=500, detail="Player brawler retrieval failed")
+
+
+@app.post("/reload-model")
+async def reload_model_endpoint():
+    try:
+        reload_model()
+        return {"message": "Model reloaded successfully"}
+    except Exception as e:
+        print(f"Error during model reload: {e}")
+        raise HTTPException(status_code=500, detail="Model reload failed")
 
 
 if __name__ == "__main__":

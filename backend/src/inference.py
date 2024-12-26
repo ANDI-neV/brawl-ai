@@ -3,10 +3,20 @@ import numpy as np
 from ai import (load_map_id_mapping, get_brawler_index, acquire_combination, CLS_TOKEN_INDEX,
                 CLASS_CLS_TOKEN_INDEX, PAD_TOKEN_INDEX,CLASS_PAD_TOKEN_INDEX, index_to_brawler_name,
                 get_brawler_class)
+from threading import Lock
 import torch
 
 MODEL_PATH = "./out/models/model.onnx"
+model_lock = Lock()
 ort_session = ort.InferenceSession(MODEL_PATH)
+
+
+def reload_model():
+    global ort_session
+    with model_lock:
+        print("Reloading ONNX model...")
+        ort_session = ort.InferenceSession(MODEL_PATH)
+        print("Model reloaded successfully.")
 
 
 def prepare_input(brawler_dict, map_name,
@@ -45,15 +55,15 @@ def predict(brawler_dict, map_name, first_pick):
     map_id_mapping = load_map_id_mapping()
     input_data = prepare_input(brawler_dict, map_name, map_id_mapping, first_pick, max_seq_len=7)
 
-    outputs = ort_session.run(None, {
-        "brawlers": input_data["brawlers"],
-        "brawler_classes": input_data["brawler_classes"],
-        "team_indicators": input_data["team_indicators"],
-        "positions": input_data["positions"],
-        "map_id": input_data["map_id"],
-        "src_key_padding_mask": input_data["src_key_padding_mask"]
-    })
-
+    with model_lock:
+        outputs = ort_session.run(None, {
+            "brawlers": input_data["brawlers"],
+            "brawler_classes": input_data["brawler_classes"],
+            "team_indicators": input_data["team_indicators"],
+            "positions": input_data["positions"],
+            "map_id": input_data["map_id"],
+            "src_key_padding_mask": input_data["src_key_padding_mask"]
+        })
     logits = outputs[0]
     logits = torch.tensor(logits)
 
