@@ -107,6 +107,17 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       getBrawlers();
   }, []);
 
+  const getGameModes = useCallback((maps: MapInterface) => {
+    const filteredGameModes: string[] = []
+    Object.values(maps.maps).map((map) => {
+      if (!filteredGameModes.includes(map.game_mode)) {
+        filteredGameModes.push(map.game_mode)
+      }
+    })
+    console.log("Available game modes: ", filteredGameModes)
+    setAvailableGameModes(filteredGameModes)
+  }, [])
+
   useEffect(() => {
     const getMaps = async () => {
       try {
@@ -121,7 +132,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       }
     };
     getMaps();
-  }, []);
+  }, [getGameModes]);
 
   useEffect(() => {
     try {
@@ -144,17 +155,11 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
         try {
           const player = currentPlayer.charAt(0) !== "#" ? "#" + currentPlayer : currentPlayer;
           const filteredBrawlers = await getPlayerBrawlers(player, minBrawlerLevel);
-          console.log("fetching player brawlers for: ", player)
+          console.log("Fetching player brawlers for: ", player);
           setPlayerTagError(false);
           setCurrentPlayerBrawlers(filteredBrawlers.brawlers);
-          if (filterPlayerBrawlers === null) {
-            setFilterPlayerBrawlers(true);
-          }
         } catch (error) {
           setPlayerTagError(true);
-          if (filterPlayerBrawlers === null) {
-            setFilterPlayerBrawlers(false);
-          }
         }
       }
     };
@@ -162,16 +167,11 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     getCurrentPlayerBrawlers();
   }, [currentPlayer, minBrawlerLevel]);
 
-  const getGameModes = useCallback((maps: MapInterface) => {
-    const filteredGameModes: string[] = []
-    Object.values(maps.maps).map((map) => {
-      if (!filteredGameModes.includes(map.game_mode)) {
-        filteredGameModes.push(map.game_mode)
-      }
-    })
-    console.log("Available game modes: ", filteredGameModes)
-    setAvailableGameModes(filteredGameModes)
-  }, []) 
+  useEffect(() => {
+    if (filterPlayerBrawlers === null && currentPlayer !== "") {
+      setFilterPlayerBrawlers(true);
+    }
+  }, [filterPlayerBrawlers, currentPlayer]);
 
   useEffect(() => {
     const fetchMapping = async () => {

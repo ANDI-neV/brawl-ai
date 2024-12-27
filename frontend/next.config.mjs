@@ -4,7 +4,7 @@ dotenv.config({ path: './.env' });
 const nextConfig = {
     reactStrictMode: true,
     images: {
-      domains: ['cdn.brawlify.com'],
+      remotePatterns: [{hostname:'cdn.brawlify.com'}],
     },
   }
 
