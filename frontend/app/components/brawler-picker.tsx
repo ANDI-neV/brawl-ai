@@ -123,7 +123,7 @@ export default function BrawlerPicker() {
         return true;
       })
       .filter(brawler => {
-        if (filterPlayerBrawlers && currentPlayerBrawlers.length > 0) {
+        if (playerBans.length > 0) {
           return !playerBans.includes(brawler.name.toLowerCase());
         }
         return true;
