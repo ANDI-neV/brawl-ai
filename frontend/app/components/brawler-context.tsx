@@ -109,20 +109,19 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const getMaps = async () => {
-    try {
-      const fetchedMaps = await fetchMaps();
-      setMaps(fetchedMaps);
-      setAvailableMaps(Object.keys(fetchedMaps.maps));
-      console.log("maps available: ", Object.keys(fetchedMaps.maps))
-      getGameModes(fetchedMaps);
-    }
-    catch( err ) {
-      console.error("Error fetching maps:", err);
-      setError("Failed to fetch maps");
-    }
+      try {
+        const fetchedMaps = await fetchMaps();
+        setMaps(fetchedMaps);
+        setAvailableMaps(Object.keys(fetchedMaps.maps));
+        console.log("maps available: ", Object.keys(fetchedMaps.maps));
+        getGameModes(fetchedMaps);
+      } catch (err) {
+        console.error("Error fetching maps:", err);
+        setError("Failed to fetch maps");
+      }
     };
     getMaps();
-  });
+  }, []);
 
   useEffect(() => {
     try {
@@ -142,29 +141,26 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const getCurrentPlayerBrawlers = async () => {
       if (currentPlayer !== "") {
-        console.log("Get current player brawlers for: ", currentPlayer);
         try {
           const player = currentPlayer.charAt(0) !== "#" ? "#" + currentPlayer : currentPlayer;
           const filteredBrawlers = await getPlayerBrawlers(player, minBrawlerLevel);
-          setPlayerTagError(false)
+          console.log("fetching player brawlers for: ", player)
+          setPlayerTagError(false);
           setCurrentPlayerBrawlers(filteredBrawlers.brawlers);
-          setFilterPlayerBrawlers(true);
+          if (filterPlayerBrawlers === null) {
+            setFilterPlayerBrawlers(true);
+          }
         } catch (error) {
-          if (axios.isAxiosError(error) && error.response?.status === 404) {
-            setPlayerTagError(true);
-            setCurrentPlayer('');
-            if (filterPlayerBrawlers !== null) {
-              setFilterPlayerBrawlers(false)
-            }
-          } else {
-            console.error("Error fetching filtered Brawlers:", error);
+          setPlayerTagError(true);
+          if (filterPlayerBrawlers === null) {
+            setFilterPlayerBrawlers(false);
           }
         }
       }
     };
   
     getCurrentPlayerBrawlers();
-  }, [currentPlayer, minBrawlerLevel, filterPlayerBrawlers]);
+  }, [currentPlayer, minBrawlerLevel]);
 
   const getGameModes = useCallback((maps: MapInterface) => {
     const filteredGameModes: string[] = []

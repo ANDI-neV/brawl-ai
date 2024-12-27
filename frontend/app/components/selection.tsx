@@ -233,7 +233,10 @@ const ToggleSwitch = ({ isOn, toggleSwitch }: ToggleSwitchProps) => {
       className={`w-16 h-8 flex items-center rounded-full p-1 cursor-pointer ${
         isOn ? 'bg-green-400' : 'bg-red-400'
       }`} 
-      onClick={toggleSwitch}
+      onClick={() => {
+        console.log("Toggling switch. Current value:", isOn);
+        toggleSwitch();
+      }}
     >
       <motion.div 
         className={`w-6 h-6 rounded-full ${
