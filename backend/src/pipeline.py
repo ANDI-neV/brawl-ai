@@ -4,6 +4,7 @@ import subprocess
 from db import Database
 import argparse
 
+
 class BrawlAIPipeline:
     def __init__(self, rank_threshold: int, initial_player_id: str, last_update: str):
         self.rank_threshold = rank_threshold
@@ -21,14 +22,6 @@ class BrawlAIPipeline:
         )
         self.logger = logging.getLogger(__name__)
 
-    def update_brawler_data(self) -> None:
-        try:
-            subprocess.run(["python", "scraper.py"], check=True)
-            self.logger.info("Brawler data updated successfully")
-        except subprocess.CalledProcessError as e:
-            self.logger.error(f"Web scraping failed: {str(e)}")
-            raise
-
     def feed_database(self) -> None:
         try:
             subprocess.run(["python", "feeding.py", "--last_update", self.last_update], check=True)
@@ -43,7 +36,6 @@ class BrawlAIPipeline:
             self.logger.info("Starting pipeline execution")
 
             self.db.delete_all_battles()
-            #self.update_brawler_data()
             self.feed_database()
             return True
 

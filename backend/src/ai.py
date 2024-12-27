@@ -9,9 +9,7 @@ import torch.nn as nn
 import torch.optim as optim
 from sqlalchemy import create_engine, URL
 import configparser
-import requests
 from requests.exceptions import HTTPError
-from scraper import cache_brawler_winrates, cache_brawler_pickrates
 import onnx
 import onnxruntime as ort
 import subprocess
@@ -1049,17 +1047,28 @@ def test():
     predict(current_picks_dict, map_name, first_pick=True)
 
 
+def update_brawler_data() -> None:
+    try:
+        subprocess.run(["python", "scraper.py"], check=True)
+        print("Brawler data updated successfully")
+    except subprocess.CalledProcessError as e:
+        print(f"Web scraping failed: {str(e)}")
+        raise
+
+
 def transfer_files():
     config = configparser.ConfigParser()
     config.read('config.ini')
     pi_user = config['Pi']['pi_user']
     pi_host = config['Pi']['pi_host']
     pi_path = config['Pi']['pi_path']
-    local_files = ["model.onnx", "brawler_pickrates.json", "brawler_winrates.json"]
+    local_files = [["model.onnx","/models/"], ["map_id_mapping.json","/models/"],
+                   ["brawler_pickrates.json","/brawlers/"], ["brawler_winrates.json","/brawlers/"],
+                   ["brawler_supercell_id_mapping.json","/brawlers/"], ["stripped_brawlers.json","/brawlers/"]]
 
     try:
         for file in local_files:
-            subprocess.run(["rsync", "-avz", file, f"{pi_user}@{pi_host}:{pi_path}"], check=True)
+            subprocess.run(["rsync", "-avz", file[0], f"{pi_user}@{pi_host}:{pi_path}{file[1]}"], check=True)
         print("Files transferred successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error during file transfer: {e}")
@@ -1083,8 +1092,7 @@ if __name__ == '__main__':
     try:
         train_model()
         create_onnx_model()
-        cache_brawler_winrates()
-        cache_brawler_pickrates()
+        update_brawler_data()
         transfer_files()
         reload_model()
     except Exception as e:
