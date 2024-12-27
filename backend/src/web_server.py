@@ -92,8 +92,11 @@ async def predict_brawlers(request: PredictionRequest):
             brawler_dict = get_brawler_dict(request.brawlers,
                                                request.first_pick)
             probabilities = predict(brawler_dict, request.map, request.first_pick)
-        print(f"Prediction results: {probabilities}")
-        return {"probabilities": probabilities}
+        if not probabilities:
+            return {"probabilities": {}}
+        else:
+            print(f"Prediction results: {probabilities}")
+            return {"probabilities": probabilities}
     except Exception as e:
         print(f"Error during prediction: {e}")
         raise HTTPException(status_code=500, detail="Prediction failed")

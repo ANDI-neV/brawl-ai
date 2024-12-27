@@ -669,8 +669,9 @@ def acquire_combination(brawler_dict, first_pick):
             print(f"Selected combination: {selected_combination}")
             break
     else:
-        raise ValueError("No matching combination found for "
+        print("No matching combination found for "
                          "the provided positions.")
+        return None
     return selected_combination
 
 
