@@ -10,7 +10,7 @@ interface BrawlerPickerProps {
 interface TableHeaderProps {
   title: string;
   sortable?: boolean;
-  sortKey?: string;
+  sortKey: string;
   currentSort: { key: string; direction: 'asc' | 'desc' };
   onSort: (key: string) => void;
 }
@@ -101,7 +101,7 @@ export default function BrawlerPicker() {
   };
 
   const handleSort = (key: string) => {
-    if (!isMapSelected) return;
+    if (!isMapSelected || key == '') return;
     setSort(prevSort => ({
       key,
       direction: prevSort.key === key && prevSort.direction === 'desc' ? 'asc' : 'desc'
@@ -123,7 +123,7 @@ export default function BrawlerPicker() {
         return true;
       })
       .filter(brawler => {
-        if (filterPlayerBrawlers && currentPlayerBrawlers.length > 0) {
+        if (playerBans.length > 0) {
           return !playerBans.includes(brawler.name.toLowerCase());
         }
         return true;
@@ -150,7 +150,7 @@ export default function BrawlerPicker() {
           <table className="w-full text-sm text-left rtl:text-right text-gray-400">
             <thead className="text-xs uppercase bg-gray-700 text-gray-400">
               <tr>
-                <TableHeader title="Brawler" sortable={false} currentSort={sort} onSort={handleSort} />
+                <TableHeader title="Brawler" sortable={false} sortKey='' currentSort={sort} onSort={handleSort} />
                 <TableHeader title="Score" sortable sortKey="score" currentSort={sort} onSort={handleSort} />
                 <TableHeader title="Pick Rate" sortable sortKey="pickRate" currentSort={sort} onSort={handleSort} />
               </tr>

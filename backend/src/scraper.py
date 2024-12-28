@@ -178,6 +178,8 @@ def main():
 
     cache_stripped_brawler_data()
     brawler_to_supercell_id_mapping()
+    cache_brawler_winrates()
+    cache_brawler_pickrates()
 
 
 def scrape_brawler_images(brawler_data):

@@ -22,6 +22,8 @@ def reload_model():
 def prepare_input(brawler_dict, map_name,
                                map_id_mapping, first_pick, max_seq_len):
     selected_combination = acquire_combination(brawler_dict, first_pick)
+    if not selected_combination:
+        return None
 
     current_picks_names = [brawler_dict[pos] for pos in selected_combination[:-1]]
     current_picks_indices = [get_brawler_index(brawler_name) for brawler_name in current_picks_names]
@@ -54,6 +56,8 @@ def prepare_input(brawler_dict, map_name,
 def predict(brawler_dict, map_name, first_pick):
     map_id_mapping = load_map_id_mapping()
     input_data = prepare_input(brawler_dict, map_name, map_id_mapping, first_pick, max_seq_len=7)
+    if not input_data:
+        return None
 
     with model_lock:
         outputs = ort_session.run(None, {

@@ -12,11 +12,13 @@
     "@nextui-org/dropdown": "^2.1.29",
     "@nextui-org/react": "^2.4.6",
     "axios": "^1.7.5",
+    "dotenv": "^16.4.7",
     "framer-motion": "^11.3.31",
     "lucide-react": "^0.436.0",
     "next": "^14.2.20",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@types/node": "^20",

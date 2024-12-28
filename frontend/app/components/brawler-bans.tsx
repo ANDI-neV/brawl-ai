@@ -41,6 +41,7 @@ const BrawlerBans = () => {
                         onClick={() => removeBrawlerBan(brawler)}
                         whileHover={{ scale: 1.1, zIndex: 10 }}
                         whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
+                        key={brawler.name}
                     >
                         <div className="relative w-full h-full">
                         <Image 

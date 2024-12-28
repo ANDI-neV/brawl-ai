@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:7001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:7001';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
