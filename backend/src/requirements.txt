@@ -11,5 +11,5 @@ pydantic==2.10.4
 Requests==2.32.3
 scikit_learn==1.4.0
 SQLAlchemy==2.0.31
-torch==2.4.0+cu124
+torch==2.4.0
 uvicorn==0.34.0
