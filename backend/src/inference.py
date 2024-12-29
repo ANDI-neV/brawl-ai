@@ -1,7 +1,6 @@
 import onnxruntime as ort
 import numpy as np
-from ai import (load_map_id_mapping, get_brawler_index, acquire_combination, initialize_brawler_data,
-                get_brawler_class)
+from ai import load_map_id_mapping, get_brawler_index, acquire_combination, initialize_brawler_data, get_brawler_class
 from threading import Lock
 import torch
 
