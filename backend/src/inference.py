@@ -8,7 +8,7 @@ MODEL_PATH = "./out/models/model.onnx"
 model_lock = Lock()
 try:
     print("ONNX Runtime Version:", ort.__version__)
-    ort_session = ort.InferenceSession("path/to/your/model.onnx")
+    ort_session = ort.InferenceSession("out/models/model.onnx")
     print("ONNX Runtime initialized successfully.")
 except Exception as e:
     print("Error initializing ONNX Runtime:", e)
