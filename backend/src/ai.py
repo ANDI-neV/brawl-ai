@@ -226,7 +226,6 @@ class BrawlStarsTransformer(nn.Module):
                                                          num_layers=num_layers)
 
         self.output_layer = nn.Linear(d_model, n_brawlers)
-        print(f"Output layer size: {n_brawlers}")
 
     def forward(self, brawlers, brawler_classes, team_indicators, positions, map_id,
                 src_key_padding_mask=None):
@@ -250,20 +249,11 @@ class BrawlStarsTransformer(nn.Module):
             before passing through the Transformer. It uses the CLS token
             output for final prediction.
         """
-        print("Brawlers shape:", brawlers.shape)
-        print("Brawler classes shape:", brawler_classes.shape)
-        print("Team indicators shape:", team_indicators.shape)
-        print("Positions shape:", positions.shape)
-        print("Map ID shape:", map_id.shape)
         x = self.brawler_embedding(brawlers)
         x = x + self.class_embedding(brawler_classes)
         x = x + self.team_embedding(team_indicators)
         x = x + self.position_embedding(positions)
         x = x + self.map_embedding(map_id).unsqueeze(1)
-
-        print("Input to TransformerEncoder:")
-        print("x:", x.shape)
-        print("src_key_padding_mask:", src_key_padding_mask.shape, src_key_padding_mask.dtype)
 
         x = self.transformer_encoder(x,
                                      src_key_padding_mask=src_key_padding_mask)
@@ -1079,14 +1069,26 @@ def transfer_files():
     pi_user = config['Pi']['pi_user']
     pi_host = config['Pi']['pi_host']
     pi_path = config['Pi']['pi_path']
-    local_files = [["model.onnx","/models/"], ["map_id_mapping.json","/models/"],
-                   ["brawler_pickrates.json","/brawlers/"], ["brawler_winrates.json","/brawlers/"],
-                   ["brawler_supercell_id_mapping.json","/brawlers/"], ["stripped_brawlers.json","/brawlers/"]]
+
+    local_files = [
+        ["model.onnx", "out/models/"],
+        ["map_id_mapping.json", "out/models/"],
+        ["brawler_pickrates.json", "out/brawlers/"],
+        ["brawler_winrates.json", "out/brawlers/"],
+        ["brawler_supercell_id_mapping.json", "out/brawlers/"],
+        ["stripped_brawlers.json", "out/brawlers/"]
+    ]
 
     try:
         for file in local_files:
-            subprocess.run(["rsync", "-avz", file[0], f"{pi_user}@{pi_host}:{pi_path}{file[1]}"], check=True)
+            local_file_path = os.path.join(file[1], file[0])
+            remote_file_path = f"{pi_user}@{pi_host}:{os.path.join(pi_path, file[1])}"
+
+            print(f"Transferring: {local_file_path} to {remote_file_path}")
+            subprocess.run(["scp", local_file_path, remote_file_path], check=True)
+
         print("Files transferred successfully.")
+
     except subprocess.CalledProcessError as e:
         print(f"Error during file transfer: {e}")
 
