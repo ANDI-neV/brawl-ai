@@ -1,20 +1,21 @@
-import json
-import os
-import string
-from typing import Dict, List
-import numpy as np
-import pandas as pd
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from sqlalchemy import create_engine, URL
-import configparser
-from requests.exceptions import HTTPError
-import onnx
-import onnxruntime as ort
-import subprocess
-import requests
+print("Starting ai.py")
 
+try:
+    import json
+    import os
+    import numpy as np
+    import pandas as pd
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    from sqlalchemy import create_engine, URL
+    import configparser
+    import onnx
+    import onnxruntime as ort
+    import requests
+    print("All imports successful.")
+except Exception as e:
+    print(f"Error during imports: {e}")
 
 BRAWLERS_JSON_PATH = 'out/brawlers/stripped_brawlers.json'
 BRAWLER_WINRATES_JSON_PATH = 'out/brawlers/brawler_winrates.json'
