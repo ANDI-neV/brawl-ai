@@ -1077,7 +1077,8 @@ def transfer_files():
         ["brawler_winrates.json", "out/brawlers/"],
         ["brawler_supercell_id_mapping.json", "out/brawlers/"],
         ["stripped_brawlers.json", "out/brawlers/"],
-        ["config.ini", ""]
+        ["config.ini", ""],
+        ["map_data.json","out/brawlers"]
     ]
 
     try:
@@ -1110,10 +1111,10 @@ def reload_model():
 
 if __name__ == '__main__':
     try:
-        #update_brawler_data()
-        #train_model()
-        #create_onnx_model()
+        update_brawler_data()
+        train_model()
+        create_onnx_model()
         transfer_files()
-        #reload_model()
+        reload_model()
     except Exception as e:
         print(f"Error in pipeline: {e}")
