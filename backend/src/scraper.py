@@ -180,6 +180,7 @@ def main():
     brawler_to_supercell_id_mapping()
     cache_brawler_winrates()
     cache_brawler_pickrates()
+    save_map_data()
 
 
 def scrape_brawler_images(brawler_data):
@@ -273,35 +274,28 @@ def cache_stripped_brawler_data():
     with open(os.path.join(BRAWLERS_DIR, 'stripped_brawlers.json'), 'w') as f:
         json.dump(stripped_brawler_data, f, indent=2)
 
+
 def scrape_map_data():
-    response = requests.get("https://brawlify.com/maps/")
-    soup = BeautifulSoup(response.text, 'html.parser')
+    response = requests.get("https://api.brawlify.com/v1/maps")
+    allowed_game_modes = ["Bounty", "Gem Grab", "Heist", "Brawl Ball", "Hot Zone", "Knockout"]
 
-    map_data = []
+    if response.status_code == 200:
+        maps = response.json().get("list", [])
 
-    # Find all game mode sections
-    game_mode_sections = soup.find_all('div', class_='row mb-4 align-items-center justify-content-center')
+        map_data = []
 
-    for section in game_mode_sections:
-        # Extract game mode
-        game_mode_element = section.find('h2', class_='h3 recomm-mode-text pt-2')
-        if game_mode_element:
-            game_mode = game_mode_element.text.split('(')[0].strip()
-
-            # Find all maps for this game mode
-            map_elements = section.find_all('div', class_='map-def')
-
-            for map_element in map_elements:
-                map_name = map_element.find('span', class_='badge map-name').text
-                map_image = map_element.find('img')['src']
-
+        for map in maps:
+            if map["gameMode"]["name"] in allowed_game_modes:
                 map_data.append({
-                    'game_mode': game_mode,
-                    'map_name': map_name,
-                    'map_image': map_image
+                    'game_mode': map["gameMode"]["name"],
+                    'map_name': map["name"],
+                    'map_image': map["imageUrl"]
                 })
 
-    return map_data
+        return map_data
+    else:
+        print(f"Error fetching map data: {response.status_code}")
+        return []
 
 
 def save_map_data():
@@ -326,4 +320,4 @@ def test_map_data():
 
 
 if __name__ == "__main__":
-    main()
+    save_map_data()

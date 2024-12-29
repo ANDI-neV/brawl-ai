@@ -1,14 +1,17 @@
 import onnxruntime as ort
 import numpy as np
-from ai import (load_map_id_mapping, get_brawler_index, acquire_combination, CLS_TOKEN_INDEX,
-                CLASS_CLS_TOKEN_INDEX, PAD_TOKEN_INDEX,CLASS_PAD_TOKEN_INDEX, index_to_brawler_name,
-                get_brawler_class)
+from ai import load_map_id_mapping, get_brawler_index, acquire_combination, initialize_brawler_data, get_brawler_class
 from threading import Lock
 import torch
 
 MODEL_PATH = "./out/models/model.onnx"
 model_lock = Lock()
-ort_session = ort.InferenceSession(MODEL_PATH)
+try:
+    print("ONNX Runtime Version:", ort.__version__)
+    ort_session = ort.InferenceSession("out/models/model.onnx")
+    print("ONNX Runtime initialized successfully.")
+except Exception as e:
+    print("Error initializing ONNX Runtime:", e)
 
 
 def reload_model():
@@ -28,16 +31,17 @@ def prepare_input(brawler_dict, map_name,
     current_picks_names = [brawler_dict[pos] for pos in selected_combination[:-1]]
     current_picks_indices = [get_brawler_index(brawler_name) for brawler_name in current_picks_names]
     brawler_classes = [get_brawler_class(brawler_name) for brawler_name in current_picks_names]
+    brawler_data, constants = initialize_brawler_data()
 
-    brawlers = [CLS_TOKEN_INDEX] + current_picks_indices
+    brawlers = [constants['CLS_TOKEN_INDEX']] + current_picks_indices
     team_indicators = [1] + [1 if pos[0] == 'a' else 2 for pos in selected_combination[:-1]]
     positions = [0] + [i + 1 for i in range(len(current_picks_indices))]
 
     seq_len = len(brawlers)
     padding_length = max_seq_len - seq_len
 
-    brawlers_padded = brawlers + [PAD_TOKEN_INDEX] * padding_length
-    brawler_classes_padded = [CLASS_CLS_TOKEN_INDEX] + brawler_classes + [CLASS_PAD_TOKEN_INDEX] * padding_length
+    brawlers_padded = brawlers + [constants['PAD_TOKEN_INDEX']] * padding_length
+    brawler_classes_padded = [constants['CLASS_CLS_TOKEN_INDEX']] + brawler_classes + [constants['CLASS_PAD_TOKEN_INDEX']] * padding_length
     team_indicators_padded = team_indicators + [0] * padding_length
     positions_padded = positions + [0] * padding_length
     padding_mask = [False] * seq_len + [True] * padding_length
@@ -56,6 +60,7 @@ def prepare_input(brawler_dict, map_name,
 def predict(brawler_dict, map_name, first_pick):
     map_id_mapping = load_map_id_mapping()
     input_data = prepare_input(brawler_dict, map_name, map_id_mapping, first_pick, max_seq_len=7)
+    brawler_data, constants = initialize_brawler_data()
     if not input_data:
         return None
 
@@ -79,7 +84,7 @@ def predict(brawler_dict, map_name, first_pick):
 
     probability_dict = {}
     for idx in range(probabilities.size(1)):
-        brawler_name = index_to_brawler_name.get(idx, 'Unknown Brawler')
+        brawler_name = constants['index_to_brawler_name'].get(idx, 'Unknown Brawler')
         prob = probabilities[0, idx].item()
         if brawler_name == 'Unknown Brawler':
             continue

@@ -7,16 +7,23 @@ import json
 import time
 from pathlib import Path
 import scraper
-from ai import (get_map_score, get_all_maps, get_all_brawlers, get_brawler_dict,
-                get_map_pickrate, PlayerNotFoundError, get_filtered_brawlers)
+from ai import get_map_score, get_all_maps, get_all_brawlers, get_brawler_dict, get_map_pickrate, PlayerNotFoundError, get_filtered_brawlers
 from inference import predict, reload_model
+import configparser
 
 app = FastAPI()
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+pi_host = config['Pi']['pi_host']
+main_host = config['Pi']['main_host']
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000",
-                   "http://127.0.0.1:3000",],
+                   "http://127.0.0.1:3000",
+                   f"http://{pi_host}:3000",
+                   f"http://{main_host}:3000"
+                   ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
