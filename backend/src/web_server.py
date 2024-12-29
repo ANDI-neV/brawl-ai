@@ -19,9 +19,9 @@ pi_host = config['Pi']['pi_host']
 main_host = config['Pi']['main_host']
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000",
-                   "http://127.0.0.1:3000",
-                   f"http://{pi_host}:3000",
+    allow_origins=["http://localhost:3003",
+                   "http://127.0.0.1:3003",
+                   f"http://{pi_host}:3003",
                    f"http://{main_host}:3000"
                    ],
     allow_credentials=True,
