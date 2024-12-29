@@ -1,19 +1,37 @@
 print("Starting ai.py")
 
 try:
-    import json
-    import os
     import numpy as np
+
+    print("Numpy imported successfully.")
+
     import pandas as pd
+
+    print("Pandas imported successfully.")
+
     import torch
-    import torch.nn as nn
-    import torch.optim as optim
-    from sqlalchemy import create_engine, URL
-    import configparser
+
+    print("Torch imported successfully.")
+
     import onnx
+
+    print("ONNX imported successfully.")
+
     import onnxruntime as ort
+
+    print("ONNX Runtime imported successfully.")
+
+    from sqlalchemy import create_engine, URL
+
+    print("SQLAlchemy imported successfully.")
+
+    import configparser
+
+    print("ConfigParser imported successfully.")
+
     import requests
-    print("All imports successful.")
+
+    print("Requests imported successfully.")
 except Exception as e:
     print(f"Error during imports: {e}")
 
