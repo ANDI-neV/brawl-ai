@@ -18,13 +18,18 @@ config.read('config.ini')
 pi_host = config['Pi']['pi_host']
 main_host = config['Pi']['main_host']
 public_ip = config['Pi']['public_ip']
+domain = config['Pi']['domain']
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3003",
                    "http://127.0.0.1:3003",
                    f"http://{pi_host}:3003",
                    f"http://{main_host}:3000",
-                   f"http://{public_ip}:3003"
+                   f"http://{public_ip}:3003",
+                   f"http://{domain}",
+                    f"https://{domain}",
+                    f"http://www.{domain}",
+                    f"https://www.{domain}",
                    ],
     allow_credentials=True,
     allow_methods=["*"],
