@@ -28,7 +28,7 @@ A solution for optimizing ranked drafting sequences in the mobile game Brawl Sta
 - 🔄 Regular updates based on meta/balance changes
 
 ## 🚀 Usage
-Free usage ***coming soon*** at [brawl-ai.com](https://brawl-ai.com)
+Free usage at [brawl-ai.com](https://brawl-ai.com)
 
 ## 💻 Running Locally
 
