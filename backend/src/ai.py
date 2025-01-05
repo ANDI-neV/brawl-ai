@@ -523,8 +523,8 @@ def train_transformer_model(training_samples, n_brawlers, n_maps, d_model=64,
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
 
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-5)
 
     for epoch in range(epochs):
         model.train()
@@ -1111,10 +1111,10 @@ def reload_model():
 
 if __name__ == '__main__':
     try:
-        update_brawler_data()
+        #update_brawler_data()
         train_model()
         create_onnx_model()
-        transfer_files()
-        reload_model()
+        #transfer_files()
+        #reload_model()
     except Exception as e:
         print(f"Error in pipeline: {e}")
