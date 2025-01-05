@@ -14,6 +14,7 @@ import onnx
 import onnxruntime as ort
 import subprocess
 import requests
+from feeding import get_last_update
 
 
 BRAWLERS_JSON_PATH = 'out/brawlers/stripped_brawlers.json'
@@ -869,7 +870,7 @@ def get_all_maps():
     return filtered_maps
 
 
-def train_model():
+def train_model(model_name):
     """
     Trains the BrawlStarsTransformer model using prepared match data.
 
@@ -881,6 +882,7 @@ def train_model():
     5. Trains the transformer model.
     6. Saves the trained model to a file.
     """
+    print(f"training model:{model_name}")
     match_data = prepare_training_data()
     brawler_data, constants = initialize_brawler_data()
 
@@ -912,7 +914,7 @@ def train_model():
         json.dump(map_id_mapping, f)
 
     model = train_transformer_model(training_samples, n_brawlers, n_maps)
-    torch.save(model.state_dict(), 'out/models/model.pth')
+    torch.save(model.state_dict(), f'out/models/{model_name}')
 
 
 def load_model(n_brawlers, n_maps, model_path='out/models/model.pth',
@@ -950,14 +952,14 @@ def load_model(n_brawlers, n_maps, model_path='out/models/model.pth',
     return model
 
 
-def create_onnx_model():
+def create_onnx_model(model_name):
     map_id_mapping = load_map_id_mapping()
     n_maps = len(map_id_mapping)
     brawler_data, constants = initialize_brawler_data()
     model = BrawlStarsTransformer(constants['n_brawlers_with_special_tokens'], n_maps, constants['CLASS_PAD_TOKEN_INDEX'] + 1,
                                   d_model=64, nhead=4, num_layers=2)
     device = torch.device("cpu")
-    model.load_state_dict(torch.load("./out/models/model.pth", map_location=torch.device("cpu")))
+    model.load_state_dict(torch.load(f"./out/models/{model_name}", map_location=torch.device("cpu")))
     model.eval()
     model.to(device)
     batch_size = 1
@@ -1111,10 +1113,15 @@ def reload_model():
 
 if __name__ == '__main__':
     try:
-        #update_brawler_data()
-        train_model()
-        create_onnx_model()
-        #transfer_files()
-        #reload_model()
+        data = prepare_training_data()
+        iteration = len(data) // 50000
+        last_update = get_last_update()
+        model_name = f"model_{last_update}_{iteration}.pth"
+        if (not os.path.isfile(f"out/models/{model_name}")) and 1 <= iteration <= 5:
+            update_brawler_data()
+            train_model(model_name)
+            create_onnx_model(model_name)
+            transfer_files()
+            reload_model()
     except Exception as e:
         print(f"Error in pipeline: {e}")

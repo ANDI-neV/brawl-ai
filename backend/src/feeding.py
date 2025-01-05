@@ -228,7 +228,7 @@ class DevBrawlManager():
             self.db.insert_player(player)
 
         runtime = 120
-        while (time.time() - start_time) < 60 * runtime and self.db.get_checked_players_percentage() < 0.98:
+        while (time.time() - start_time) < 60 * runtime and self.db.get_checked_players_percentage() < 0.98 and self.db.get_battles_count() <= 275000:
             print(f"Time left: "
                   f"{(60 * runtime - (time.time() - start_time)) / 60:.2f} "
                   f"min")
