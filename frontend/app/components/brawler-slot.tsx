@@ -40,7 +40,14 @@ export default function BrawlerSlot({ index, bgColor, team }: BrawlerSlotProps) 
   const firstClearSlotIndex = getFirstClearSlot(selectedBrawlers);
   const isFirstClearSlot = slotIndex === firstClearSlotIndex;
 
-  if (loadingMapping) return <div>Loading...</div>;
+  if (loadingMapping) return <div 
+  className={`h-[100px] w-[100px] border-8 p-3 rounded-xl ${
+    isFirstClearSlot ? '' : 'border-transparent'
+  } ${team === 'left' ? 'shadow-up-xl' : 'shadow-xl'}`}
+  style={{
+    backgroundColor: bgColor,
+    borderColor: 'transparent',
+  }}> </div>;
 
   const handleClearSlot = () => {
     if (selectedBrawler) {

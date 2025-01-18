@@ -9,7 +9,6 @@ import Image from "next/image";
 
 function Menu() {
   const { selectedMap, availableMaps, maps, availableGameModes, mapSelectionSetup } = useBrawler();
-  const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set(selectedMap ? [selectedMap] : []));
   const [selectedGameMode, setSelectedGameMode] = React.useState<string>("");
 
   const filteredMaps = useMemo(() => (
@@ -19,7 +18,6 @@ function Menu() {
   ), [availableMaps, maps, selectedGameMode]);
 
   const handleSelectionChange = (keys: Selection) => {
-    setSelectedKeys(keys);
     const selected = Array.from(keys)[0] as string;
     mapSelectionSetup(selected);
   };
@@ -50,7 +48,7 @@ function Menu() {
           variant="flat"
           disallowEmptySelection
           selectionMode="single"
-          selectedKeys={selectedKeys}
+          selectedKeys={selectedMap ? new Set([selectedMap]) : new Set()}
           onSelectionChange={handleSelectionChange}
           className="bg-gray-700 text-white p-2 rounded-xl max-h-64 overflow-auto custom-scrollbar"
         >

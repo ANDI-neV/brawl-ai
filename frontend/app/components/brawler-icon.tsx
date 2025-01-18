@@ -13,7 +13,7 @@ interface BrawlerIconProps {
 export default function BrawlerIcon({ brawler, isAboveFold = false }: BrawlerIconProps) {
   const { loadingMapping, error, brawlerMapping } = useBrawler();
 
-  if (loadingMapping) return <div>Loading...</div>;
+  if (loadingMapping) return <div className="md:h-[75px] md:w-[75px] h-[60px] w-[60px] border-[4px] md:border-[5px] border-black bg-black bg-opacity-10 p-2 relative rounded-lg overflow-hidden"> </div>;
 
   const brawlerId = Object.entries(brawlerMapping).find(([name, id]) => name === brawler)?.[1];
   if (!brawlerId) {console.log("brawler not found: ", brawler);  return <div>Brawler not found</div>};
