@@ -62,7 +62,7 @@ class DevBrawlManager():
         players = []
         for team in battle["battle"]["teams"]:
             for player in team:
-                if 15 <= player["brawler"]["trophies"] <= 19:
+                if 16 <= player["brawler"]["trophies"] <= 24:
                     players.append((player["tag"][1:], player["name"]))
         return players
 
@@ -155,10 +155,27 @@ class DevBrawlManager():
             start_time = time.time()
             battle_logs, player_tags_to_remove = self.get_battlelogs(player_tags)
 
-            for player_tag in player_tags_to_remove:
-                self.db.delete_player(player_tag)
+            players_with_valid_trophies = set()
 
-            player_tags = list(set(player_tags) - set(player_tags_to_remove))
+            for log in battle_logs:
+                for battle in log["items"]:
+                    if battle["battle"].get("type") == "soloRanked":
+                        for team in battle["battle"]["teams"]:
+                            for player in team:
+                                player_tag = player["tag"][1:]
+                                if player_tag in player_tags:
+                                    if 16 <= player["brawler"]["trophies"] <= 24:
+                                        players_with_valid_trophies.add(player_tag)
+
+            players_to_remove = set(player_tags) - players_with_valid_trophies - set(player_tags_to_remove)
+            for player_tag in players_to_remove:
+                self.db.delete_player(player_tag)
+                player_tags_to_remove.append(player_tag)
+
+            print(f"Players meeting trophy requirements: {len(players_with_valid_trophies)}")
+            print(f"Additional players removed (trophy filter): {len(players_to_remove)}")
+
+            player_tags = list(players_with_valid_trophies)
 
             print(f"Battlelogs took: {time.time() - start_time:.2f} seconds")
             battles = [battle for log in battle_logs for battle in log["items"]]
