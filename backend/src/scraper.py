@@ -320,4 +320,4 @@ def test_map_data():
 
 
 if __name__ == "__main__":
-    save_map_data()
+    main()
