@@ -57,7 +57,7 @@ function Menu() {
               <div className="flex items-center gap-2">
                 {maps.maps[map]?.game_mode ? (
                   <Image
-                    src={`/game_modes/${maps.maps[map].game_mode}.png`}
+                    src={`/game_modes/${maps.maps[map].game_mode}.webp`}
                     alt={map}
                     width={30}
                     height={30}
@@ -91,7 +91,7 @@ function Menu() {
           >
             <div className="relative w-full h-full">
               <Image
-                src={`/game_modes/${game_mode}.png`}
+                src={`/game_modes/${game_mode}.webp`}
                 alt={game_mode}
                 fill={true}
                 style={{objectFit: "contain"}}
