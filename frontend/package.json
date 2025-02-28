@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "cross-env NODE_ENV=development node ./loadConfig.js",
     "dev": "next dev -p 3003",
     "load-env": "cross-env NODE_ENV=production node ./loadConfig.js -p 3003",
     "build": "npm run load-env && cross-env NODE_ENV=production next build",

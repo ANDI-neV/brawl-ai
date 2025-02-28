@@ -12,7 +12,7 @@ const configPath = path.resolve(__dirname, 'frontend_config.ini');
 if (fs.existsSync(configPath)) {
     const config = ini.parse(fs.readFileSync(configPath, 'utf-8'));
     console.log('Parsed Config:', config);
-
+ 
     const envConfig = config[env] || {};
     if (Object.keys(envConfig).length === 0) {
         console.error(`No configuration found for environment: ${env}`);
