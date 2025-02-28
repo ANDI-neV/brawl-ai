@@ -154,6 +154,8 @@ class DevBrawlManager():
 
             start_time = time.time()
             battle_logs, player_tags_to_remove = self.get_battlelogs(player_tags)
+            for player_tag in player_tags_to_remove:
+                self.db.delete_player(player_tag)
 
             players_with_valid_trophies = set()
 

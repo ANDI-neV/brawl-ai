@@ -157,6 +157,8 @@ def main():
 
     for brawler_name, brawler_url in brawler_list:
         print(f"Fetching data for {brawler_name}")
+        if str.lower(brawler_name) == "buzz lightyear":
+            continue
 
         if brawler_name in brawler_data:
             brawler_details = (
@@ -277,7 +279,7 @@ def cache_stripped_brawler_data():
 
 def scrape_map_data():
     response = requests.get("https://api.brawlify.com/v1/maps")
-    allowed_game_modes = ["Bounty", "Gem Grab", "Heist", "Brawl Ball", "Hot Zone", "Knockout"]
+    allowed_game_modes = ["Bounty", "Gem Grab", "Heist", "Brawl Ball", "Hot Zone", "Knockout", "Brawl Hockey"]
 
     if response.status_code == 200:
         maps = response.json().get("list", [])
