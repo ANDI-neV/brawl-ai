@@ -279,7 +279,7 @@ def cache_stripped_brawler_data():
 
 def scrape_map_data():
     response = requests.get("https://api.brawlify.com/v1/maps")
-    allowed_game_modes = ["Bounty", "Gem Grab", "Heist", "Brawl Ball", "Hot Zone", "Knockout", "Brawl Hockey"]
+    allowed_game_modes = ["Bounty", "Gem Grab", "Heist", "Brawl Ball", "Hot Zone", "Knockout", "Brawl Hockey", "Cleaning Duty"]
 
     if response.status_code == 200:
         maps = response.json().get("list", [])
