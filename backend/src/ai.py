@@ -1,4 +1,5 @@
 import json
+import argparse
 import os
 import string
 from typing import Dict, List
@@ -854,7 +855,7 @@ def test_team_composition(model, current_picks_dict, map_name,
 def get_all_maps():
     map_json = 'out/brawlers/map_data.json'
     with open(map_json, 'r') as f:
-        map_id_mapping = json.load(f)
+        all_maps = json.load(f)
 
     current_maps_json = 'out/models/map_id_mapping.json'
     with open(current_maps_json, 'r') as f:
@@ -862,13 +863,26 @@ def get_all_maps():
 
     filtered_maps = {}
     for active_map in list(current_maps.keys()):
-        filtered_maps[active_map] = map_id_mapping[string.capwords(active_map).replace("'", "")]
+        if active_map in all_maps:
+            filtered_maps[active_map] = all_maps[active_map]
+            continue
+
+        normalized_name = string.capwords(active_map).replace("'", "")
+        if normalized_name in all_maps:
+            filtered_maps[active_map] = all_maps[normalized_name]
 
     print(filtered_maps)
     return filtered_maps
 
 
-def train_model(model_name):
+def train_model(
+    model_name,
+    *,
+    training_limit=None,
+    epochs=10,
+    batch_size=64,
+    learning_rate=0.001,
+):
     """
     Trains the BrawlStarsTransformer model using prepared match data.
 
@@ -902,7 +916,7 @@ def train_model(model_name):
     here = os.path.dirname(os.path.abspath(__file__))
     training_samples = get_brawler_vectors(match_data,
                                            map_id_mapping=map_id_mapping,
-                                           limit=None)
+                                           limit=training_limit)
 
     print("Map ID Mapping:")
     for map_name, map_id in map_id_mapping.items():
@@ -911,8 +925,16 @@ def train_model(model_name):
     with open(os.path.join(here, 'out/models/map_id_mapping.json'), 'w') as f:
         json.dump(map_id_mapping, f)
 
-    model = train_transformer_model(training_samples, n_brawlers, n_maps)
+    model = train_transformer_model(
+        training_samples,
+        n_brawlers,
+        n_maps,
+        batch_size=batch_size,
+        epochs=epochs,
+        learning_rate=learning_rate,
+    )
     torch.save(model.state_dict(), f'out/models/{model_name}')
+    return model_name
 
 
 def load_model(n_brawlers, n_maps, model_path='out/models/model.pth',
@@ -1008,6 +1030,35 @@ def create_onnx_model(model_name):
     outputs = ort_session.run(None, input_data)
 
     print("ONNX Inference Output:", outputs)
+
+
+def refresh_artifacts(
+    *,
+    model_name="model_latest.pth",
+    training_limit=None,
+    epochs=10,
+    batch_size=64,
+    learning_rate=0.001,
+    refresh_metadata=True,
+    transfer=False,
+    reload_remote=False,
+):
+    if refresh_metadata:
+        update_brawler_data()
+
+    train_model(
+        model_name,
+        training_limit=training_limit,
+        epochs=epochs,
+        batch_size=batch_size,
+        learning_rate=learning_rate,
+    )
+    create_onnx_model(model_name)
+
+    if transfer:
+        transfer_files()
+    if reload_remote:
+        reload_model()
 
 
 def predict(picks_dict, map_name, first_pick):
@@ -1108,16 +1159,28 @@ def reload_model():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Train and export BrawlAI artifacts")
+    parser.add_argument("--model-name", default="model_latest.pth")
+    parser.add_argument("--train-limit", type=int, default=None)
+    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--batch-size", type=int, default=64)
+    parser.add_argument("--learning-rate", type=float, default=0.001)
+    parser.add_argument("--skip-metadata-refresh", action="store_true")
+    parser.add_argument("--transfer", action="store_true")
+    parser.add_argument("--reload-remote", action="store_true")
+    args = parser.parse_args()
+
     try:
-        data = prepare_training_data()
-        iteration = len(data) // 50000
-        last_update = get_last_update()
-        model_name = f"model_{last_update}_{iteration}.pth"
-        if (not os.path.isfile(f"out/models/{model_name}")) and 1 <= iteration <= 5:
-            update_brawler_data()
-            train_model(model_name)
-            create_onnx_model(model_name)
-            transfer_files()
-            reload_model()
+        refresh_artifacts(
+            model_name=args.model_name,
+            training_limit=args.train_limit,
+            epochs=args.epochs,
+            batch_size=args.batch_size,
+            learning_rate=args.learning_rate,
+            refresh_metadata=not args.skip_metadata_refresh,
+            transfer=args.transfer,
+            reload_remote=args.reload_remote,
+        )
     except Exception as e:
         print(f"Error in pipeline: {e}")
+        raise
