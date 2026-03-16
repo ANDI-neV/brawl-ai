@@ -1,0 +1,406 @@
+{
+  "shelly": {
+    "class_idx": 3,
+    "index": 0
+  },
+  "colt": {
+    "class_idx": 3,
+    "index": 1
+  },
+  "bull": {
+    "class_idx": 6,
+    "index": 2
+  },
+  "brock": {
+    "class_idx": 4,
+    "index": 3
+  },
+  "rico": {
+    "class_idx": 3,
+    "index": 4
+  },
+  "spike": {
+    "class_idx": 3,
+    "index": 5
+  },
+  "barley": {
+    "class_idx": 0,
+    "index": 6
+  },
+  "jessie": {
+    "class_idx": 2,
+    "index": 7
+  },
+  "nita": {
+    "class_idx": 3,
+    "index": 8
+  },
+  "dynamike": {
+    "class_idx": 0,
+    "index": 9
+  },
+  "el primo": {
+    "class_idx": 6,
+    "index": 10
+  },
+  "mortis": {
+    "class_idx": 1,
+    "index": 11
+  },
+  "crow": {
+    "class_idx": 1,
+    "index": 12
+  },
+  "poco": {
+    "class_idx": 5,
+    "index": 13
+  },
+  "bo": {
+    "class_idx": 2,
+    "index": 14
+  },
+  "piper": {
+    "class_idx": 4,
+    "index": 15
+  },
+  "pam": {
+    "class_idx": 5,
+    "index": 16
+  },
+  "tara": {
+    "class_idx": 3,
+    "index": 17
+  },
+  "darryl": {
+    "class_idx": 6,
+    "index": 18
+  },
+  "penny": {
+    "class_idx": 0,
+    "index": 19
+  },
+  "frank": {
+    "class_idx": 6,
+    "index": 20
+  },
+  "gene": {
+    "class_idx": 2,
+    "index": 21
+  },
+  "tick": {
+    "class_idx": 0,
+    "index": 22
+  },
+  "leon": {
+    "class_idx": 1,
+    "index": 23
+  },
+  "rosa": {
+    "class_idx": 6,
+    "index": 24
+  },
+  "carl": {
+    "class_idx": 3,
+    "index": 25
+  },
+  "bibi": {
+    "class_idx": 6,
+    "index": 26
+  },
+  "8-bit": {
+    "class_idx": 3,
+    "index": 27
+  },
+  "sandy": {
+    "class_idx": 2,
+    "index": 28
+  },
+  "bea": {
+    "class_idx": 4,
+    "index": 29
+  },
+  "emz": {
+    "class_idx": 2,
+    "index": 30
+  },
+  "mr. p": {
+    "class_idx": 2,
+    "index": 31
+  },
+  "max": {
+    "class_idx": 5,
+    "index": 32
+  },
+  "jacky": {
+    "class_idx": 6,
+    "index": 33
+  },
+  "gale": {
+    "class_idx": 2,
+    "index": 34
+  },
+  "nani": {
+    "class_idx": 4,
+    "index": 35
+  },
+  "sprout": {
+    "class_idx": 0,
+    "index": 36
+  },
+  "surge": {
+    "class_idx": 3,
+    "index": 37
+  },
+  "colette": {
+    "class_idx": 3,
+    "index": 38
+  },
+  "amber": {
+    "class_idx": 2,
+    "index": 39
+  },
+  "lou": {
+    "class_idx": 2,
+    "index": 40
+  },
+  "byron": {
+    "class_idx": 5,
+    "index": 41
+  },
+  "edgar": {
+    "class_idx": 1,
+    "index": 42
+  },
+  "ruffs": {
+    "class_idx": 5,
+    "index": 43
+  },
+  "stu": {
+    "class_idx": 1,
+    "index": 44
+  },
+  "belle": {
+    "class_idx": 4,
+    "index": 45
+  },
+  "squeak": {
+    "class_idx": 2,
+    "index": 46
+  },
+  "grom": {
+    "class_idx": 0,
+    "index": 47
+  },
+  "buzz": {
+    "class_idx": 1,
+    "index": 48
+  },
+  "griff": {
+    "class_idx": 2,
+    "index": 49
+  },
+  "ash": {
+    "class_idx": 6,
+    "index": 50
+  },
+  "meg": {
+    "class_idx": 6,
+    "index": 51
+  },
+  "lola": {
+    "class_idx": 3,
+    "index": 52
+  },
+  "fang": {
+    "class_idx": 1,
+    "index": 53
+  },
+  "eve": {
+    "class_idx": 3,
+    "index": 54
+  },
+  "janet": {
+    "class_idx": 4,
+    "index": 55
+  },
+  "bonnie": {
+    "class_idx": 4,
+    "index": 56
+  },
+  "otis": {
+    "class_idx": 2,
+    "index": 57
+  },
+  "sam": {
+    "class_idx": 1,
+    "index": 58
+  },
+  "gus": {
+    "class_idx": 5,
+    "index": 59
+  },
+  "buster": {
+    "class_idx": 6,
+    "index": 60
+  },
+  "chester": {
+    "class_idx": 3,
+    "index": 61
+  },
+  "gray": {
+    "class_idx": 5,
+    "index": 62
+  },
+  "mandy": {
+    "class_idx": 4,
+    "index": 63
+  },
+  "r-t": {
+    "class_idx": 3,
+    "index": 64
+  },
+  "willow": {
+    "class_idx": 2,
+    "index": 65
+  },
+  "maisie": {
+    "class_idx": 4,
+    "index": 66
+  },
+  "hank": {
+    "class_idx": 6,
+    "index": 67
+  },
+  "cordelius": {
+    "class_idx": 1,
+    "index": 68
+  },
+  "doug": {
+    "class_idx": 5,
+    "index": 69
+  },
+  "pearl": {
+    "class_idx": 3,
+    "index": 70
+  },
+  "chuck": {
+    "class_idx": 3,
+    "index": 71
+  },
+  "charlie": {
+    "class_idx": 2,
+    "index": 72
+  },
+  "mico": {
+    "class_idx": 1,
+    "index": 73
+  },
+  "kit": {
+    "class_idx": 5,
+    "index": 74
+  },
+  "larry & lawrie": {
+    "class_idx": 0,
+    "index": 75
+  },
+  "melodie": {
+    "class_idx": 1,
+    "index": 76
+  },
+  "angelo": {
+    "class_idx": 4,
+    "index": 77
+  },
+  "draco": {
+    "class_idx": 6,
+    "index": 78
+  },
+  "lily": {
+    "class_idx": 1,
+    "index": 79
+  },
+  "berry": {
+    "class_idx": 5,
+    "index": 80
+  },
+  "clancy": {
+    "class_idx": 3,
+    "index": 81
+  },
+  "moe": {
+    "class_idx": 3,
+    "index": 82
+  },
+  "kenji": {
+    "class_idx": 1,
+    "index": 83
+  },
+  "shade": {
+    "class_idx": 1,
+    "index": 84
+  },
+  "juju": {
+    "class_idx": 0,
+    "index": 85
+  },
+  "meeple": {
+    "class_idx": 7,
+    "index": 86
+  },
+  "ollie": {
+    "class_idx": 7,
+    "index": 87
+  },
+  "lumi": {
+    "class_idx": 3,
+    "index": 88
+  },
+  "finx": {
+    "class_idx": 7,
+    "index": 89
+  },
+  "jae-yong": {
+    "class_idx": 7,
+    "index": 90
+  },
+  "kaze": {
+    "class_idx": 7,
+    "index": 91
+  },
+  "alli": {
+    "class_idx": 7,
+    "index": 92
+  },
+  "trunk": {
+    "class_idx": 7,
+    "index": 93
+  },
+  "mina": {
+    "class_idx": 7,
+    "index": 94
+  },
+  "ziggy": {
+    "class_idx": 7,
+    "index": 95
+  },
+  "pierce": {
+    "class_idx": 7,
+    "index": 96
+  },
+  "gigi": {
+    "class_idx": 7,
+    "index": 97
+  },
+  "glowbert": {
+    "class_idx": 7,
+    "index": 98
+  },
+  "sirius": {
+    "class_idx": 7,
+    "index": 99
+  },
+  "najia": {
+    "class_idx": 7,
+    "index": 100
+  }
+}

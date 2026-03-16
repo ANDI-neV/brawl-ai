@@ -1,0 +1,810 @@
+{
+  "shelly": {
+    "index": 0,
+    "name": "shelly",
+    "supercell_id": 16000000,
+    "class": "Damage Dealer",
+    "rarity": "Common",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000000.png"
+  },
+  "colt": {
+    "index": 1,
+    "name": "colt",
+    "supercell_id": 16000001,
+    "class": "Damage Dealer",
+    "rarity": "Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000001.png"
+  },
+  "bull": {
+    "index": 2,
+    "name": "bull",
+    "supercell_id": 16000002,
+    "class": "Tank",
+    "rarity": "Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000002.png"
+  },
+  "brock": {
+    "index": 3,
+    "name": "brock",
+    "supercell_id": 16000003,
+    "class": "Marksman",
+    "rarity": "Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000003.png"
+  },
+  "rico": {
+    "index": 4,
+    "name": "rico",
+    "supercell_id": 16000004,
+    "class": "Damage Dealer",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000004.png"
+  },
+  "spike": {
+    "index": 5,
+    "name": "spike",
+    "supercell_id": 16000005,
+    "class": "Damage Dealer",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000005.png"
+  },
+  "barley": {
+    "index": 6,
+    "name": "barley",
+    "supercell_id": 16000006,
+    "class": "Artillery",
+    "rarity": "Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000006.png"
+  },
+  "jessie": {
+    "index": 7,
+    "name": "jessie",
+    "supercell_id": 16000007,
+    "class": "Controller",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000007.png"
+  },
+  "nita": {
+    "index": 8,
+    "name": "nita",
+    "supercell_id": 16000008,
+    "class": "Damage Dealer",
+    "rarity": "Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000008.png"
+  },
+  "dynamike": {
+    "index": 9,
+    "name": "dynamike",
+    "supercell_id": 16000009,
+    "class": "Artillery",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000009.png"
+  },
+  "el primo": {
+    "index": 10,
+    "name": "el primo",
+    "supercell_id": 16000010,
+    "class": "Tank",
+    "rarity": "Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000010.png"
+  },
+  "mortis": {
+    "index": 11,
+    "name": "mortis",
+    "supercell_id": 16000011,
+    "class": "Assassin",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000011.png"
+  },
+  "crow": {
+    "index": 12,
+    "name": "crow",
+    "supercell_id": 16000012,
+    "class": "Assassin",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000012.png"
+  },
+  "poco": {
+    "index": 13,
+    "name": "poco",
+    "supercell_id": 16000013,
+    "class": "Support",
+    "rarity": "Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000013.png"
+  },
+  "bo": {
+    "index": 14,
+    "name": "bo",
+    "supercell_id": 16000014,
+    "class": "Controller",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000014.png"
+  },
+  "piper": {
+    "index": 15,
+    "name": "piper",
+    "supercell_id": 16000015,
+    "class": "Marksman",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000015.png"
+  },
+  "pam": {
+    "index": 16,
+    "name": "pam",
+    "supercell_id": 16000016,
+    "class": "Support",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000016.png"
+  },
+  "tara": {
+    "index": 17,
+    "name": "tara",
+    "supercell_id": 16000017,
+    "class": "Damage Dealer",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000017.png"
+  },
+  "darryl": {
+    "index": 18,
+    "name": "darryl",
+    "supercell_id": 16000018,
+    "class": "Tank",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000018.png"
+  },
+  "penny": {
+    "index": 19,
+    "name": "penny",
+    "supercell_id": 16000019,
+    "class": "Artillery",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000019.png"
+  },
+  "frank": {
+    "index": 20,
+    "name": "frank",
+    "supercell_id": 16000020,
+    "class": "Tank",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000020.png"
+  },
+  "gene": {
+    "index": 21,
+    "name": "gene",
+    "supercell_id": 16000021,
+    "class": "Controller",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000021.png"
+  },
+  "tick": {
+    "index": 22,
+    "name": "tick",
+    "supercell_id": 16000022,
+    "class": "Artillery",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000022.png"
+  },
+  "leon": {
+    "index": 23,
+    "name": "leon",
+    "supercell_id": 16000023,
+    "class": "Assassin",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000023.png"
+  },
+  "rosa": {
+    "index": 24,
+    "name": "rosa",
+    "supercell_id": 16000024,
+    "class": "Tank",
+    "rarity": "Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000024.png"
+  },
+  "carl": {
+    "index": 25,
+    "name": "carl",
+    "supercell_id": 16000025,
+    "class": "Damage Dealer",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000025.png"
+  },
+  "bibi": {
+    "index": 26,
+    "name": "bibi",
+    "supercell_id": 16000026,
+    "class": "Tank",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000026.png"
+  },
+  "8-bit": {
+    "index": 27,
+    "name": "8-bit",
+    "supercell_id": 16000027,
+    "class": "Damage Dealer",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000027.png"
+  },
+  "sandy": {
+    "index": 28,
+    "name": "sandy",
+    "supercell_id": 16000028,
+    "class": "Controller",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000028.png"
+  },
+  "bea": {
+    "index": 29,
+    "name": "bea",
+    "supercell_id": 16000029,
+    "class": "Marksman",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000029.png"
+  },
+  "emz": {
+    "index": 30,
+    "name": "emz",
+    "supercell_id": 16000030,
+    "class": "Controller",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000030.png"
+  },
+  "mr. p": {
+    "index": 31,
+    "name": "mr. p",
+    "supercell_id": 16000031,
+    "class": "Controller",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000031.png"
+  },
+  "max": {
+    "index": 32,
+    "name": "max",
+    "supercell_id": 16000032,
+    "class": "Support",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000032.png"
+  },
+  "jacky": {
+    "index": 33,
+    "name": "jacky",
+    "supercell_id": 16000034,
+    "class": "Tank",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000034.png"
+  },
+  "gale": {
+    "index": 34,
+    "name": "gale",
+    "supercell_id": 16000035,
+    "class": "Controller",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000035.png"
+  },
+  "nani": {
+    "index": 35,
+    "name": "nani",
+    "supercell_id": 16000036,
+    "class": "Marksman",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000036.png"
+  },
+  "sprout": {
+    "index": 36,
+    "name": "sprout",
+    "supercell_id": 16000037,
+    "class": "Artillery",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000037.png"
+  },
+  "surge": {
+    "index": 37,
+    "name": "surge",
+    "supercell_id": 16000038,
+    "class": "Damage Dealer",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000038.png"
+  },
+  "colette": {
+    "index": 38,
+    "name": "colette",
+    "supercell_id": 16000039,
+    "class": "Damage Dealer",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000039.png"
+  },
+  "amber": {
+    "index": 39,
+    "name": "amber",
+    "supercell_id": 16000040,
+    "class": "Controller",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000040.png"
+  },
+  "lou": {
+    "index": 40,
+    "name": "lou",
+    "supercell_id": 16000041,
+    "class": "Controller",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000041.png"
+  },
+  "byron": {
+    "index": 41,
+    "name": "byron",
+    "supercell_id": 16000042,
+    "class": "Support",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000042.png"
+  },
+  "edgar": {
+    "index": 42,
+    "name": "edgar",
+    "supercell_id": 16000043,
+    "class": "Assassin",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000043.png"
+  },
+  "ruffs": {
+    "index": 43,
+    "name": "ruffs",
+    "supercell_id": 16000044,
+    "class": "Support",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000044.png"
+  },
+  "stu": {
+    "index": 44,
+    "name": "stu",
+    "supercell_id": 16000045,
+    "class": "Assassin",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000045.png"
+  },
+  "belle": {
+    "index": 45,
+    "name": "belle",
+    "supercell_id": 16000046,
+    "class": "Marksman",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000046.png"
+  },
+  "squeak": {
+    "index": 46,
+    "name": "squeak",
+    "supercell_id": 16000047,
+    "class": "Controller",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000047.png"
+  },
+  "grom": {
+    "index": 47,
+    "name": "grom",
+    "supercell_id": 16000048,
+    "class": "Artillery",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000048.png"
+  },
+  "buzz": {
+    "index": 48,
+    "name": "buzz",
+    "supercell_id": 16000049,
+    "class": "Assassin",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000049.png"
+  },
+  "griff": {
+    "index": 49,
+    "name": "griff",
+    "supercell_id": 16000050,
+    "class": "Controller",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000050.png"
+  },
+  "ash": {
+    "index": 50,
+    "name": "ash",
+    "supercell_id": 16000051,
+    "class": "Tank",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000051.png"
+  },
+  "meg": {
+    "index": 51,
+    "name": "meg",
+    "supercell_id": 16000052,
+    "class": "Tank",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000052.png"
+  },
+  "lola": {
+    "index": 52,
+    "name": "lola",
+    "supercell_id": 16000053,
+    "class": "Damage Dealer",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000053.png"
+  },
+  "fang": {
+    "index": 53,
+    "name": "fang",
+    "supercell_id": 16000054,
+    "class": "Assassin",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000054.png"
+  },
+  "eve": {
+    "index": 54,
+    "name": "eve",
+    "supercell_id": 16000056,
+    "class": "Damage Dealer",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000056.png"
+  },
+  "janet": {
+    "index": 55,
+    "name": "janet",
+    "supercell_id": 16000057,
+    "class": "Marksman",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000057.png"
+  },
+  "bonnie": {
+    "index": 56,
+    "name": "bonnie",
+    "supercell_id": 16000058,
+    "class": "Marksman",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000058.png"
+  },
+  "otis": {
+    "index": 57,
+    "name": "otis",
+    "supercell_id": 16000059,
+    "class": "Controller",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000059.png"
+  },
+  "sam": {
+    "index": 58,
+    "name": "sam",
+    "supercell_id": 16000060,
+    "class": "Assassin",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000060.png"
+  },
+  "gus": {
+    "index": 59,
+    "name": "gus",
+    "supercell_id": 16000061,
+    "class": "Support",
+    "rarity": "Super Rare",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000061.png"
+  },
+  "buster": {
+    "index": 60,
+    "name": "buster",
+    "supercell_id": 16000062,
+    "class": "Tank",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000062.png"
+  },
+  "chester": {
+    "index": 61,
+    "name": "chester",
+    "supercell_id": 16000063,
+    "class": "Damage Dealer",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000063.png"
+  },
+  "gray": {
+    "index": 62,
+    "name": "gray",
+    "supercell_id": 16000064,
+    "class": "Support",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000064.png"
+  },
+  "mandy": {
+    "index": 63,
+    "name": "mandy",
+    "supercell_id": 16000065,
+    "class": "Marksman",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000065.png"
+  },
+  "r-t": {
+    "index": 64,
+    "name": "r-t",
+    "supercell_id": 16000066,
+    "class": "Damage Dealer",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000066.png"
+  },
+  "willow": {
+    "index": 65,
+    "name": "willow",
+    "supercell_id": 16000067,
+    "class": "Controller",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000067.png"
+  },
+  "maisie": {
+    "index": 66,
+    "name": "maisie",
+    "supercell_id": 16000068,
+    "class": "Marksman",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000068.png"
+  },
+  "hank": {
+    "index": 67,
+    "name": "hank",
+    "supercell_id": 16000069,
+    "class": "Tank",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000069.png"
+  },
+  "cordelius": {
+    "index": 68,
+    "name": "cordelius",
+    "supercell_id": 16000070,
+    "class": "Assassin",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000070.png"
+  },
+  "doug": {
+    "index": 69,
+    "name": "doug",
+    "supercell_id": 16000071,
+    "class": "Support",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000071.png"
+  },
+  "pearl": {
+    "index": 70,
+    "name": "pearl",
+    "supercell_id": 16000072,
+    "class": "Damage Dealer",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000072.png"
+  },
+  "chuck": {
+    "index": 71,
+    "name": "chuck",
+    "supercell_id": 16000073,
+    "class": "Damage Dealer",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000073.png"
+  },
+  "charlie": {
+    "index": 72,
+    "name": "charlie",
+    "supercell_id": 16000074,
+    "class": "Controller",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000074.png"
+  },
+  "mico": {
+    "index": 73,
+    "name": "mico",
+    "supercell_id": 16000075,
+    "class": "Assassin",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000075.png"
+  },
+  "kit": {
+    "index": 74,
+    "name": "kit",
+    "supercell_id": 16000076,
+    "class": "Support",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000076.png"
+  },
+  "larry & lawrie": {
+    "index": 75,
+    "name": "larry & lawrie",
+    "supercell_id": 16000077,
+    "class": "Artillery",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000077.png"
+  },
+  "melodie": {
+    "index": 76,
+    "name": "melodie",
+    "supercell_id": 16000078,
+    "class": "Assassin",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000078.png"
+  },
+  "angelo": {
+    "index": 77,
+    "name": "angelo",
+    "supercell_id": 16000079,
+    "class": "Marksman",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000079.png"
+  },
+  "draco": {
+    "index": 78,
+    "name": "draco",
+    "supercell_id": 16000080,
+    "class": "Tank",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000080.png"
+  },
+  "lily": {
+    "index": 79,
+    "name": "lily",
+    "supercell_id": 16000081,
+    "class": "Assassin",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000081.png"
+  },
+  "berry": {
+    "index": 80,
+    "name": "berry",
+    "supercell_id": 16000082,
+    "class": "Support",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000082.png"
+  },
+  "clancy": {
+    "index": 81,
+    "name": "clancy",
+    "supercell_id": 16000083,
+    "class": "Damage Dealer",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000083.png"
+  },
+  "moe": {
+    "index": 82,
+    "name": "moe",
+    "supercell_id": 16000084,
+    "class": "Damage Dealer",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000084.png"
+  },
+  "kenji": {
+    "index": 83,
+    "name": "kenji",
+    "supercell_id": 16000085,
+    "class": "Assassin",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000085.png"
+  },
+  "shade": {
+    "index": 84,
+    "name": "shade",
+    "supercell_id": 16000086,
+    "class": "Assassin",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000086.png"
+  },
+  "juju": {
+    "index": 85,
+    "name": "juju",
+    "supercell_id": 16000087,
+    "class": "Artillery",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000087.png"
+  },
+  "meeple": {
+    "index": 86,
+    "name": "meeple",
+    "supercell_id": 16000089,
+    "class": "Unknown",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000089.png"
+  },
+  "ollie": {
+    "index": 87,
+    "name": "ollie",
+    "supercell_id": 16000090,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000090.png"
+  },
+  "lumi": {
+    "index": 88,
+    "name": "lumi",
+    "supercell_id": 16000091,
+    "class": "Damage Dealer",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000091.png"
+  },
+  "finx": {
+    "index": 89,
+    "name": "finx",
+    "supercell_id": 16000092,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000092.png"
+  },
+  "jae-yong": {
+    "index": 90,
+    "name": "jae-yong",
+    "supercell_id": 16000093,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000093.png"
+  },
+  "kaze": {
+    "index": 91,
+    "name": "kaze",
+    "supercell_id": 16000094,
+    "class": "Unknown",
+    "rarity": "Ultra Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000094.png"
+  },
+  "alli": {
+    "index": 92,
+    "name": "alli",
+    "supercell_id": 16000095,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000095.png"
+  },
+  "trunk": {
+    "index": 93,
+    "name": "trunk",
+    "supercell_id": 16000096,
+    "class": "Unknown",
+    "rarity": "Epic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000096.png"
+  },
+  "mina": {
+    "index": 94,
+    "name": "mina",
+    "supercell_id": 16000097,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000097.png"
+  },
+  "ziggy": {
+    "index": 95,
+    "name": "ziggy",
+    "supercell_id": 16000098,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000098.png"
+  },
+  "pierce": {
+    "index": 96,
+    "name": "pierce",
+    "supercell_id": 16000099,
+    "class": "Unknown",
+    "rarity": "Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000099.png"
+  },
+  "gigi": {
+    "index": 97,
+    "name": "gigi",
+    "supercell_id": 16000100,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000100.png"
+  },
+  "glowbert": {
+    "index": 98,
+    "name": "glowbert",
+    "supercell_id": 16000101,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000101.png"
+  },
+  "sirius": {
+    "index": 99,
+    "name": "sirius",
+    "supercell_id": 16000102,
+    "class": "Unknown",
+    "rarity": "Ultra Legendary",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000102.png"
+  },
+  "najia": {
+    "index": 100,
+    "name": "najia",
+    "supercell_id": 16000103,
+    "class": "Unknown",
+    "rarity": "Mythic",
+    "image_url": "https://cdn.brawlify.com/brawlers/borders/16000103.png"
+  }
+}
