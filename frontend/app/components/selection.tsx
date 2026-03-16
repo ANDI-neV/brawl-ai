@@ -74,10 +74,11 @@ function Menu() {
                     alt={map}
                     width={30}
                     height={30}
+                    className="shrink-0"
                     unoptimized
                     style={{
-                      width: 'auto',
-                      height: 'auto',
+                      width: '30px',
+                      height: '30px',
                       objectFit: 'contain'
                     }}
                     onError={(e) => {
