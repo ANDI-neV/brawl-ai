@@ -13,6 +13,7 @@ import onnx
 import onnxruntime as ort
 import subprocess
 import requests
+import sys
 from feeding import get_last_update
 from settings import get_api_token, get_db_config, get_pi_config
 
@@ -113,10 +114,10 @@ def get_filtered_brawlers(player_tag, min_level):
 
 def update_brawler_data() -> None:
     try:
-        subprocess.run(["python", "scraper.py"], check=True)
+        subprocess.run([sys.executable, "scraper.py"], check=True)
         print("Brawler data updated successfully")
     except subprocess.CalledProcessError as e:
-        print(f"Web scraping failed: {str(e)}")
+        print(f"Metadata sync failed: {str(e)}")
         raise
 
 

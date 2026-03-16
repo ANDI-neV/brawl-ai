@@ -189,9 +189,14 @@ class Database:
         # Execute the query for each player
         for player in players:
             try:
-                self.cur.execute(insert_query, (player['tag'][1:], player['name']))
+                if isinstance(player, dict):
+                    tag, name = player["tag"], player["name"]
+                else:
+                    tag, name = player
+                normalized_tag = tag[1:] if tag.startswith("#") else tag
+                self.cur.execute(insert_query, (normalized_tag, name))
             except Exception as e:
-                print(f"Error inserting player {player['tag']}: {str(e)}")
+                print(f"Error inserting player {player}: {str(e)}")
                 continue
 
         self.commit()

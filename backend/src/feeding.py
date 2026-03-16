@@ -9,6 +9,12 @@ from typing import Tuple, List, Dict, Any
 import argparse
 import os
 
+from ranked_utils import (
+    get_players_from_ranked_battle,
+    is_supported_ranked_battle,
+    normalize_brawler_name,
+)
+
 
 class DevBrawlManager():
     """
@@ -59,12 +65,7 @@ class DevBrawlManager():
 
     @staticmethod
     def get_players_from_battlelog(battle: Dict[str, Any]):
-        players = []
-        for team in battle["battle"]["teams"]:
-            for player in team:
-                if 16 <= player["brawler"]["trophies"] <= 24:
-                    players.append((player["tag"][1:], player["name"]))
-        return players
+        return get_players_from_ranked_battle(battle)
 
     @staticmethod
     def check_ranked_eligibility(player_stats):
@@ -100,6 +101,34 @@ class DevBrawlManager():
         return (datetime.strptime(timestamp_str,
                                  "%Y%m%dT%H%M%S.%fZ")
                 .replace(tzinfo=timezone.utc))
+
+    @staticmethod
+    def is_supported_ranked_battle(battle: Dict[str, Any]) -> bool:
+        return is_supported_ranked_battle(battle)
+
+    @staticmethod
+    def normalize_brawler_name(name: str) -> str:
+        return normalize_brawler_name(name)
+
+    def to_sql_battle(self, battle: Dict[str, Any]) -> Tuple:
+        battle_id = random.randint(0, 10000000000000)
+        unix_time = int(
+            time.mktime(time.strptime(battle["battleTime"], "%Y%m%dT%H%M%S.000Z"))
+        )
+        teams = battle["battle"]["teams"]
+        return (
+            battle_id,
+            unix_time,
+            battle["event"]["map"],
+            battle["battle"]["mode"],
+            self.normalize_brawler_name(teams[0][0]["brawler"]["name"]),
+            self.normalize_brawler_name(teams[0][1]["brawler"]["name"]),
+            self.normalize_brawler_name(teams[0][2]["brawler"]["name"]),
+            self.normalize_brawler_name(teams[1][0]["brawler"]["name"]),
+            self.normalize_brawler_name(teams[1][1]["brawler"]["name"]),
+            self.normalize_brawler_name(teams[1][2]["brawler"]["name"]),
+            1 if battle["battle"]["result"] == "victory" else 0,
+        )
 
     def get_battlelogs(self, player_tags):
         logs = []
@@ -141,11 +170,6 @@ class DevBrawlManager():
             print(json.dumps(battle))
             return False
 
-    @staticmethod
-    def check_rank_requirement(battle):
-        return sum(int(player["brawler"]["trophies"]) >= 15 for team
-                   in battle["battle"]["teams"] for player in team) >= 5
-
     def cycle(self):
         try:
             batch_size = 200
@@ -157,76 +181,32 @@ class DevBrawlManager():
             for player_tag in player_tags_to_remove:
                 self.db.delete_player(player_tag)
 
-            players_with_valid_trophies = set()
-
-            for log in battle_logs:
-                for battle in log["items"]:
-                    if battle["battle"].get("type") == "soloRanked":
-                        for team in battle["battle"]["teams"]:
-                            for player in team:
-                                player_tag = player["tag"][1:]
-                                if player_tag in player_tags:
-                                    if 16 <= player["brawler"]["trophies"] <= 24:
-                                        players_with_valid_trophies.add(player_tag)
-
-            players_to_remove = set(player_tags) - players_with_valid_trophies - set(player_tags_to_remove)
-            for player_tag in players_to_remove:
-                self.db.delete_player(player_tag)
-                player_tags_to_remove.append(player_tag)
-
-            print(f"Players meeting trophy requirements: {len(players_with_valid_trophies)}")
-            print(f"Additional players removed (trophy filter): {len(players_to_remove)}")
-
-            player_tags = list(players_with_valid_trophies)
-
             print(f"Battlelogs took: {time.time() - start_time:.2f} seconds")
             battles = [battle for log in battle_logs for battle in log["items"]]
             new_players = []
             filtered_battles = []
 
-            for battle in battles:  # Get all players from the battles
-                if (battle["battle"].get("type") == "soloRanked" and
-                        self.parse_iso_timestamp(battle["battleTime"]) >= self.min_timestamp):
+            for battle in battles:
+                if (
+                    self.is_supported_ranked_battle(battle)
+                    and self.parse_iso_timestamp(battle["battleTime"]) >= self.min_timestamp
+                ):
                     filtered_battles.append(battle)
                     new_players.extend(self.get_players_from_battlelog(battle))
 
             new_players = list(set(new_players))  # Remove duplicates
             new_player_tags = [player[0] for player in new_players]
             existing_players = self.db.get_if_players_exist(new_player_tags)
-            new_player_tags = list(set(new_player_tags) - set(existing_players))
-
-            player_stats_list = self.get_player_stats(new_player_tags)
-            eligible_players = [stats for stats in player_stats_list
-                                if self.check_ranked_eligibility(stats)]
+            existing_players = set(existing_players)
+            new_players = [player for player in new_players if player[0] not in existing_players]
 
             print(f"Time taken: {time.time() - start_time:.2f} seconds")
-            print(f"Players: {len(player_stats_list)}")
-            print(f"Eligible Players: {len(eligible_players)}")
+            print(f"New players: {len(new_players)}")
             print(f"Battles: {len(filtered_battles)}")
 
-            real_battles = []
+            self.db.insert_many_players(new_players)
             for battle in filtered_battles:
-                if self.check_rank_requirement(battle):
-                    real_battles.append(battle)
-
-            print(f"Real Battles: {len(real_battles)}")
-
-            self.db.insert_many_players(eligible_players)
-            for battle in real_battles:
-                battle_id = random.randint(0, 10000000000000)
-                unix_time = time.mktime(
-                    time.strptime(battle["battleTime"], "%Y%m%dT%H%M%S.000Z"))
-                unix_time = int(unix_time)
-                sql_battle = (battle_id, unix_time, battle["event"]["map"],
-                              battle["battle"]["mode"],
-                              battle["battle"]["teams"][0][0]["brawler"]["name"],
-                              battle["battle"]["teams"][0][1]["brawler"]["name"],
-                              battle["battle"]["teams"][0][2]["brawler"]["name"],
-                              battle["battle"]["teams"][1][0]["brawler"]["name"],
-                              battle["battle"]["teams"][1][1]["brawler"]["name"],
-                              battle["battle"]["teams"][1][2]["brawler"]["name"],
-                              1 if battle["battle"]["result"] == "victory" else 0)
-                self.push_battle(sql_battle)
+                self.push_battle(self.to_sql_battle(battle))
             self.db.set_many_players_checked(player_tags)
             self.db.commit()
 
