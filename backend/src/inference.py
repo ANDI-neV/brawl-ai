@@ -1,8 +1,13 @@
 import onnxruntime as ort
 import numpy as np
-from ai import load_map_id_mapping, get_brawler_index, acquire_combination, initialize_brawler_data, get_brawler_class
+from runtime_data import (
+    acquire_combination,
+    get_brawler_class,
+    get_brawler_index,
+    initialize_brawler_data,
+    load_map_id_mapping,
+)
 from threading import Lock
-import torch
 
 MODEL_PATH = "./out/models/model.onnx"
 model_lock = Lock()
@@ -25,6 +30,12 @@ def reload_model():
 
 def model_is_ready():
     return ort_session is not None
+
+
+def _softmax(logits: np.ndarray) -> np.ndarray:
+    shifted = logits - np.max(logits, axis=-1, keepdims=True)
+    exponentiated = np.exp(shifted)
+    return exponentiated / np.sum(exponentiated, axis=-1, keepdims=True)
 
 
 def prepare_input(brawler_dict, map_name,
@@ -80,19 +91,18 @@ def predict(brawler_dict, map_name, first_pick):
             "map_id": input_data["map_id"],
             "src_key_padding_mask": input_data["src_key_padding_mask"]
         })
-    logits = outputs[0]
-    logits = torch.tensor(logits)
+    logits = np.array(outputs[0], copy=True)
 
     already_picked_indices = [get_brawler_index(brawler_name) for brawler_name in brawler_dict.values()]
-    logits[0, already_picked_indices] = -float("inf")
+    logits[0, already_picked_indices] = -np.inf
 
-    probabilities = torch.softmax(logits, dim=-1)
+    probabilities = _softmax(logits)
     probabilities[0, already_picked_indices] = 0
 
     probability_dict = {}
-    for idx in range(probabilities.size(1)):
+    for idx in range(probabilities.shape[1]):
         brawler_name = constants['index_to_brawler_name'].get(idx, 'Unknown Brawler')
-        prob = probabilities[0, idx].item()
+        prob = float(probabilities[0, idx])
         if brawler_name == 'Unknown Brawler':
             continue
         probability_dict[brawler_name] = prob

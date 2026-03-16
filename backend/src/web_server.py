@@ -7,7 +7,15 @@ import json
 import time
 from pathlib import Path
 import scraper
-from ai import get_map_score, get_all_maps, get_all_brawlers, get_brawler_dict, get_map_pickrate, PlayerNotFoundError, get_filtered_brawlers
+from runtime_data import (
+    PlayerNotFoundError,
+    get_all_brawlers,
+    get_all_maps,
+    get_brawler_dict,
+    get_filtered_brawlers,
+    get_map_pickrate,
+    get_map_score,
+)
 from db import Database
 from inference import model_is_ready, predict, reload_model
 from settings import get_cors_origins

@@ -76,7 +76,7 @@ Expected outputs:
 ## Deployment to the Pi
 1. Sync the branch to the Pi.
 2. Copy the refreshed `backend/src/out/` artifacts to the Pi checkout.
-3. Run the checked-in deploy script on the Pi:
+3. Run the checked-in deploy script on the Pi. It creates a `uv`-managed runtime virtualenv under `/home/oleg/brawl-ai/.venv-runtime` and installs only `backend/src/requirements.runtime.txt`, so the Pi does not pull in local training dependencies like `torch`.
 
 ```bash
 ./scripts/deploy_pi.sh
