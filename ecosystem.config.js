@@ -13,9 +13,9 @@ module.exports = {
     {
       name: "frontend",
       cwd: "./frontend",
-      script: "/usr/bin/npm",
-      args: "start",
-      interpreter: "none",
+      script: "./node_modules/next/dist/bin/next",
+      args: "start -p 3003",
+      interpreter: "node",
       env: {
         NODE_ENV: "production",
       },
