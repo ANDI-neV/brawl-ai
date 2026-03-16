@@ -44,6 +44,7 @@ npm run build
 popd >/dev/null
 
 pm2 delete frontend >/dev/null 2>&1 || true
+pkill -f "/home/oleg/brawl-ai/frontend/node_modules/.bin/next start -p 3003" >/dev/null 2>&1 || true
 pm2 startOrReload ecosystem.config.js --only brawl-backend --update-env
 pm2 start ecosystem.config.js --only frontend --update-env
 pm2 save
