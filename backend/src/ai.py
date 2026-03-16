@@ -914,6 +914,7 @@ def train_model(
     n_maps = len(match_data['map'].unique())
     map_id_mapping = create_map_id_mapping(match_data)
     here = os.path.dirname(os.path.abspath(__file__))
+    os.makedirs(os.path.join(here, "out", "models"), exist_ok=True)
     training_samples = get_brawler_vectors(match_data,
                                            map_id_mapping=map_id_mapping,
                                            limit=training_limit)
@@ -976,6 +977,7 @@ def create_onnx_model(model_name):
     map_id_mapping = load_map_id_mapping()
     n_maps = len(map_id_mapping)
     brawler_data, constants = initialize_brawler_data()
+    os.makedirs("./out/models", exist_ok=True)
     model = BrawlStarsTransformer(constants['n_brawlers_with_special_tokens'], n_maps, constants['CLASS_PAD_TOKEN_INDEX'] + 1,
                                   d_model=64, nhead=4, num_layers=2)
     device = torch.device("cpu")

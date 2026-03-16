@@ -4,11 +4,11 @@ import React, { useMemo, useEffect, useState } from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
 import type { Selection } from "@nextui-org/react";
 import { ChevronDown, Check, Info, X } from "lucide-react";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from "next/image";
 
 function Menu() {
-  const { selectedMap, availableMaps, maps, availableGameModes, mapSelectionSetup } = useBrawler();
+  const { selectedMap, availableMaps, maps, availableGameModes, mapSelectionSetup, error } = useBrawler();
   const [selectedGameMode, setSelectedGameMode] = React.useState<string>("");
 
   const filteredMaps = useMemo(() => (
@@ -26,14 +26,12 @@ function Menu() {
     return <div>Loading...</div>;
   }
 
-  console.log("maps: ", maps);
-
   return (
     <div className="w-64 relative">
       <div className="absolute -top-3 left-4 z-20">
         <span className="px-2 py-0.5 bg-yellow-300 text-gray-900 text-sm rounded-xl">Map</span>
       </div>
-      <Dropdown>
+      <Dropdown isDisabled={availableMaps.length === 0}>
         <DropdownTrigger>
           <Button 
             variant="flat" 
@@ -104,7 +102,9 @@ function Menu() {
           </motion.button>
           ))
         ) : (
-          <div> Loading... </div>
+          <div className="text-sm text-gray-600">
+            {error ? "Backend unavailable" : "Loading maps..."}
+          </div>
         )}
       </div>
     </div>
@@ -232,7 +232,6 @@ const ToggleSwitch = ({ isOn, toggleSwitch }: ToggleSwitchProps) => {
         isOn ? 'bg-green-400' : 'bg-red-400'
       }`} 
       onClick={() => {
-        console.log("Toggling switch. Current value:", isOn);
         toggleSwitch();
       }}
     >
@@ -307,10 +306,27 @@ const PlayerTagFilters = () => {
 
 
 const Selection = () => {
-  const { firstPick, setFirstPick, resetEverything } = useBrawler();
+  const { firstPick, setFirstPick, resetEverything, error, rosterMismatch, availableMaps } = useBrawler();
 
   return (
     <div className='w-full flex flex-col items-center lg:items-stretch lg:flex-row gap-x-12 py-3 gap-y-3 justify-center mb-16 lg:mb-0'>
+      <div className='w-full lg:hidden'>
+        {error && (
+          <div className="mb-3 rounded-xl border border-red-300 bg-red-100 px-4 py-3 text-sm text-red-900">
+            {error}
+          </div>
+        )}
+        {!error && availableMaps.length === 0 && (
+          <div className="mb-3 rounded-xl border border-yellow-300 bg-yellow-100 px-4 py-3 text-sm text-yellow-900">
+            Maps are still loading from the backend.
+          </div>
+        )}
+        {rosterMismatch && (
+          <div className="mb-3 rounded-xl border border-yellow-300 bg-yellow-100 px-4 py-3 text-sm text-yellow-900">
+            The backend roster and icon mapping do not match yet. Refresh the deployment artifacts before relying on suggestions.
+          </div>
+        )}
+      </div>
       <FilterByPlayer/>
       <Menu />
       <motion.button

@@ -65,7 +65,7 @@ const TableRow: React.FC<TableRowProps> = ({ brawler, score, pickrate, onClick, 
 export default function BrawlerPicker() {
   const [filter, setFilter] = useState("");
   const [sort, setSort] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'score', direction: 'desc' });
-  const { selectBrawler, updatePredictions, selectBrawlerBan, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores, brawlerPickrates, currentPlayerBrawlers, filterPlayerBrawlers, brawlerBans } = useBrawler();
+  const { selectBrawler, selectBrawlerBan, availableBrawlers, selectedBrawlers, selectedMap, brawlerScores, brawlerPickrates, currentPlayerBrawlers, filterPlayerBrawlers, brawlerBans, error, rosterMismatch } = useBrawler();
   const [localAvailableBrawlers, setLocalAvailableBrawlers] = useState<BrawlerPickerProps[]>(availableBrawlers);
 
   useEffect(() => {
@@ -110,9 +110,7 @@ export default function BrawlerPicker() {
 
   const filteredAndSortedBrawlers = useMemo(() => {
     const playerBrawlers = currentPlayerBrawlers.map(brawler => brawler.toLowerCase());
-    console.log("current player brawlers: ", playerBrawlers)
     const playerBans = brawlerBans.map(brawlerBan => brawlerBan.name.toLowerCase());
-    console.log("player bans: ", playerBans)
   
     return localAvailableBrawlers
       .filter(brawler => brawler.name.toLowerCase().includes(filter.toLowerCase()))
@@ -145,6 +143,16 @@ export default function BrawlerPicker() {
 
   return (
     <div className="relative">
+      {error && (
+        <div className="mb-3 rounded-xl border border-red-300 bg-red-100 px-4 py-3 text-sm text-red-900">
+          {error}
+        </div>
+      )}
+      {rosterMismatch && (
+        <div className="mb-3 rounded-xl border border-yellow-300 bg-yellow-100 px-4 py-3 text-sm text-yellow-900">
+          Backend roster artifacts are out of sync. Predictions may be incomplete until the model and mapping are reloaded together.
+        </div>
+      )}
       <div className={`relative overflow-x-auto h-[500px] shadow-md rounded-xl bg-gray-800 custom-scrollbar ${!isMapSelected ? 'pointer-events-none' : ''}`}>
         <div className="min-w-[250px]">
           <table className="w-full text-sm text-left rtl:text-right text-gray-400">
@@ -168,6 +176,13 @@ export default function BrawlerPicker() {
                   isAboveFold={index < 6}
                 />
               ))}
+              {isMapSelected && filteredAndSortedBrawlers.length === 0 && (
+                <tr className="border-b border-gray-700 bg-gray-800">
+                  <td className="px-4 py-6 text-center text-sm text-gray-300" colSpan={3}>
+                    No brawlers match the current filters.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
