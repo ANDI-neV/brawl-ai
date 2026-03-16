@@ -13,8 +13,9 @@ module.exports = {
     {
       name: "frontend",
       cwd: "./frontend",
-      script: "npm",
+      script: "/usr/bin/npm",
       args: "start",
+      interpreter: "none",
       env: {
         NODE_ENV: "production",
       },
