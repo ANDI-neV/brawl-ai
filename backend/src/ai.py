@@ -1,4 +1,5 @@
 import json
+import argparse
 import os
 import string
 from typing import Dict, List
@@ -8,13 +9,14 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from sqlalchemy import create_engine, URL
-import configparser
 from requests.exceptions import HTTPError
 import onnx
 import onnxruntime as ort
 import subprocess
 import requests
+import sys
 from feeding import get_last_update
+from settings import get_api_token, get_db_config, get_pi_config
 
 
 BRAWLERS_JSON_PATH = 'out/brawlers/stripped_brawlers.json'
@@ -78,11 +80,8 @@ class PlayerNotFoundError(Exception):
 
 def get_filtered_brawlers(player_tag, min_level):
     url = "https://api.brawlstars.com"
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    token = config["Credentials"]["api"]
     headers = {
-        "Authorization": f"Bearer {token}"
+        "Authorization": f"Bearer {get_api_token()}"
     }
 
     if player_tag.startswith('#'):
@@ -116,10 +115,10 @@ def get_filtered_brawlers(player_tag, min_level):
 
 def update_brawler_data() -> None:
     try:
-        subprocess.run(["python", "scraper.py"], check=True)
+        subprocess.run([sys.executable, "scraper.py"], check=True)
         print("Brawler data updated successfully")
     except subprocess.CalledProcessError as e:
-        print(f"Web scraping failed: {str(e)}")
+        print(f"Metadata sync failed: {str(e)}")
         raise
 
 
@@ -150,15 +149,15 @@ def prepare_training_data() -> pd.DataFrame:
     Returns:
         pd.Dataframe: Dataframe that contains training data.
     """
-    config = configparser.ConfigParser()
-    config.read('config.ini')
+    config = get_db_config()
 
     url_object = URL.create(
         "postgresql+psycopg2",
-        username=config['Credentials']['username'],
-        password=config['Credentials']['password'],
-        host=config['Credentials']['host'],
-        database=config['Credentials']['database'],
+        username=config["user"],
+        password=config["password"],
+        host=config["host"],
+        port=config["port"],
+        database=config["database"],
     )
     engine = create_engine(url_object)
     query = "SELECT * FROM battles"
@@ -856,7 +855,7 @@ def test_team_composition(model, current_picks_dict, map_name,
 def get_all_maps():
     map_json = 'out/brawlers/map_data.json'
     with open(map_json, 'r') as f:
-        map_id_mapping = json.load(f)
+        all_maps = json.load(f)
 
     current_maps_json = 'out/models/map_id_mapping.json'
     with open(current_maps_json, 'r') as f:
@@ -864,13 +863,26 @@ def get_all_maps():
 
     filtered_maps = {}
     for active_map in list(current_maps.keys()):
-        filtered_maps[active_map] = map_id_mapping[string.capwords(active_map).replace("'", "")]
+        if active_map in all_maps:
+            filtered_maps[active_map] = all_maps[active_map]
+            continue
+
+        normalized_name = string.capwords(active_map).replace("'", "")
+        if normalized_name in all_maps:
+            filtered_maps[active_map] = all_maps[normalized_name]
 
     print(filtered_maps)
     return filtered_maps
 
 
-def train_model(model_name):
+def train_model(
+    model_name,
+    *,
+    training_limit=None,
+    epochs=10,
+    batch_size=64,
+    learning_rate=0.001,
+):
     """
     Trains the BrawlStarsTransformer model using prepared match data.
 
@@ -902,9 +914,10 @@ def train_model(model_name):
     n_maps = len(match_data['map'].unique())
     map_id_mapping = create_map_id_mapping(match_data)
     here = os.path.dirname(os.path.abspath(__file__))
+    os.makedirs(os.path.join(here, "out", "models"), exist_ok=True)
     training_samples = get_brawler_vectors(match_data,
                                            map_id_mapping=map_id_mapping,
-                                           limit=None)
+                                           limit=training_limit)
 
     print("Map ID Mapping:")
     for map_name, map_id in map_id_mapping.items():
@@ -913,8 +926,16 @@ def train_model(model_name):
     with open(os.path.join(here, 'out/models/map_id_mapping.json'), 'w') as f:
         json.dump(map_id_mapping, f)
 
-    model = train_transformer_model(training_samples, n_brawlers, n_maps)
+    model = train_transformer_model(
+        training_samples,
+        n_brawlers,
+        n_maps,
+        batch_size=batch_size,
+        epochs=epochs,
+        learning_rate=learning_rate,
+    )
     torch.save(model.state_dict(), f'out/models/{model_name}')
+    return model_name
 
 
 def load_model(n_brawlers, n_maps, model_path='out/models/model.pth',
@@ -956,6 +977,7 @@ def create_onnx_model(model_name):
     map_id_mapping = load_map_id_mapping()
     n_maps = len(map_id_mapping)
     brawler_data, constants = initialize_brawler_data()
+    os.makedirs("./out/models", exist_ok=True)
     model = BrawlStarsTransformer(constants['n_brawlers_with_special_tokens'], n_maps, constants['CLASS_PAD_TOKEN_INDEX'] + 1,
                                   d_model=64, nhead=4, num_layers=2)
     device = torch.device("cpu")
@@ -1012,6 +1034,35 @@ def create_onnx_model(model_name):
     print("ONNX Inference Output:", outputs)
 
 
+def refresh_artifacts(
+    *,
+    model_name="model_latest.pth",
+    training_limit=None,
+    epochs=10,
+    batch_size=64,
+    learning_rate=0.001,
+    refresh_metadata=True,
+    transfer=False,
+    reload_remote=False,
+):
+    if refresh_metadata:
+        update_brawler_data()
+
+    train_model(
+        model_name,
+        training_limit=training_limit,
+        epochs=epochs,
+        batch_size=batch_size,
+        learning_rate=learning_rate,
+    )
+    create_onnx_model(model_name)
+
+    if transfer:
+        transfer_files()
+    if reload_remote:
+        reload_model()
+
+
 def predict(picks_dict, map_name, first_pick):
     """
     Predicts the next brawler pick based on the current picks and map.-
@@ -1066,11 +1117,10 @@ def test():
 
 
 def transfer_files():
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    pi_user = config['Pi']['pi_user']
-    pi_host = config['Pi']['pi_host']
-    pi_path = config['Pi']['pi_path']
+    config = get_pi_config()
+    pi_user = config["pi_user"]
+    pi_host = config["pi_host"]
+    pi_path = config["pi_path"]
 
     local_files = [
         ["model.onnx", "out/models/"],
@@ -1098,9 +1148,8 @@ def transfer_files():
 
 
 def reload_model():
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    pi_host = config['Pi']['pi_host']
+    config = get_pi_config()
+    pi_host = config["pi_host"]
 
     try:
         response = requests.post(f"http://{pi_host}:7001/reload-model", timeout=10)
@@ -1112,16 +1161,28 @@ def reload_model():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Train and export BrawlAI artifacts")
+    parser.add_argument("--model-name", default="model_latest.pth")
+    parser.add_argument("--train-limit", type=int, default=None)
+    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--batch-size", type=int, default=64)
+    parser.add_argument("--learning-rate", type=float, default=0.001)
+    parser.add_argument("--skip-metadata-refresh", action="store_true")
+    parser.add_argument("--transfer", action="store_true")
+    parser.add_argument("--reload-remote", action="store_true")
+    args = parser.parse_args()
+
     try:
-        data = prepare_training_data()
-        iteration = len(data) // 50000
-        last_update = get_last_update()
-        model_name = f"model_{last_update}_{iteration}.pth"
-        if (not os.path.isfile(f"out/models/{model_name}")) and 1 <= iteration <= 5:
-            update_brawler_data()
-            train_model(model_name)
-            create_onnx_model(model_name)
-            transfer_files()
-            reload_model()
+        refresh_artifacts(
+            model_name=args.model_name,
+            training_limit=args.train_limit,
+            epochs=args.epochs,
+            batch_size=args.batch_size,
+            learning_rate=args.learning_rate,
+            refresh_metadata=not args.skip_metadata_refresh,
+            transfer=args.transfer,
+            reload_remote=args.reload_remote,
+        )
     except Exception as e:
         print(f"Error in pipeline: {e}")
+        raise

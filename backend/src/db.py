@@ -1,9 +1,11 @@
-import configparser
 import time
 from typing import List, Tuple
 
 import psycopg2
 from psycopg2 import pool
+from psycopg2.extensions import connection as PGConnection
+
+from settings import get_db_config
 
 
 class ConnectionPoolManager:
@@ -16,15 +18,15 @@ class ConnectionPoolManager:
     @classmethod
     def initpool(cls):
         try:
-            config = configparser.ConfigParser()
-            config.read('config.ini')
+            config = get_db_config()
             cls._pool = psycopg2.pool.ThreadedConnectionPool(
-                1, 1000,
-                host=config['Credentials']['host'],
-                port=5432,
-                database=config['Credentials']['database'],
-                user=config['Credentials']['username'],
-                password=config['Credentials']['password'],
+                config["pool_min"],
+                config["pool_max"],
+                host=config["host"],
+                port=config["port"],
+                database=config["database"],
+                user=config["user"],
+                password=config["password"],
             )
         except Exception as e:
             print(f"Error: {e}")
@@ -53,9 +55,22 @@ class ConnectionPoolManager:
 class Database:
     def __init__(self):
         manager = ConnectionPoolManager.instance()
-        self.conn = manager.getconn()
+        self.conn: PGConnection = manager.getconn()
         self.cur = self.conn.cursor()
         self.interval = '12 hours'
+
+    def close(self):
+        if getattr(self, "conn", None) is not None:
+            try:
+                self.cur.close()
+            except Exception:
+                pass
+            ConnectionPoolManager.putconn(self.conn)
+            self.conn = None
+            self.cur = None
+
+    def __del__(self):
+        self.close()
 
     def commit(self):
         self.conn.commit()
@@ -115,11 +130,25 @@ class Database:
         checked = self.cur.fetchone()[0]
         self.cur.execute("SELECT COUNT(*) FROM players")
         total = self.cur.fetchone()[0]
-        return checked / total
+        return checked / total if total else 0
 
     def insert_battle(self, battle: Tuple):
-        # check by BattleTime
-        self.cur.execute("SELECT * FROM battles WHERE battleTime=%s", (battle[1],))
+        self.cur.execute(
+            """
+            SELECT 1 FROM battles
+            WHERE battleTime=%s AND map=%s AND mode=%s
+              AND a1=%s AND a2=%s AND a3=%s
+              AND b1=%s AND b2=%s AND b3=%s
+              AND result=%s
+            LIMIT 1
+            """,
+            (
+                battle[1], battle[2], battle[3],
+                battle[4], battle[5], battle[6],
+                battle[7], battle[8], battle[9],
+                battle[10],
+            ),
+        )
         if self.cur.fetchone():
             return
         self.cur.execute(
@@ -136,7 +165,7 @@ class Database:
         if self.cur.fetchone():
             return
         self.cur.execute(
-            "INSERT INTO players (tag, name, last_checked) VALUES (%s, %s, %s, %s)",
+            "INSERT INTO players (tag, name, last_checked) VALUES (%s, %s, %s)",
             (tag, name, '001-01-01 00:00:00')
         )
         self.commit()
@@ -160,9 +189,14 @@ class Database:
         # Execute the query for each player
         for player in players:
             try:
-                self.cur.execute(insert_query, (player['tag'][1:], player['name']))
+                if isinstance(player, dict):
+                    tag, name = player["tag"], player["name"]
+                else:
+                    tag, name = player
+                normalized_tag = tag[1:] if tag.startswith("#") else tag
+                self.cur.execute(insert_query, (normalized_tag, name))
             except Exception as e:
-                print(f"Error inserting player {player['tag']}: {str(e)}")
+                print(f"Error inserting player {player}: {str(e)}")
                 continue
 
         self.commit()
@@ -316,7 +350,16 @@ class ThreadedDBWorker:
         self.cur = self.conn.cursor()
 
     def __del__(self):
-        ConnectionPoolManager.instance().putconn(self.conn)
+        self.close()
+
+    def close(self):
+        if getattr(self, "conn", None) is not None:
+            try:
+                self.cur.close()
+            except Exception:
+                pass
+            ConnectionPoolManager.instance().putconn(self.conn)
+            self.conn = None
 
 if __name__ == "__main__":
     db = Database()

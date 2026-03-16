@@ -7,30 +7,24 @@ import json
 import time
 from pathlib import Path
 import scraper
-from ai import get_map_score, get_all_maps, get_all_brawlers, get_brawler_dict, get_map_pickrate, PlayerNotFoundError, get_filtered_brawlers
-from inference import predict, reload_model
-import configparser
+from runtime_data import (
+    PlayerNotFoundError,
+    get_all_brawlers,
+    get_all_maps,
+    get_brawler_dict,
+    get_filtered_brawlers,
+    get_map_pickrate,
+    get_map_score,
+)
+from db import Database
+from inference import model_is_ready, predict, reload_model
+from settings import get_cors_origins
 
 app = FastAPI()
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-pi_host = config['Pi']['pi_host']
-main_host = config['Pi']['main_host']
-public_ip = config['Pi']['public_ip']
-domain = config['Pi']['domain']
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3003",
-                   "http://127.0.0.1:3003",
-                   f"http://{pi_host}:3003",
-                   f"http://{main_host}:3000",
-                   f"http://{public_ip}:3003",
-                   f"http://{domain}",
-                    f"https://{domain}",
-                    f"http://www.{domain}",
-                    f"https://www.{domain}",
-                   ],
+    allow_origins=get_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,6 +39,39 @@ class PredictionRequest(BaseModel):
 
 class PickrateRequest(BaseModel):
     map: str
+
+
+def _artifacts_ready() -> dict[str, bool]:
+    return {
+        "model": Path("./out/models/model.onnx").is_file(),
+        "map_ids": Path("./out/models/map_id_mapping.json").is_file(),
+        "brawlers": Path("./out/brawlers/stripped_brawlers.json").is_file(),
+        "maps": Path("./out/brawlers/map_data.json").is_file(),
+    }
+
+
+@app.get("/healthz")
+async def healthz():
+    return {"status": "ok"}
+
+
+@app.get("/readiness")
+async def readiness():
+    checks = _artifacts_ready()
+    checks["model_loaded"] = model_is_ready()
+    db = None
+    try:
+        db = Database()
+        checks["database"] = db.get_battles_count() >= 0
+    except Exception:
+        checks["database"] = False
+    finally:
+        if db is not None:
+            db.close()
+
+    if all(checks.values()):
+        return {"status": "ready", "checks": checks}
+    raise HTTPException(status_code=503, detail={"status": "not_ready", "checks": checks})
 
 
 @app.get("/maps")

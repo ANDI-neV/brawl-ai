@@ -1,7 +1,6 @@
 "use client";
 import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo, useCallback, useRef } from 'react';
 import { fetchMaps, fetchBrawlers, predictBrawlers, getPickrate, MapInterface, Mapping, getMapping, getPlayerBrawlers } from './api-handler';
-import axios from 'axios';
 
 
 interface BrawlerPickerProps {
@@ -33,6 +32,7 @@ interface BrawlerContextType {
   filterPlayerBrawlers: boolean | null;
   minBrawlerLevel: number;
   playerTagError: boolean;
+  rosterMismatch: boolean;
   brawlerBans: BrawlerPickerProps[];
   setFirstPick: (firstPick: boolean) => void;
   setSelectedMap: (map: string) => void;
@@ -114,7 +114,6 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
         filteredGameModes.push(map.game_mode)
       }
     })
-    console.log("Available game modes: ", filteredGameModes)
     setAvailableGameModes(filteredGameModes)
   }, [])
 
@@ -124,7 +123,6 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
         const fetchedMaps = await fetchMaps();
         setMaps(fetchedMaps);
         setAvailableMaps(Object.keys(fetchedMaps.maps));
-        console.log("maps available: ", Object.keys(fetchedMaps.maps));
         getGameModes(fetchedMaps);
       } catch (err) {
         console.error("Error fetching maps:", err);
@@ -155,7 +153,6 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
         try {
           const player = currentPlayer.charAt(0) !== "#" ? "#" + currentPlayer : currentPlayer;
           const filteredBrawlers = await getPlayerBrawlers(player, minBrawlerLevel);
-          console.log("Fetching player brawlers for: ", player);
           setPlayerTagError(false);
           setCurrentPlayerBrawlers(filteredBrawlers.brawlers);
         } catch (error) {
@@ -195,6 +192,14 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     [selectedBrawlers]
   );
 
+  const rosterMismatch = useMemo(
+    () =>
+      allBrawlers.length > 0 &&
+      Object.keys(brawlerMapping).length > 0 &&
+      allBrawlers.length !== Object.keys(brawlerMapping).length,
+    [allBrawlers, brawlerMapping]
+  );
+
   const resetEverything = useCallback(() => {
     setFirstPick(true)
     setSelectedBrawlers(Array(6).fill(null))
@@ -213,53 +218,41 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    console.info("Retrieving pickrate for map:", map);
     if (map) {
       setError(null);
       getPickrate(map)
         .then(probabilities => {
-          console.log("Received probabilities:", probabilities);
           if (probabilities && Object.keys(probabilities).length > 0) {
             setBrawlerPickrates(probabilities);
             pickratesFetchedRef.current = true;
           } else {
-            console.warn("Received empty probabilities");
             setError("Received empty data from server");
           }
         })
         .catch(error => {
-          console.error("Error retrieving pickrates:", error);
           setError("Failed to retrieve pickrates: " + error.message);
         });
-    } else {
-      console.warn("No map selected for pickrate retrieval");
     }
   }, []);
   
   const updatePredictions = useCallback((map: string, brawlers: string[], firstPick: boolean) => {
-    console.log("Updating predictions:", { map, brawlers, firstPick });
     if (map) {
       setIsPredicting(true);
       setError(null);
       predictBrawlers(map, brawlers, firstPick)
         .then(probabilities => {
-          console.log("Received probabilities: ", probabilities);
           setBrawlerScores(probabilities);
           setIsPredicting(false);
         })
         .catch(error => {
-          console.error("Error predicting brawlers: ", error);
           setError("Failed to predict brawlers");
           setIsPredicting(false);
         });
-    } else {
-      console.warn("No map selected for prediction.");
     }
   }, []);
 
 
   const mapSelectionSetup = useCallback((map: string) => {
-    console.log('Map selected:', map);
     setSelectedMap(map);
 
     setSelectedMapData(maps?.maps[map]);
@@ -337,6 +330,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
       filterPlayerBrawlers,
       minBrawlerLevel,
       playerTagError,
+      rosterMismatch,
       brawlerBans,
       setFirstPick,
       setSelectedMap,
