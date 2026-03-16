@@ -7,13 +7,28 @@ import { ChevronDown, Check, Info, X } from "lucide-react";
 import { motion } from 'framer-motion';
 import Image from "next/image";
 
+const GAME_MODE_ICON_SRC: Record<string, string> = {
+  "Bounty": "/game_modes/Bounty.webp",
+  "Brawl Ball": "/game_modes/Brawl Ball.webp",
+  "Brawl Hockey": "/game_modes/Brawl Hockey.webp",
+  "Cleaning Duty": "/game_modes/Cleaning Duty.webp",
+  "Gem Grab": "/game_modes/Gem Grab.webp",
+  "Heist": "/game_modes/Heist.webp",
+  "Hot Zone": "/game_modes/Hot Zone.webp",
+  "Knockout": "/game_modes/Knockout.webp",
+};
+
+function getGameModeIconSrc(gameMode: string) {
+  return GAME_MODE_ICON_SRC[gameMode] || "/brawlstar.png";
+}
+
 function Menu() {
   const { selectedMap, availableMaps, maps, availableGameModes, mapSelectionSetup, error } = useBrawler();
   const [selectedGameMode, setSelectedGameMode] = React.useState<string>("");
 
   const filteredMaps = useMemo(() => (
     selectedGameMode === ""
-      ? availableMaps.sort()
+      ? [...availableMaps].sort()
       : availableMaps.filter(map => maps?.maps[map]?.game_mode === selectedGameMode).sort()
   ), [availableMaps, maps, selectedGameMode]);
 
@@ -55,10 +70,11 @@ function Menu() {
               <div className="flex items-center gap-2">
                 {maps.maps[map]?.game_mode ? (
                   <Image
-                    src={`/game_modes/${maps.maps[map].game_mode}.webp`}
+                    src={getGameModeIconSrc(maps.maps[map].game_mode)}
                     alt={map}
                     width={30}
                     height={30}
+                    unoptimized
                     style={{
                       width: 'auto',
                       height: 'auto',
@@ -82,23 +98,22 @@ function Menu() {
           availableGameModes.map((game_mode) => (
             <motion.button
             key={game_mode}
-            className={`bg-gray-200 p-1 min-w-[40px] h-[40px] rounded-xl ${selectedGameMode === game_mode ? 'ring-2 border-blue-500 border-2 ring-blue-500' : ''}`}
+            className={`bg-gray-200 p-1 w-[40px] h-[40px] rounded-xl flex items-center justify-center overflow-hidden ${selectedGameMode === game_mode ? 'ring-2 border-blue-500 border-2 ring-blue-500' : ''}`}
             whileHover={{ scale: 1.1, zIndex: 10, backgroundColor: "#9ca3af" }}
             whileTap={{ scale: 0.9, zIndex: 10, transition: { duration: 0.3 } }}
             onClick={() => setSelectedGameMode(prevMode => prevMode === game_mode ? "" : game_mode)}
           >
-            <div className="relative w-full h-full">
-              <Image
-                src={`/game_modes/${game_mode}.webp`}
-                alt={game_mode}
-                fill={true}
-                style={{objectFit: "contain"}}
-                sizes="(max-width: 768px) 100vw, 33vw"
-                onError={(e) => {
-                  e.currentTarget.src = '/brawlstar.png'; 
-                }}
-              />
-            </div>
+            <Image
+              src={getGameModeIconSrc(game_mode)}
+              alt={game_mode}
+              width={28}
+              height={28}
+              unoptimized
+              style={{objectFit: "contain"}}
+              onError={(e) => {
+                e.currentTarget.src = '/brawlstar.png'; 
+              }}
+            />
           </motion.button>
           ))
         ) : (
