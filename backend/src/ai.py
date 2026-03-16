@@ -8,13 +8,13 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from sqlalchemy import create_engine, URL
-import configparser
 from requests.exceptions import HTTPError
 import onnx
 import onnxruntime as ort
 import subprocess
 import requests
 from feeding import get_last_update
+from settings import get_api_token, get_db_config, get_pi_config
 
 
 BRAWLERS_JSON_PATH = 'out/brawlers/stripped_brawlers.json'
@@ -78,11 +78,8 @@ class PlayerNotFoundError(Exception):
 
 def get_filtered_brawlers(player_tag, min_level):
     url = "https://api.brawlstars.com"
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    token = config["Credentials"]["api"]
     headers = {
-        "Authorization": f"Bearer {token}"
+        "Authorization": f"Bearer {get_api_token()}"
     }
 
     if player_tag.startswith('#'):
@@ -150,15 +147,15 @@ def prepare_training_data() -> pd.DataFrame:
     Returns:
         pd.Dataframe: Dataframe that contains training data.
     """
-    config = configparser.ConfigParser()
-    config.read('config.ini')
+    config = get_db_config()
 
     url_object = URL.create(
         "postgresql+psycopg2",
-        username=config['Credentials']['username'],
-        password=config['Credentials']['password'],
-        host=config['Credentials']['host'],
-        database=config['Credentials']['database'],
+        username=config["user"],
+        password=config["password"],
+        host=config["host"],
+        port=config["port"],
+        database=config["database"],
     )
     engine = create_engine(url_object)
     query = "SELECT * FROM battles"
@@ -1066,11 +1063,10 @@ def test():
 
 
 def transfer_files():
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    pi_user = config['Pi']['pi_user']
-    pi_host = config['Pi']['pi_host']
-    pi_path = config['Pi']['pi_path']
+    config = get_pi_config()
+    pi_user = config["pi_user"]
+    pi_host = config["pi_host"]
+    pi_path = config["pi_path"]
 
     local_files = [
         ["model.onnx", "out/models/"],
@@ -1098,9 +1094,8 @@ def transfer_files():
 
 
 def reload_model():
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    pi_host = config['Pi']['pi_host']
+    config = get_pi_config()
+    pi_host = config["pi_host"]
 
     try:
         response = requests.post(f"http://{pi_host}:7001/reload-model", timeout=10)

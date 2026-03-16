@@ -1,14 +1,12 @@
 import requests
-import configparser
-from db import Database
+
+from settings import get_api_token
         
 class DevBrawlAPI:
     # This uses a token
     def __init__(self):
         self.url = "https://api.brawlstars.com"
-        config = configparser.ConfigParser()
-        config.read('config.ini')
-        self.token = config["Credentials"]["api"]
+        self.token = get_api_token()
     def get_player_battlelog(self, player_tag):
         headers = {
             "Authorization": f"Bearer {self.token}"

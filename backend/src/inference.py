@@ -6,9 +6,10 @@ import torch
 
 MODEL_PATH = "./out/models/model.onnx"
 model_lock = Lock()
+ort_session = None
 try:
     print("ONNX Runtime Version:", ort.__version__)
-    ort_session = ort.InferenceSession("out/models/model.onnx")
+    ort_session = ort.InferenceSession(MODEL_PATH)
     print("ONNX Runtime initialized successfully.")
 except Exception as e:
     print("Error initializing ONNX Runtime:", e)
@@ -20,6 +21,10 @@ def reload_model():
         print("Reloading ONNX model...")
         ort_session = ort.InferenceSession(MODEL_PATH)
         print("Model reloaded successfully.")
+
+
+def model_is_ready():
+    return ort_session is not None
 
 
 def prepare_input(brawler_dict, map_name,
@@ -58,6 +63,8 @@ def prepare_input(brawler_dict, map_name,
 
 
 def predict(brawler_dict, map_name, first_pick):
+    if ort_session is None:
+        raise RuntimeError("ONNX model is not loaded")
     map_id_mapping = load_map_id_mapping()
     input_data = prepare_input(brawler_dict, map_name, map_id_mapping, first_pick, max_seq_len=7)
     brawler_data, constants = initialize_brawler_data()
