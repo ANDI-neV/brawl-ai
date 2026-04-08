@@ -13,12 +13,12 @@
   "dependencies": {
     "@nextui-org/dropdown": "^2.1.29",
     "@nextui-org/react": "^2.4.6",
-    "axios": "^1.7.5",
+    "axios": "^1.14.0",
     "dotenv": "^16.4.7",
     "framer-motion": "^11.3.31",
     "ini": "^5.0.0",
     "lucide-react": "^0.436.0",
-    "next": "14.2.33",
+    "next": "^15.5.14",
     "react": "^18",
     "react-dom": "^18",
     "sharp": "^0.33.5"
@@ -28,10 +28,30 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "cross-env": "^7.0.3",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.33",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^15.5.14",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.4.18",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@typescript-eslint/typescript-estree": {
+      "brace-expansion": "5.0.5",
+      "picomatch": "4.0.4"
+    },
+    "eslint": {
+      "brace-expansion": "1.1.13"
+    },
+    "anymatch": {
+      "picomatch": "2.3.2"
+    },
+    "readdirp": {
+      "picomatch": "2.3.2"
+    },
+    "micromatch": {
+      "picomatch": "2.3.2"
+    },
+    "postcss-load-config": "6.0.1",
+    "sucrase": "3.35.1"
   }
 }

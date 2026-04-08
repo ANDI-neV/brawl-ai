@@ -1,8 +1,10 @@
 "use client";
+import dynamic from "next/dynamic";
 import Header from "./components/header"
 import { BrawlerProvider } from './components/brawler-context';
-import Picking from "./components/picking";
-import Selection from "./components/selection";
+
+const Picking = dynamic(() => import("./components/picking"), { ssr: false });
+const Selection = dynamic(() => import("./components/selection"), { ssr: false });
 
 
 export default function Home() {
