@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PYTHON_BIN="${PYTHON_BIN:-/home/oleg/.pyenv/versions/3.10.6/bin/python}"
+PYTHON_BIN="${PYTHON_BIN:-python3.12}"
 BACKEND_VENV="${BACKEND_VENV:-$ROOT_DIR/.venv-runtime}"
 
 cd "$ROOT_DIR"

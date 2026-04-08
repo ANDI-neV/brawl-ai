@@ -17,7 +17,10 @@ def run_model(map: str, partial_comp: dict, first_pick: bool):
     brawler_data = prepare_brawler_data()
 
     model = BrawlStarsNN(shape).to(device)
-    model.load_state_dict(torch.load(os.path.join(here,f'{path}/{str(next_pick_combination)}.pth')))
+    model.load_state_dict(torch.load(
+        os.path.join(here, f'{path}/{str(next_pick_combination)}.pth'),
+        weights_only=True,
+    ))
     model.eval()
 
     best_picks = predict_best_pick(model, partial_comp, brawler_data, next_pick_combination,encoder, scaler, device,
