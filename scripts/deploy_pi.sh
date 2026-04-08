@@ -2,14 +2,14 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PYTHON_BIN="${PYTHON_BIN:-python3.12}"
+PYTHON_SPEC="${PYTHON_SPEC:-${PYTHON_BIN:-3.12}}"
 BACKEND_VENV="${BACKEND_VENV:-$ROOT_DIR/.venv-runtime}"
 
 cd "$ROOT_DIR"
+export PATH="$HOME/.local/bin:$PATH"
 
 if ! command -v uv >/dev/null 2>&1; then
   python3 -m pip install --user uv
-  export PATH="$HOME/.local/bin:$PATH"
 fi
 
 if ! command -v uv >/dev/null 2>&1; then
@@ -29,7 +29,13 @@ fi
 
 pushd backend/src >/dev/null
 rm -rf "$BACKEND_VENV"
-uv venv "$BACKEND_VENV" --python "$PYTHON_BIN"
+if [[ "$PYTHON_SPEC" == */* ]] || command -v "$PYTHON_SPEC" >/dev/null 2>&1; then
+  PYTHON_FOR_VENV="$PYTHON_SPEC"
+else
+  uv python install "$PYTHON_SPEC"
+  PYTHON_FOR_VENV="$PYTHON_SPEC"
+fi
+uv venv "$BACKEND_VENV" --python "$PYTHON_FOR_VENV"
 uv pip install --python "$BACKEND_VENV/bin/python" -r requirements.runtime.txt
 "$BACKEND_VENV/bin/python" - <<'PY'
 import web_server
