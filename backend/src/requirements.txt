@@ -1,2 +1,2 @@
 -r requirements.runtime.txt
-torch==2.4.0
+torch==2.8.0

@@ -57,7 +57,8 @@ npm install
 
 # Backend
 cd ../backend
-pip install -r requirements.txt
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -r src/requirements.txt
 ```
 4. Start the application
 ```bash
@@ -65,7 +66,7 @@ pip install -r requirements.txt
 npm run dev
 
 # Run backend
-python src/web_server.py
+.venv/bin/python src/web_server.py
 ```
 
 ## 🛠 Development

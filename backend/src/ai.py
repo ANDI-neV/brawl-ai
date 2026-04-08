@@ -966,7 +966,7 @@ def load_model(n_brawlers, n_maps, model_path='out/models/model.pth',
     brawler_data, constants = initialize_brawler_data()
     model = BrawlStarsTransformer(constants['n_brawlers_with_special_tokens'], n_maps, constants['CLASS_PAD_TOKEN_INDEX'] + 1, d_model, nhead,
                                   num_layers)
-    model.load_state_dict(torch.load(model_path, map_location='cpu'))
+    model.load_state_dict(torch.load(model_path, map_location='cpu', weights_only=True))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
     model.eval()
@@ -981,7 +981,11 @@ def create_onnx_model(model_name):
     model = BrawlStarsTransformer(constants['n_brawlers_with_special_tokens'], n_maps, constants['CLASS_PAD_TOKEN_INDEX'] + 1,
                                   d_model=64, nhead=4, num_layers=2)
     device = torch.device("cpu")
-    model.load_state_dict(torch.load(f"./out/models/{model_name}", map_location=torch.device("cpu")))
+    model.load_state_dict(torch.load(
+        f"./out/models/{model_name}",
+        map_location=torch.device("cpu"),
+        weights_only=True,
+    ))
     model.eval()
     model.to(device)
     batch_size = 1
