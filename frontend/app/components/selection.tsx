@@ -1,8 +1,6 @@
 "use client";
 import { useBrawler } from './brawler-context';
 import React, { useMemo, useEffect, useState } from "react";
-import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react";
-import type { Selection } from "@nextui-org/react";
 import { ChevronDown, Check, Info, X } from "lucide-react";
 import { motion } from 'framer-motion';
 import Image from "next/image";
@@ -32,11 +30,6 @@ function Menu() {
       : availableMaps.filter(map => maps?.maps[map]?.game_mode === selectedGameMode).sort()
   ), [availableMaps, maps, selectedGameMode]);
 
-  const handleSelectionChange = (keys: Selection) => {
-    const selected = Array.from(keys)[0] as string;
-    mapSelectionSetup(selected);
-  };
-
   if (!maps) {
     return <div>Loading...</div>;
   }
@@ -46,54 +39,28 @@ function Menu() {
       <div className="absolute -top-3 left-4 z-20">
         <span className="px-2 py-0.5 bg-yellow-300 text-gray-900 text-sm rounded-xl">Map</span>
       </div>
-      <Dropdown isDisabled={availableMaps.length === 0}>
-        <DropdownTrigger>
-          <Button 
-            variant="flat" 
-            className="w-full justify-between bg-gray-700 text-white border border-gray-900 rounded-2xl h-[55px] items-center flex"
-          >
-            <span className="capitalize">{selectedMap || "Select Map"}</span>
-            <ChevronDown className="text-gray-400" size={20} />
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu 
+      <div className="relative">
+        <select
           aria-label="Map selection"
-          variant="flat"
-          disallowEmptySelection
-          selectionMode="single"
-          selectedKeys={selectedMap ? new Set([selectedMap]) : new Set()}
-          onSelectionChange={handleSelectionChange}
-          className="bg-gray-700 text-white p-2 rounded-xl max-h-64 overflow-auto custom-scrollbar"
+          disabled={availableMaps.length === 0}
+          value={selectedMap}
+          onChange={(event) => mapSelectionSetup(event.target.value)}
+          className="w-full appearance-none rounded-2xl border border-gray-900 bg-gray-700 px-4 pr-12 text-white h-[55px] outline-none disabled:cursor-not-allowed disabled:opacity-60"
         >
+          <option value="" disabled>
+            {filteredMaps.length > 0 ? "Select Map" : "No maps available"}
+          </option>
           {filteredMaps.map((map) => (
-            <DropdownItem key={map} textValue={map} className="text-white hover:bg-gray-600 px-2 py-2 rounded-xl gap-x-2">
-              <div className="flex items-center gap-2">
-                {maps.maps[map]?.game_mode ? (
-                  <Image
-                    src={getGameModeIconSrc(maps.maps[map].game_mode)}
-                    alt={map}
-                    width={30}
-                    height={30}
-                    className="shrink-0"
-                    unoptimized
-                    style={{
-                      width: '30px',
-                      height: '30px',
-                      objectFit: 'contain'
-                    }}
-                    onError={(e) => {
-                      e.currentTarget.src = '/brawlstar.png'; 
-                    }}
-                  />
-                ) : (
-                  <div className="w-[30px] h-[30px] bg-gray-600 rounded-full"></div>
-                )}
-                <span>{map}</span>
-              </div>
-            </DropdownItem>
+            <option key={map} value={map}>
+              {map}
+            </option>
           ))}
-        </DropdownMenu>
-      </Dropdown>
+        </select>
+        <ChevronDown
+          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"
+          size={20}
+        />
+      </div>
       <div className='flex items-center gap-1 mt-4'>
         {availableGameModes && availableGameModes.length > 0 ? (
           availableGameModes.map((game_mode) => (
