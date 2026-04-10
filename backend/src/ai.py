@@ -122,6 +122,91 @@ def update_brawler_data() -> None:
         raise
 
 
+def _build_score_artifacts(match_data: pd.DataFrame) -> tuple[dict, dict]:
+    brawler_names = list(prepare_brawler_data().keys())
+    slots = [
+        ("a1", 1, "win_only"),
+        ("a2", 1, "win_only"),
+        ("a3", 1, "win_only"),
+        ("b1", 0, "always"),
+        ("b2", 0, "always"),
+        ("b3", 0, "always"),
+    ]
+
+    pick_frames = []
+    for column, winning_result, significance_mode in slots:
+        frame = match_data[["map", "result", column]].rename(
+            columns={column: "brawler"}
+        ).copy()
+        frame = frame[frame["brawler"].notna()]
+        frame["brawler"] = frame["brawler"].str.lower()
+        frame["picked"] = 1
+        frame["won"] = (frame["result"] == winning_result).astype(int)
+        if significance_mode == "always":
+            frame["significance"] = 1
+        else:
+            frame["significance"] = frame["won"]
+        pick_frames.append(frame[["map", "brawler", "picked", "won", "significance"]])
+
+    picks = pd.concat(pick_frames, ignore_index=True)
+    picks = picks[picks["brawler"].isin(brawler_names)]
+
+    map_totals = match_data.groupby("map").size().to_dict()
+    grouped = (
+        picks.groupby(["map", "brawler"], sort=False)[["picked", "won", "significance"]]
+        .sum()
+        .reset_index()
+    )
+
+    brawler_winrates: dict[str, dict[str, float]] = {}
+    brawler_pickrates: dict[str, dict[str, float]] = {}
+    grouped_by_map = {
+        map_name: group.set_index("brawler")
+        for map_name, group in grouped.groupby("map", sort=False)
+    }
+
+    for map_name, total_games in map_totals.items():
+        rows = grouped_by_map.get(map_name)
+        winrate_map = {}
+        pickrate_map = {}
+        for brawler_name in brawler_names:
+            if rows is not None and brawler_name in rows.index:
+                picked = float(rows.at[brawler_name, "picked"])
+                wins = float(rows.at[brawler_name, "won"])
+                significance = float(rows.at[brawler_name, "significance"])
+            else:
+                picked = 0.0
+                wins = 0.0
+                significance = 0.0
+
+            winrate_map[brawler_name] = (wins / picked) if picked > 0 else 0.0
+            pickrate_map[brawler_name] = (
+                significance / float(total_games)
+            ) if total_games > 0 else 0.0
+
+        brawler_winrates[map_name] = winrate_map
+        brawler_pickrates[map_name] = pickrate_map
+
+    return brawler_winrates, brawler_pickrates
+
+
+def refresh_score_artifacts(match_data: pd.DataFrame | None = None) -> None:
+    try:
+        if match_data is None:
+            match_data = prepare_training_data()
+        brawler_winrates, brawler_pickrates = _build_score_artifacts(match_data)
+        here = os.path.dirname(os.path.abspath(__file__))
+        os.makedirs(os.path.join(here, "out", "brawlers"), exist_ok=True)
+        with open(os.path.join(here, BRAWLER_WINRATES_JSON_PATH), "w") as f:
+            json.dump(brawler_winrates, f, indent=2)
+        with open(os.path.join(here, BRAWLER_PICKRATES_JSON_PATH), "w") as f:
+            json.dump(brawler_pickrates, f, indent=2)
+        print("Score artifacts updated successfully")
+    except Exception as e:
+        print(f"Score artifact refresh failed: {str(e)}")
+        raise
+
+
 def initialize_brawler_data(refresh=False):
     if refresh:
         update_brawler_data()
@@ -878,6 +963,7 @@ def get_all_maps():
 def train_model(
     model_name,
     *,
+    match_data=None,
     training_limit=None,
     epochs=10,
     batch_size=64,
@@ -895,7 +981,8 @@ def train_model(
     6. Saves the trained model to a file.
     """
     print(f"training model:{model_name}")
-    match_data = prepare_training_data()
+    if match_data is None:
+        match_data = prepare_training_data()
     brawler_data, constants = initialize_brawler_data()
 
     n_brawlers = len(brawler_data)
@@ -1049,17 +1136,21 @@ def refresh_artifacts(
     transfer=False,
     reload_remote=False,
 ):
+    match_data = prepare_training_data()
+
     if refresh_metadata:
         update_brawler_data()
 
     train_model(
         model_name,
+        match_data=match_data,
         training_limit=training_limit,
         epochs=epochs,
         batch_size=batch_size,
         learning_rate=learning_rate,
     )
     create_onnx_model(model_name)
+    refresh_score_artifacts(match_data)
 
     if transfer:
         transfer_files()
@@ -1133,6 +1224,7 @@ def transfer_files():
         ["brawler_winrates.json", "out/brawlers/"],
         ["brawler_supercell_id_mapping.json", "out/brawlers/"],
         ["stripped_brawlers.json", "out/brawlers/"],
+        ["last_update.json", "out/"],
         ["config.ini", ""],
         ["map_data.json","out/brawlers"]
     ]
