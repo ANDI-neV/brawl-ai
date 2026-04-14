@@ -20,17 +20,12 @@ A solution for optimizing ranked drafting sequences in the mobile game Brawl Sta
 
 </div>
 
-## ✨ Features
-- 🎯 Optimized drafting sequences for competitive play
-- ⚡ Real-time analysis and suggestions
-- 📱 Responsive, mobile-friendly interface
-- 🤖 AI-powered decision making
-- 🔄 Regular updates based on meta/balance changes
 
-## 🚀 Usage
+
+## Usage
 Free usage at [brawl-ai.com](https://brawl-ai.com)
 
-## 💻 Running Locally
+## Running Locally
 
 ### Prerequisites
 - Node.js (v18 or higher)
@@ -69,7 +64,7 @@ npm run dev
 .venv/bin/python src/web_server.py
 ```
 
-## 🛠 Development
+## Development
 ### Training a custom model
 The project includes a pre-trained model at `backend/src/out/models/ai_model.pth` (model will be regularly updated in relation to new updates/balance changes), but you can train your own:
 1. Set up database configuration in `config.ini` (and adjust URL parameters/database loading according to your setup)
@@ -91,9 +86,9 @@ python src/feeding.py
 ```bash
 python src/ai.py
 ```
-## 📝 License
+## License
 GPLv3
 
-## 🙏 Acknowledgments
+## Acknowledgments
 - Brawl Stars API for providing game data
 - [BrawlAPI](https://brawlapi.com/#/) for providing high-quality images for brawlers and maps
