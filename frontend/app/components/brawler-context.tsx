@@ -185,7 +185,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     fetchMapping();
   }, []);
     
-  const pickratesFetchedRef = useRef(false);
+  const pickratesFetchedForMapRef = useRef<string | null>(null);
 
   const selectedBrawlerNames = useMemo(
     () => selectedBrawlers.filter(Boolean).map(b => b!.name),
@@ -206,14 +206,14 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     setSelectedMap('')
     setIsPredicting(false)
     setError(null)
-    pickratesFetchedRef.current = false
+    pickratesFetchedForMapRef.current = null
     setBrawlerScores({})
     setBrawlerPickrates({})
     setBrawlerBans([])
   }, [])
 
   const retrieveBrawlerPickrates = useCallback((map: string) => {
-    if (pickratesFetchedRef.current) {
+    if (pickratesFetchedForMapRef.current === map) {
       console.info("Pickrates already fetched, skipping retrieval");
       return;
     }
@@ -224,7 +224,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
         .then(probabilities => {
           if (probabilities && Object.keys(probabilities).length > 0) {
             setBrawlerPickrates(probabilities);
-            pickratesFetchedRef.current = true;
+            pickratesFetchedForMapRef.current = map;
           } else {
             setError("Received empty data from server");
           }
@@ -256,9 +256,7 @@ export function BrawlerProvider({ children }: { children: ReactNode }) {
     setSelectedMap(map);
 
     setSelectedMapData(maps?.maps[map]);
-    if (!pickratesFetchedRef.current) {
-      retrieveBrawlerPickrates(map);
-    }
+    retrieveBrawlerPickrates(map);
     updatePredictions(map, selectedBrawlers.filter(Boolean).map(b => b!.name), firstPick);
   }, [selectedBrawlers, firstPick, maps, updatePredictions, retrieveBrawlerPickrates]);
 
