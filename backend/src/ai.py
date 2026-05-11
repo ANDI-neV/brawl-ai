@@ -125,16 +125,16 @@ def update_brawler_data() -> None:
 def _build_score_artifacts(match_data: pd.DataFrame) -> tuple[dict, dict]:
     brawler_names = list(prepare_brawler_data().keys())
     slots = [
-        ("a1", 1, "win_only"),
-        ("a2", 1, "win_only"),
-        ("a3", 1, "win_only"),
-        ("b1", 0, "always"),
-        ("b2", 0, "always"),
-        ("b3", 0, "always"),
+        ("a1", 1),
+        ("a2", 1),
+        ("a3", 1),
+        ("b1", 0),
+        ("b2", 0),
+        ("b3", 0),
     ]
 
     pick_frames = []
-    for column, winning_result, significance_mode in slots:
+    for column, winning_result in slots:
         frame = match_data[["map", "result", column]].rename(
             columns={column: "brawler"}
         ).copy()
@@ -142,18 +142,14 @@ def _build_score_artifacts(match_data: pd.DataFrame) -> tuple[dict, dict]:
         frame["brawler"] = frame["brawler"].str.lower()
         frame["picked"] = 1
         frame["won"] = (frame["result"] == winning_result).astype(int)
-        if significance_mode == "always":
-            frame["significance"] = 1
-        else:
-            frame["significance"] = frame["won"]
-        pick_frames.append(frame[["map", "brawler", "picked", "won", "significance"]])
+        pick_frames.append(frame[["map", "brawler", "picked", "won"]])
 
     picks = pd.concat(pick_frames, ignore_index=True)
     picks = picks[picks["brawler"].isin(brawler_names)]
 
     map_totals = match_data.groupby("map").size().to_dict()
     grouped = (
-        picks.groupby(["map", "brawler"], sort=False)[["picked", "won", "significance"]]
+        picks.groupby(["map", "brawler"], sort=False)[["picked", "won"]]
         .sum()
         .reset_index()
     )
@@ -173,15 +169,13 @@ def _build_score_artifacts(match_data: pd.DataFrame) -> tuple[dict, dict]:
             if rows is not None and brawler_name in rows.index:
                 picked = float(rows.at[brawler_name, "picked"])
                 wins = float(rows.at[brawler_name, "won"])
-                significance = float(rows.at[brawler_name, "significance"])
             else:
                 picked = 0.0
                 wins = 0.0
-                significance = 0.0
 
             winrate_map[brawler_name] = (wins / picked) if picked > 0 else 0.0
             pickrate_map[brawler_name] = (
-                significance / float(total_games)
+                picked / float(total_games)
             ) if total_games > 0 else 0.0
 
         brawler_winrates[map_name] = winrate_map
